@@ -6,7 +6,6 @@ export const Main = styled.div`
 	flex-flow:column;
 	width:100vw;
 
-
 	.box{
 		width:100%;
 		height:100vh;

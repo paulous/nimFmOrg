@@ -1,6 +1,29 @@
 import React, { useState } from 'react'
-import {useSpring, animated} from '@react-spring/web'
+import {useSpring, animated, useSprings} from '@react-spring/web'
 import {Card} from './springAnimationStyles'
+
+
+export const ChangeChars = ({text}) => {
+
+	const charsArr = [...text]
+
+	const springs = useSprings(charsArr.length, charsArr.map(() => (null)))
+
+	const random = (min, max) => Math.random() * (max - min) + min;
+
+	return (
+	<div>
+		{springs.map((s, i) => {
+		return (
+			<animated.span key={`char${i}`} style={{opacity:random(0.5, 1.0)}}>
+				{charsArr[i] === ' ' ? <>&nbsp;</> : charsArr[i]}
+			</animated.span>
+		)
+		})}
+	</div>
+	)
+}
+
 
 export const HeadlineTrail = props => {
 

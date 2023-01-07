@@ -22,10 +22,10 @@ export async function loader() {
 
 export default function RootLayout()  {
 
-	const data = useLoaderData()
+	const {wt, program} = useLoaderData()
 
   	return <>
-		<ShowTimeProvider wt={data.wt} program={data.program}>
+		<ShowTimeProvider {...{wt, program}}>
 			<Outlet />
 		</ShowTimeProvider>
 		<PlayerCont />

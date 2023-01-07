@@ -6,6 +6,25 @@ const {
 const app = new Realm.App({ id:import.meta.env.VITE_REALM_APP_ID})
 const mongo = app.currentUser.mongoClient("mongodb-atlas").db("nimfm")
 
+
+export const getShowTitleId = async () => {
+
+	const data =  await mongo.collection("hosts").aggregate([
+		{
+		  $project: {
+			title: 1,
+		  },
+		},
+	  ])
+	try {
+		if (data.length) return data
+		else  console.log("no program data...dude")
+		
+	} catch (error) {
+		console.log("error program...dude", error)
+	}
+}
+
 export const getProgramData = async () => {
 
 	const data =  await mongo.collection("program").find({})

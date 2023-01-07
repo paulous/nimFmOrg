@@ -3,11 +3,13 @@ import {HomeContext} from "./HomeState"
 import { worldTime } from '../utils/worldTime'
 
 
-const initialValues = (program) => ({
+const initialValues = (program, day) => ({
 	unixTime:{},
 	setUnixTime:() => {},
 	programColl:program,
 	setProgramColl:() => {},
+	selectedDay:day,
+	setSelectedDay:() => {}
 })
 
 export const ShowTimeContext = createContext(initialValues)
@@ -17,13 +19,14 @@ function reducer(state, action) {
     switch (action.type) {
 	case "setProgramColl": 
 		return {...state, programColl:action.payload}
+	case "setSelectedDay": 
+		return {...state, selectedDay:action.payload}
 	default:
 		return state
     }
 }
 
 let timeout
-let onlineEv = false
 let updateNoSelect = false
 
 export const ShowTimeProvider = ({ 
@@ -37,7 +40,7 @@ export const ShowTimeProvider = ({
 		setCurrentShow
 	} = homeContext
 
-    const [state, dispatch] = useReducer(reducer, initialValues(program))
+    const [state, dispatch] = useReducer(reducer, initialValues(program, wt.getDay))
 
 		
 	const [unixTime, setUnixTime] = useState(wt)
@@ -91,9 +94,9 @@ export const ShowTimeProvider = ({
 	}, [unixTime.getHour, unixTime.getMins, unixTime.getSecs, getUnixTime, setUnixTime, showIndx, times])
 
 	const offLineWake = useCallback(() => {
-		onlineEv = true
 		window.addEventListener('online', () => { 
 			updateNoSelect = false
+			console.log('online wake was called.')
 			getUnixTime(wtResolved => {
 				setUnixTime(wtResolved)
 			})                
@@ -124,7 +127,9 @@ export const ShowTimeProvider = ({
             value={{
 				unixTime,
 				programColl:state.programColl,
-				setProgramColl:(arr) => dispatch({type: "setProgramColl", payload:arr})
+				setProgramColl:(arr) => dispatch({type: "setProgramColl", payload:arr}),
+				selectedDay:state.selectedDay,
+				setSelectedDay:(num) => dispatch({type: "setSelectedDay", payload:num})
             }}>
         {children}
         </ShowTimeContext.Provider>

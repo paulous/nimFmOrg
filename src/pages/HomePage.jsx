@@ -5,15 +5,13 @@ import BodyOne from './home/BodyOne'
 
 export async function loader() {
 	
-	return {}
+	return {showTitleId: 'hello'}
 }
 
 export default function HomePage(){
 
-
-	const data = useLoaderData()
+	//const {showTitleId} = useLoaderData()
 	
-
 	return <Main>
 			<div className='box b-0'>
 				<Header />

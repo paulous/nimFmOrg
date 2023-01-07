@@ -12,6 +12,12 @@ export const MainBodyOne = styled.div`
     url('/assets/one/fuck.png') center center;
     background-size: cover;
     background-repeat:no-repeat;
+
+	select{
+		padding:10px;
+		font-size:1.1rem;
+		background: rgba(103, 155, 139, 1) ;
+	}
 `
 export const BodyOneCont = styled.div`
     max-width:1000px;
@@ -21,7 +27,7 @@ export const BodyOneCont = styled.div`
 		font-size:3.5rem;
 		margin:75px 0 10px;
 		line-height:1.3;
-		color: rgba(199, 164, 196, 0.5);
+		color: rgba(199, 164, 196, 0.9);
 		transform:rotate( -3deg);
 		
 		${media.phone`font-size:3rem; margin:10px 0 20px;`}
