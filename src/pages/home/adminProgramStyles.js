@@ -24,6 +24,17 @@ export const Main = styled.div`
 	.day-wrap{
 		width:clamp(200px, 95vw, 1000px);
 
+		.add-show{
+			display:flex;
+			font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+			color:rgba(0, 0, 0, 1);
+			justify-content:center;
+			padding:10px;
+			background:rgba(249, 242, 190, 1);
+			border-radius:5px;
+			cursor:pointer;
+		}
+
 		select{
 			padding:10px;
 			font-size:1.1rem;
@@ -38,7 +49,7 @@ export const Main = styled.div`
 		margin-top:25px;
 	}
 	.title{
-		margin-right:15px;
+		margin-right:35px;
 	}
 	.admin-btns{
 		position:fixed;
@@ -51,10 +62,24 @@ export const Listing = styled.div`
 	position:relative;
 	display:flex;
 	align-items:center;
-	background:${({selected}) => selected ? 'rgba(14, 222, 222, 0.7)' : 'rgba(33,24,28,0.5)'};
+	background:${({selected}) => selected ? 'rgba(247, 28, 203, .5)' : 'rgba(33,24,28,0.5)'};
 	margin-top: 3px;
 	box-shadow: 2px 2px 3px rgba(13,3,15,1);
 	border-radius: 3px;
+
+	span{
+		position:absolute;
+		right: 15px;
+		font-size:1.5rem;
+		cursor:pointer;
+	}
+	p{
+		position:absolute;
+		top:5px;
+		font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+		font-size:1.1rem;
+		color:#FFF8C2;
+	}
 `
 export const Time = styled.div`
 	display:flex;
@@ -67,7 +92,7 @@ export const Time = styled.div`
 	margin-right:15px;
 
 	clip-path: polygon( 0% 0%, calc(100% - 0.8em) 0%, 100% 50%, calc(100% - 0.8em) 100%, 0% 100%);
-	background:${({selected}) => selected ? 'rgba(144, 69, 102, 0.7)' : 'rgba(33,24,28,0.5)'};
+	background:${({selected}) => selected ? 'rgba(247, 28, 203, 0.5)' : 'rgba(33,24,28,1)'};
 `
 export const Day = styled.li`
 	margin: 0 3px 6px 3px;

@@ -53,6 +53,6 @@ export const GlobalStyles = createGlobalStyle`
 	}
 
 	p{
-		font-family: 'Merriweather', serif;
+		//font-family: 'Merriweather', serif;
 	}
 `
