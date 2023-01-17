@@ -1,10 +1,11 @@
 import {useContext, useState} from 'react'
-import { useLoaderData } from 'react-router-dom'
+import { useLoaderData, useNavigate, Link, Outlet } from 'react-router-dom'
 import { Main, Day, Time, Listing } from './adminProgramStyles'
 import { GlobalStyles } from '../../components/GlobalStyles'
 import {AdminContext} from "../../utils/AdminState"
 import {ShowTimeContext} from "../../utils/ShowTimeState"
 import {getShowTitleId} from "../../utils/loaders"
+import {updateProgram} from "../../utils/actions"
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 
 let times = [
@@ -29,31 +30,8 @@ let times = [
 
 export async function loader() {
 	
-	//return {showTitleId:[{title:'hello'}]}
 	return {showTitleId:await getShowTitleId()}
 }
-
-let addUpdateDeleteProgram = async (type, data) => {
-	switch (type) {
-		case 'add':
-			console.log('add', data)
-			
-			break;
-		case 'update':
-			console.log('update', data)
-
-			break;
-		case 'delete':
-			console.log('delete', data)
-			
-			break;
-	
-		default:
-			break;
-	}
-	return ''
-
-} 
 
 export default function AdminProgram(){
 
@@ -68,9 +46,11 @@ export default function AdminProgram(){
 		selectedDay
 	} = useContext(ShowTimeContext)
 
+	let navigate = useNavigate()
+
 	const [day, setDay] = useState(selectedDay)
 	const [dayHistory, setDayHistory] = useState({[programColl[day].day]: programColl[day].hosts.map(
-		(sho, i, arr) => ({ ...sho, // will be cleaned 
+		(sho, _, arr) => ({ ...sho, // will be cleaned 
 					selected:{}, //set init obj for css selection changes
 					origVals:{title:sho.title, time:sho.time, numShows:arr.length} // set init obj for original values
 				} 
@@ -101,10 +81,11 @@ export default function AdminProgram(){
 		e.preventDefault()
 
 		let newtitle = e.target.value
-
+		let new_id = showTitleId.filter((s) => (s.title === e.target.value))
 		let newtitleday = () => dayHistory[programColl[day].day].map(
 			(sho,j) => (i === j 
 				? 	{ ...sho, 
+						show_id:new_id[0]._id.toString(),
 						title:newtitle,
 						selected: newtitle !== sho.origVals.title 
 							? {...sho.selected, [sho.origVals.title]:true} 
@@ -115,7 +96,28 @@ export default function AdminProgram(){
 		setDayHistory(state => ({...state , [programColl[day].day]: newtitleday()}))
 	}
 
-	let saveDays = (e) => {
+	let saveBtn = () => {
+
+		let activeDay = false
+
+		for(let hday in dayHistory ){
+
+			let origDayLen = programColl[programColl.findIndex((pc) => (pc.day === hday))].hosts.length
+
+			if(dayHistory[hday].some((d) => 
+				d.selected[d.origVals.title] || d.selected[d.origVals.time]) 
+				|| (dayHistory[hday].length !== origDayLen && origDayLen > 0)
+			){
+				activeDay = true
+			}
+		}
+
+		return activeDay
+			? 	<div className='save-btn-on' onClick={saveDays}>SAVE ALL CHANGES!</div>
+			:	<div className='save-btn-off'>NOTHING TO SAVE</div>
+	}
+
+	let saveDays = async (e) => {
 		e.preventDefault()
 
 		let dayhistory = {...dayHistory}
@@ -127,7 +129,7 @@ export default function AdminProgram(){
 					m.selected[m.origVals.title] //changed title or time
 					|| m.selected[m.origVals.time]
 				) 
-			|| dayhistory[day].length !== dayhistory[day][0].origVals.numShows // added or removed a show
+			|| dayhistory[day].length !== dayhistory[day][0]?.origVals.numShows // added or removed a show
 			){
 				cleanDayHistory = {...cleanDayHistory, [day]: dayhistory[day].map((d) => {
 
@@ -140,18 +142,28 @@ export default function AdminProgram(){
 			}		
 		}
 
-		addUpdateDeleteProgram('update', cleanDayHistory)
+		addUpdateDeleteProgram(cleanDayHistory)
+
 	}
 
 	let addShow = (e) => {
 		e.preventDefault()
 
 		let dayStr = programColl[day].day
+		let sho = programColl[day].hosts
+		let addedShow = {
+			title:sho[0]?.title || 'untitled',
+			slot:sho[0]?.slot||'0',
+			time:sho[0]?.time ||'6',
+			show_id:sho[0]?.show_id || 'unchanged',
+			selected:{},
+			origVals:{title:sho[0]?.title || 'new show', time:sho[0]?.time || 6, numShows:sho.length || dayHistory[day]?.hosts.length}
+		}
 
 		setDayHistory(state => (
 			{
 				...state, 
-				[dayStr]: [...state[dayStr], state[ dayStr ][0] ]
+				[dayStr]: [...state[dayStr], addedShow ]
 				.sort((a, b) =>  a.slot - b.slot) 
 			}
 		))
@@ -170,90 +182,111 @@ export default function AdminProgram(){
 		))
 	}
 
-	return <Main>
-		<GlobalStyles bodyScrollOff={true} />
-		<h2>UPDATE THE PROGRAM</h2>
-			<ul className='days'>
-				{programColl.map(show => show.day).map((d, i) => 
-					<Day 
-					key={`days${i}`} 
-					selected={i === day} 
-					onClick={() => {
-						let newday = programColl[i]
-						let newhosts = newday.hosts.map(
-							(sho,_,arr) => ({ ...sho, 
-								selected:{}, //set dirty
-								origVals:{title:sho.title, time:sho.time, numShows:arr.length}//set dirty
-							} 
-						))
-						setDay(i)
-						setDayHistory(state => (
-							{
-								...state , 
-								[newday.day]: state[newday.day] 
-									? state[newday.day]  
-									: [...newhosts]
-							}
-							)
-						)
-					}} >
-						{d.toUpperCase()}
-					</Day>)}
-			</ul>
-			<div className='day-wrap'>
-				<div className='add-show' onClick={addShow}>ADD NEW ENTRY</div>
-				{dayHistory[programColl[day].day].map((dayshow, i) => (						
-					<Listing 
-					selected={dayshow.selected[dayshow.origVals.title]}  //need delete and add
-					key={`ap${i}`}
-					>			
-						<Time selected={dayshow.selected[dayshow.origVals.time]}>
-							<p>{dayshow.selected[dayshow.origVals.time] && `Old time: ${dayshow.origVals.time}`}</p>
-							<select onChange={onTime(i)} value={dayshow.slot}>
-								{	
-									times.map((time, j) => (
-										<option
-										key={`time${j}`} 
-										value={j}
-										>
-											{time.label}
-										</option>
-									))
-								}
-							</select>
-						</Time>
-						<div className='title' >
-							<p>{dayshow.selected[dayshow.origVals.title] && `Old title: ${dayshow.origVals.title}`}</p>
-							<select onChange={onTitle(i)} value={dayshow.title}>
-								{	
-									showTitleId.map((show,k) => (
-										<option 
-										key={`keyp${k}`} 
-										value={show.title}
-										>
-											{show.title}
-										</option>
-									))
-								}
-							</select>
-						</div>
-						<span onClick={removeShow(i)}>
-							{!dayshow.selected[dayshow.origVals.title] && !dayshow.selected[dayshow.origVals.time] && 'X'}
-						</span>								
-					</Listing>
-				))
-			}
-		</div>
-		{admin.status && <div className='admin-btns'>
-				<div  className='save-days' onClick={saveDays}>save</div>
-				<AdminLinkBtn {...{
-				admin:admin.program,
-				adminOn:'/', 
-				adminOff:'/',
-				setAdmin, 
-				area:'program'
-				}} />
-			</div>
+	let addUpdateDeleteProgram = async (data) => {
+
+		let {result, days, shows} = await updateProgram(data)
+
+		if(result.length && result.some((r) => (r.modifiedCount === 1))){
+
+			setProgramColl(programColl.map((d) => (days.some((sd) => (d.day === sd)) 
+			? {...d, hosts:shows[days.indexOf(d.day)]} 
+			: d
+			)))
+
+			navigate('/')
+		}else{
+			console.log('nothing was updated')
 		}
-	</Main>
+	} 
+
+	return <>{
+			admin.status &&
+			<>
+				<Main>
+					<GlobalStyles bodyScrollOff={true} />
+					<h2>UPDATE THE PROGRAM</h2>
+					<div className='back-btn'>
+						<Link to='/'>back</Link>
+					</div>
+					<ul className='days'>
+						{programColl.map(show => show.day).map((d, i) => 
+							<Day 
+							key={`days${i}`} 
+							selected={i === day} 
+							onClick={() => {
+								let newday = programColl[i]
+								let newhosts = newday.hosts.map(
+									(sho,_,arr) => ({ ...sho, 
+										selected:{}, //set dirty
+										origVals:{title:sho.title, time:sho.time, numShows:arr.length}//set dirty
+									} 
+								))
+								setDay(i)
+								setDayHistory(state => (
+									{
+										...state , 
+										[newday.day]: state[newday.day] 
+											? state[newday.day]  
+											: [...newhosts]
+									}
+									)
+								)
+							}} >
+								{d.toUpperCase()}
+							</Day>)}
+					</ul>
+					<div className='day-wrap'>
+					<div className='admin-btns'>
+							<Link to='/admin-program/admin-add-show'>CREATE A NEW SHOW</Link>
+							{ saveBtn() }
+							<Link to='/admin-program/admin-remove-show'>DELETE A SHOW</Link>
+						</div>
+						<div className='add-show' onClick={addShow}>ADD NEW ENTRY</div>
+						{dayHistory[programColl[day].day].map((dayshow, i) => (						
+							<Listing 
+							selected={dayshow.selected[dayshow.origVals.title]}  //need delete and add
+							key={`ap${i}`}
+							>			
+								<Time selected={dayshow.selected[dayshow.origVals.time]}>
+									<p>{dayshow.selected[dayshow.origVals.time] && `Old time: (${dayshow.origVals.time})`}</p>
+									<select onChange={onTime(i)} value={dayshow.slot}>
+										{	
+											times.map((time, j) => (
+												<option
+												key={`time${j}`} 
+												value={j}
+												>
+													{time.label}
+												</option>
+											))
+										}
+									</select>
+								</Time>
+								<div className='title' >
+									<p>{dayshow.selected[dayshow.origVals.title] && `Old title: (${dayshow.origVals.title})`}</p>
+									<select onChange={onTitle(i)} value={dayshow.title}>
+										{	
+											showTitleId.map((show,k) => (
+												<option 
+												key={`keyp${k}`} 
+												value={show.title}
+												>
+													{show.title}
+												</option>
+											))
+										}
+									</select>
+								</div>
+								<span onClick={removeShow(i)}>
+									{!dayshow.selected[dayshow.origVals.title] && !dayshow.selected[dayshow.origVals.time] && 'X'}
+								</span>								
+							</Listing>
+						))
+						}
+					</div>	
+				</Main>
+				<Outlet context={{showTitleId,showsData:programColl[day].hosts[0] || {}, admin, setAdmin}} />
+			</>
+		}
+	</>
 }

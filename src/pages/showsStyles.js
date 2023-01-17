@@ -14,6 +14,18 @@ export const Main = styled.div`
 	${props => props.bgImage && `, url(${props.bgImage}); background-size:cover;`};
 	overflow-y:auto;
 
+	.back-btn{
+		position:absolute;
+		top:15px;
+		left:3vw;
+		a{
+			color:white;
+			//margin:30px clamp(50px, 25vw, 600px) 30px 30px ;
+			//justify-content:center;
+			font-size:1.5rem;
+		}		
+	}
+
 	.wrap{
 		max-width:90vw;
 
@@ -33,6 +45,7 @@ export const Main = styled.div`
 				background: linear-gradient(0deg, rgba(42, 3, 42, 0) 25%, rgba(34, 2, 34, 0.281) 75%);
 				padding:25px;
 				margin-top:30px;
+				white-space: pre-wrap;
 			}
 
 			.mast-head{

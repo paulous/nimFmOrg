@@ -1,7 +1,10 @@
 import {useNavigate} from 'react-router-dom'
 import styled from 'styled-components'
 
-const Main = styled.div`		
+const Main = styled.div`
+	position:${props => props.position ? 'absolute' : 'fixed'};
+	bottom:50px;
+	right:15px;	
 	width:100px;
 	height:100px;
 	border-radius:50%;
@@ -12,17 +15,17 @@ const Main = styled.div`
 	cursor:pointer;
 `
 
-export default function AdminLinkBtn({ admin, adminOn, adminOff, setAdmin, area}){
+export default function AdminLinkBtn({ admin, link, setAdmin, area, position}){
 
 	let navigate = useNavigate()
 
 	let toggleAdmin = (e) => {
 		e.preventDefault()
-		navigate(admin ? adminOn : adminOff)
+		navigate(link)
 		setAdmin({[area]:!admin})
 	}
 
 
-	return <Main onClick={toggleAdmin}>
+	return <Main onClick={toggleAdmin} position={position}>
 		</Main>
 }

@@ -54,7 +54,6 @@ export default function BodyOne(){
         setTrail.start({from:{opacity:0, y:100}, to:{opacity:1, y:0}, reset:true})
     }, [setTrail, programColl])
 
-
     return (
 		<MainBodyOne>
 			<BodyOneCont>
@@ -66,7 +65,7 @@ export default function BodyOne(){
 				</Days>
 				<ul>
 					{trail.map((prop, i) =>
-							<Link key={'today'+i}  to={`show/${today[i].title}`}>
+							<Link key={'today'+i}  to={`show/${today[i].show_id}`}>
 								<animated.div style={prop}>
 										<Listing 
 										bg={i % 2 ? true : false}
@@ -94,10 +93,10 @@ export default function BodyOne(){
 			</BodyOneCont>
 			{	admin.status && <AdminLinkBtn {...{
 				admin:admin.program,
-				adminOn:'admin-program', 
-				adminOff:'/',
+				link:'admin-program', 
 				setAdmin, 
-				area:'program'
+				area:'program',
+				position:true
 				}} />
 			}
 		</MainBodyOne>

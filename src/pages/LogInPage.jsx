@@ -1,8 +1,8 @@
-import {useCallback, useContext} from 'react'
-import {useNavigate} from "react-router-dom"
+import {useContext, useEffect} from 'react'
+import {useNavigate, Form, useActionData} from "react-router-dom"
 import * as Realm from "realm-web"
 import {AdminContext} from "../utils/AdminState"
-import { useForm } from "react-hook-form"
+import {adminLogIn} from "../utils/Realm"
 import styled from 'styled-components'
 //import media from '../media'
 
@@ -59,85 +59,51 @@ const Main = styled.div`
 	}
 `
 
+export async function actions({ params, request }) {
+
+	let formData = await request.formData()
+
+	let details = [formData.get("email"), formData.get("pass")]
+	let data = await adminLogIn({email:details[0], pass:details[1]})
+
+	return data
+}
+
 export default function LogIn(){
 
 	const navigate = useNavigate()
+	let actionData = useActionData()
 
 	const adminContext = useContext(AdminContext)
 	const {
 		setAdmin
 	} = adminContext
 
-	const adminLogIn = useCallback( async ( {email, password}) => {
-
-		let credentials = Realm.Credentials.emailPassword( email, password )
-		try {
-			let user = await app.logIn(credentials)
-
-			console.log(user)
-
-			let db = app.currentUser.mongoClient("mongodb-atlas")
-			let mongo = db.db("nim-fm")
-			
-			/*let hosts = await mongo.collection('hosts').find({})
-
-			let hostIds = hosts.map((h,i) => ({hostId:h._id, title:h.title}))
-
-			let program = await mongo.collection('program').find({})
-
-			let changeProgram = hostIds.map((hid,i) => {
-				hid.title .map((t,i) => (t.title === hostIds[]))
-				return hostIds[i].title
-			}).filter((t,i) => (t.title === h.hosts.title))
-
-			console.log(changeProgram)
-
-			let insertValAt = {
-                "$push": {
-                    "hosts": {
-                       "$each": [{'hostId': hostIds[0].hostId}],
-                       "$position": 2
-                    }
-                 }
-            }
-
-			{ "$addToSet" : { "hosts.$.hostId" : {} } }
-
-			let programUpdate = await mongo.collection('program').updateOne({'day':'sunday'}, insertValAt, {'upsert':false} )*/
-
-
-
-			setAdmin({status:true, program:false, mongo, ObjectId, user})
+	useEffect(() => {
+		if(actionData?.user){
+			setAdmin({status:true})
 			navigate('/')
-	
-		} catch (err) {
-			console.error("Failed to log in", err.message)
 		}
-	
-	}, [setAdmin])
-
-	const { register, handleSubmit, watch, formState: { errors } } = useForm()
-  	const onSubmit = data => adminLogIn(data)
+	}, [actionData?.user])
 
 	return <Main>
 		<div className='log-in'>
 			<div className='wrapper'>
 				<h1>LOGIN</h1>
-				 <form onSubmit={handleSubmit(onSubmit)}>
-					<input 
+				 <Form method="post" action={`/hackdb`}>
+					<input
+					name='email'
 					type="email" 
-					placeholder="your@email.com" 
-					{...register("email" , { required: true })} 					
-					/>
-					<p>{errors.email && <>This field is required</>}</p>
-					<input 
+					placeholder="your@email.com" />
+					{actionData?.errors.email && <span>{actionData.errors.email}</span>}
+					<input
+					name='pass'
 					type="password"
 					placeholder="Password" 
-					{...register("password", { required: true, minLength: 4 })} 
 					/>
-					<p>{errors.password && <>This field is required</>}</p>
+					{actionData?.errors.password && <span>{actionData.errors.password}</span>}
 					<input type="submit" />
-				</form>
+				</Form>
 				
 			</div>
 		</div>

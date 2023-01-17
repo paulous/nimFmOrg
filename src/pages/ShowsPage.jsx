@@ -1,6 +1,6 @@
-import {useContext, useEffect, useState, Suspense} from 'react'
+import {useContext} from 'react'
 import {Main} from './showsStyles'
-import { useLoaderData, Outlet } from 'react-router-dom'
+import {useLoaderData, Outlet, Link } from 'react-router-dom'
 import {getShowsData} from '../utils/loaders'
 import AdminLinkBtn from '../components/buttons/AdminLinkBtn'
 import {AdminContext} from "../utils/AdminState"
@@ -8,7 +8,7 @@ import { GlobalStyles } from '../components/GlobalStyles'
 
 export async function loader({ params }) {
 
-	return {showsData: await getShowsData(params.show), params};
+	return {showsData: await getShowsData(params.show), params}
 }
 
 export default function ShowsPage(){
@@ -37,6 +37,9 @@ export default function ShowsPage(){
 
 	return <Main masthead={mastHead} bgImage={bgImage}>
 		<GlobalStyles bodyScrollOff={true} />
+		<div className='back-btn'>
+				<Link to='/'>back</Link>
+			</div>
 		<div className='wrap'>
 			<div className='head-wrap'>
 				<h1>{title.toUpperCase()}</h1>
@@ -63,14 +66,14 @@ export default function ShowsPage(){
 		</div>
 		{
 			admin.status && <>
-			<Outlet context={showsData[0]} />
 			<AdminLinkBtn {...{
 				admin:admin.show,
-				adminOn:`/show/${params.show}`, 
-				adminOff:'admin-show',
+				link:`/show/${params.show}/admin-show`, 
 				setAdmin, 
 				area:'show'
-			}} /></>
+			}} />
+			<Outlet context={{showsData, admin, setAdmin}} />
+			</>
 		}	
 	</Main>
 }

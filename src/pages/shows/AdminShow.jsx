@@ -1,5 +1,7 @@
-import { useOutletContext, Form, useParams } from 'react-router-dom'
+import {useEffect} from 'react'
+import { useOutletContext, Form, useParams , useActionData, useNavigate} from 'react-router-dom'
 import { updateShow } from '../../utils/actions'
+import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 //import media from '../media'
 import styled from 'styled-components'
 
@@ -70,16 +72,24 @@ export async function actions({ params, request }) {
 		linkUrl:formData.get("linkUrl") 
 	} 
 
-	return {actdata: await updateShow(params, updatedShow)};
+	let result = await updateShow(params, updatedShow)
+
+	return {result, updatedShow}
 }
 
 export async function loader({ params }) {
-console.log(params)
-	return {showData: 'hello'};
+
+	return {showData: 'hello'}
 }
 
-export default function AdminShows() {
+export default function AdminShow() {
 	let {
+		showsData,
+		admin,
+		setAdmin
+	} = useOutletContext()
+
+	let {		
 		bgImage, 
 		mastHead, 
 		podcastTitle, 
@@ -92,10 +102,23 @@ export default function AdminShows() {
 		imgOne, 
 		imgTwo, 
 		linkDesc, 
-		linkUrl 
-	} = useOutletContext()
+		linkUrl
+	} = showsData[0]
 
+	let actionData = useActionData()
+	let navigate = useNavigate()
 	let {show} = useParams()
+
+	useEffect(() => {
+
+		if(actionData?.result.modifiedCount === 1){
+
+			navigate(`/show/${show}`)
+		}else{
+			console.log('nothing was updated')
+		}
+
+	}, [actionData])
 
   return <Main>
 		<h2>EDIT SHOW: {title}</h2>
@@ -195,5 +218,14 @@ export default function AdminShows() {
 			</label>
 			<input type="submit" />
 		</Form>
+		{
+			admin.status && 
+			<AdminLinkBtn {...{
+				admin:admin.show,
+				link:`/show/${show}`, 
+				setAdmin, 
+				area:'show'
+			}} />
+		}
 	</Main>
 }

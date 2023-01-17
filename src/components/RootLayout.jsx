@@ -27,8 +27,8 @@ export default function RootLayout()  {
   	return <>
 		<ShowTimeProvider {...{wt, program}}>
 			<Outlet />
+			<PlayerCont />
 		</ShowTimeProvider>
-		<PlayerCont />
   		<Nav>
 			<MainNavigation />
 		</Nav>

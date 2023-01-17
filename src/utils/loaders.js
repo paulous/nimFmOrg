@@ -17,7 +17,7 @@ export const getShowTitleId = async () => {
 		},
 	  ])
 	try {
-		if (data.length) return data
+		if (data.length) return data.sort((a, b) =>  a.title.localeCompare(b.title))// sort abc...
 		else  console.log("no program data...dude")
 		
 	} catch (error) {
@@ -52,9 +52,9 @@ export const getShopData = async () => {
 }
 
 
-export const getShowsData = async (title) => {
+export const getShowsData = async (_id) => {
 
-	const data =  await mongo.collection("hosts").find({'title':title})
+	const data =  await mongo.collection("hosts").find({'_id':ObjectId(_id)})
 	try {
 		if (data.length) return data.sort((a,b) => (a.indx - b.indx))
 		else  console.log("no shop data...dude")

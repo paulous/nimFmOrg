@@ -5,18 +5,21 @@ import RootLayout, {loader as rootLoader} from '../components/RootLayout'
 import HomePage, {loader as homeLoader} from '../pages/HomePage'
 import ItemDetail from '../pages/shop/ItemDetail'
 import {loader as adminProgramLoader} from '../pages/home/AdminProgram'
-//import AdminShows, {loader as adminShowsLoader, actions as adminShowsAction} from '../pages/shows/AdminShows'
+import {loader as adminShowLoader, actions as adminShowAction} from '../pages/shows/AdminShow'
+import {actions as adminAddShowAction} from '../pages/home/AdminAddShow'
+import {actions as adminRemoveShowAction} from '../pages/home/AdminRemoveShow'
 import ShowsPage, {loader as showsLoader} from '../pages/ShowsPage'
 import ShopPage, {loader as shopLoader} from '../pages/ShopPage'
 import DocsPage, {loader as docsLoader} from '../pages/DocsPage'
-import LogInPage from '../pages/LogInPage'
+import {actions as loginAction} from '../pages/LogInPage'
 
+const LogInPage = lazy(() => import('../pages/LogInPage'))
 const AdminProgram = lazy(() => import('../pages/home/AdminProgram'))
-
-
-const AdminShows = lazy(() => import('../pages/shows/AdminShows'))
-const adminShowsLoader = lazy(() => import('../pages/shows/AdminShows').then((func) => ({default: func.loader})))
-const adminShowsAction = lazy(() => import('../pages/shows/AdminShows').then((func) => ({default: func.actions})))
+const AdminShow = lazy(() => import('../pages/shows/AdminShow'))
+const AdminAddShow = lazy(() => import('../pages/home/AdminAddShow'))
+const AdminRemoveShow = lazy(() => import('../pages/home/AdminRemoveShow'))
+//const adminShowLoader = lazy(() => import('../pages/shows/AdminShow').then((func) => ({default: func.loader})))
+//const adminShowAction = lazy(() => import('../pages/shows/AdminShow').then((func) => ({default: func.actions})))
 
 export const router = createBrowserRouter([
 	{
@@ -31,11 +34,34 @@ export const router = createBrowserRouter([
 				loader:homeLoader,
 				children:[
 					{ 
+						path: "hackdb",
+						element: <Suspense fallback={<>loading...</>}>
+									<LogInPage />
+								</Suspense>,
+						action:loginAction
+					},
+					{ 
 						path: "admin-program",
 						element: <Suspense fallback={<>loading...</>}>
 									<AdminProgram />
 					  			</Suspense>,
-						loader:adminProgramLoader
+						loader:adminProgramLoader,
+						children:[
+							{ 						
+								path: "admin-add-show",
+								element: <Suspense fallback={<>loading...</>}>
+											<AdminAddShow />
+										</Suspense>,
+								action:adminAddShowAction
+							},
+							{ 						
+								path: "admin-remove-show",
+								element: <Suspense fallback={<>loading...</>}>
+											<AdminRemoveShow />
+										</Suspense>,
+								action:adminRemoveShowAction
+							}
+						]
 					},
 					{ 						
 						path: "show/:show",
@@ -45,10 +71,10 @@ export const router = createBrowserRouter([
 							{ 
 								path: "admin-show",
 								element: <Suspense fallback={<>loading...</>}>
-											<AdminShows />
+											<AdminShow />
 							  			</Suspense>,
-								loader:adminShowsLoader.loader,
-								action:adminShowsAction.actions
+								loader:adminShowLoader,
+								action:adminShowAction
 							}
 						]
 					}
@@ -70,9 +96,5 @@ export const router = createBrowserRouter([
 				]
 			}
 		]
-	},
-	{ 
-		path: "hackdb",
-		element: <LogInPage />
 	}
-]);
+])

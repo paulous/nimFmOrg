@@ -1,8 +1,9 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import styled from "styled-components"
 
 
 const Nav = styled.nav`
+	position:relative;
 	width:90%;
 	max-width:1000px;
 	font-size:clamp(1.3rem, 1.5vw, 3rem);
@@ -20,6 +21,12 @@ const Nav = styled.nav`
 	.off{
 		color:gray;
 		&:hover{color:white;}
+	}
+	.log-in{
+		position:absolute;
+		right:30px;
+		display:flex;
+		align-items:center;
 	}
     
 `
@@ -56,6 +63,7 @@ export default function MainNav(){
 				</NavLink>
 			  </li>
 			</ul>
+			<div className='log-in'><Link to="hackdb" >log-in</Link></div>
 		</Nav>
 	  );
 }

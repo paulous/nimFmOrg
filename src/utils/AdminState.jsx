@@ -1,7 +1,7 @@
 import {createContext, useReducer} from "react"
 
 const initialValues = {
-	admin:{status:true, program:false, show:false, sponsors:false, shop:false, docs:false},
+	admin:{status:false, program:false, show:false, sponsors:false, shop:false, docs:false},
 	setAdmin:() => {}
 }
 

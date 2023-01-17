@@ -95,19 +95,13 @@ export default function PlayerCont () {
 		currentShow
 	} = useContext(HomeContext)
 
-    const [updateShow, setUpdateShow] = useState(currentShow)
+    //const [currentShow, setcurrentShow] = useState(currentShow)
 
-    let mashTitle = (t) => (
-        t.indexOf(' ') !== -1 
-            ? t.split(' ').map(i => i.charAt(0)).join('').replace(/\W/g, '').toLowerCase() 
-            : t.replace(/\W/g, '').toLowerCase()
-    )
+    //useEffect(() => {
+		//setcurrentShow(currentShow)
+    //}, [currentShow])
 
-    useEffect(() => {
-		setUpdateShow(currentShow)
-    }, [currentShow])
-
-    let isPodcast = updateShow.started && url !== nimfm_url && title
+    let isPodcast = currentShow.started && url !== nimfm_url && title
 
     return(
         <PlayerWrap>
@@ -121,9 +115,9 @@ export default function PlayerCont () {
                     audioStream
                 }} />
                 <Link to={
-                        updateShow.started
+                        currentShow.started
                         ? `${url === nimfm_url || !url 
-                            ? mashTitle(updateShow.title) 
+                            ? currentShow.show_id 
                             : currPath}` 
                         : '#'
                     }
@@ -131,7 +125,7 @@ export default function PlayerCont () {
                     <CurrentShow>                    
                         <CurrentShowTxt>
                         {
-                            isPodcast ? title : `NimFM ~ ${updateShow.title || 'Loading...'}`
+                            isPodcast ? title : `NimFM ~ ${currentShow.title || 'Loading...'}`
                         }
                         </CurrentShowTxt>
                     </CurrentShow>

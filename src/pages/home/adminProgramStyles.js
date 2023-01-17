@@ -21,6 +21,41 @@ export const Main = styled.div`
 		width:100%;
 	}
 
+	.back-btn{
+		//position:relative;
+		display:flex;
+		width:100%;
+		a{
+			position:absolute;
+			top:15px;
+			left:5vw;
+			color:white;
+			//margin:30px clamp(50px, 25vw, 600px) 30px 30px ;
+			//justify-content:center;
+			font-size:1.5rem;
+		}		
+	}
+
+	.admin-btns{
+		display:inline-flex;
+		justify-content:space-between;
+		width:100%;
+		font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+		background:rgba(33,24,28,0.5);
+		margin-bottom:2px;
+
+		div, a{
+			color:white;
+			padding:10px 15px;
+			border-radius:5px;
+		}
+		a:first-child{background:rgba(18, 123, 112, 1);}
+		a:last-child{background:rgba(209, 89, 135, 1);}
+
+		.save-btn-on{background:rgba(206, 6, 176, 1); cursor: pointer;}
+		.save-btn-off{background:rgba(62, 38, 59, 1);}
+	}
+
 	.day-wrap{
 		width:clamp(200px, 95vw, 1000px);
 
@@ -51,12 +86,6 @@ export const Main = styled.div`
 	.title{
 		margin-right:35px;
 	}
-	.admin-btns{
-		position:fixed;
-		bottom:15px;
-		right:30px;
-	}
-
 `
 export const Listing = styled.div`
 	position:relative;
