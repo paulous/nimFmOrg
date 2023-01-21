@@ -43,7 +43,7 @@ export const getShopData = async () => {
 
 	const data =  await mongo.collection("shop").find({})
 	try {
-		if (data.length) return data.sort((a,b) => (a.indx - b.indx))
+		if (data.length) return data
 		else  console.log("no shop data...dude")
 		
 	} catch (error) {

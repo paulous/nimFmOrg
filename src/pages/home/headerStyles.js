@@ -16,7 +16,7 @@ export const Center = styled.div`
 	${media.phone` margin-top: 110px;`}
 
 	.btn-top-margin{
-		margin-top:-100px;
+		margin-top:-115px;
 		${media.laptop` margin-top: -50px;`}
 		${media.phone` margin-top: 0;`}
 	}

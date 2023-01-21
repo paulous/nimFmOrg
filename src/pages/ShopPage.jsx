@@ -1,8 +1,8 @@
-
-import {useContext, useEffect} from 'react';
-import { Outlet, Link, Await, defer, useLoaderData } from 'react-router-dom'
+import {useContext} from 'react';
+import { Outlet, Link, useLoaderData } from 'react-router-dom'
+import {AdminContext} from "../utils/AdminState"
 import {Main} from './shopStyles'
-import Loader from '../utils/Loader'
+//import Loader from '../utils/Loader'
 import {getShopData} from '../utils/loaders'
 
 export async function loader() {
@@ -12,16 +12,12 @@ export async function loader() {
 
 export default function ShopPage(){
 
-	//const context = useContext(AppContext);
-	//const {} = context;
+	const {
+		admin, 
+		setAdmin
+	} = useContext(AdminContext)
 
-	useEffect(() => {
-		//setVerified({...verified, favs:verified.favs.splice(0, 1, 'user.id')})
-	}, [])
-
-
-	const data = useLoaderData()
-
+	const {shopColl} = useLoaderData()
 
 	return <Main>
 			<div>
@@ -32,17 +28,17 @@ export default function ShopPage(){
 			</div>
 			<div className='items'>
 				
-					{data.shopColl.map((itm, i) => (
+					{shopColl.map((itm, i) => (
 						<Link to={`${i}`} key={`itm${i}`}>
 							<div  className='item'>
-								<img className='itm-img' src={itm.frontImg} />							
-								<h3>{itm.title}	</h3>
-								<h3>Price: ${itm.price} AUD</h3>
+								<img className='itm-img' src={itm.images[0]} />							
+								<h3>{itm.name}</h3>
+								<h3>Price: ${itm.unit_amount.value} AUD</h3>
 							</div>
 						</Link>
 					))}
 				
 			</div>
-			<div className='details-outlet'><Outlet context={[data]}/></div>
+			<div className='details-outlet'><Outlet context={{shopColl,	admin, setAdmin}}/></div>
 		</Main>
 }

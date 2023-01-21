@@ -6,9 +6,9 @@ const {
 const app = new Realm.App({ id:import.meta.env.VITE_REALM_APP_ID})
 const mongo = app.currentUser.mongoClient("mongodb-atlas").db("nimfm")
 
-export const addShow = async (params, updatedShow) => {
+export const addShow = async (addShow) => {
 
-	const data =  await mongo.collection("hosts").insertOne({'title':params.show }, updatedShow, {'upsert':false})
+	const data =  await mongo.collection("hosts").insertOne({}, addShow, {'upsert':false})
 	try {
 		return data
 		
@@ -19,7 +19,7 @@ export const addShow = async (params, updatedShow) => {
 
 export const removeShow = async (params) => {
 
-	const data =  await mongo.collection("hosts").deleteOne({'title':params.show })
+	const data =  await mongo.collection("hosts").deleteOne({'_id':ObjectId(params.show) })
 	try {
 		return data
 		
@@ -30,7 +30,7 @@ export const removeShow = async (params) => {
 
 export const updateShow = async (params, updatedShow) => {
 
-	const data =  await mongo.collection("hosts").updateOne({'title':params.show }, updatedShow, {'upsert':false})
+	const data =  await mongo.collection("hosts").updateOne({'_id':ObjectId(params.show) }, updatedShow, {'upsert':false})
 	try {
 		return data
 		
@@ -72,4 +72,37 @@ export const updateProgram = async (data) => {
 	)
 	
 	return {result, days, shows}
+}
+
+export const updateShop = async (params, updatedShop) => {
+
+	const data =  await mongo.collection("shop").updateOne({'_id':ObjectId(params.shop) }, updatedShop, {'upsert':false})
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error updateShow...dude", error)
+	}
+}
+
+export const addShop = async (params, addShop) => {
+
+	const data =  await mongo.collection("shop").insertOne({'_id':ObjectId(params.shop)  }, addShop, {'upsert':false})
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error addShop...dude", error)
+	}
+}
+
+export const removeShop = async (params) => {
+
+	const data =  await mongo.collection("shop").deleteOne({'_id':ObjectId(params.shop)  })
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error deleteShop...dude", error)
+	}
 }

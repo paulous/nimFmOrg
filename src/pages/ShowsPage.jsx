@@ -1,10 +1,11 @@
 import {useContext} from 'react'
 import {Main} from './showsStyles'
-import {useLoaderData, Outlet, Link } from 'react-router-dom'
+import {useLoaderData, Outlet } from 'react-router-dom'
 import {getShowsData} from '../utils/loaders'
 import AdminLinkBtn from '../components/buttons/AdminLinkBtn'
 import {AdminContext} from "../utils/AdminState"
 import { GlobalStyles } from '../components/GlobalStyles'
+import BackButton from '../components/buttons/BackButton'
 
 export async function loader({ params }) {
 
@@ -37,9 +38,7 @@ export default function ShowsPage(){
 
 	return <Main masthead={mastHead} bgImage={bgImage}>
 		<GlobalStyles bodyScrollOff={true} />
-		<div className='back-btn'>
-				<Link to='/'>back</Link>
-			</div>
+		<BackButton here='/' />
 		<div className='wrap'>
 			<div className='head-wrap'>
 				<h1>{title.toUpperCase()}</h1>

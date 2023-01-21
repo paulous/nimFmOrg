@@ -9,7 +9,9 @@ const Rainbow = styled.svg.attrs(props => ({
 	xmlnsXlink: "http://www.w3.org/1999/xlink",
 	viewBox: `0 0 200 200`
 }))`
-	//styles
+	#ftm{
+		opacity:0.6;
+	}
 `
 
 const Circle = styled(animated.circle).attrs(props => ({
@@ -66,6 +68,11 @@ export default function RainbowSvg({ pause }){
 						<stop offset="1" stopColor="white" stopOpacity="0.8"/>
 					</linearGradient>
 
+					<linearGradient id="fade-nimfm" y1="0.9" y2="0.1" x2="0" x1="0">
+						<stop offset="0.5" stopColor="#b6a9bb" stopOpacity="0.8"/>
+						<stop offset="1" stopColor="#b6a9bb" stopOpacity="0.4"/>
+					</linearGradient>
+
 					<mask id="fade" maskContentUnits="objectBoundingBox">
 						<rect width="1" height="1" fill="url(#fadeGrad)"/>
 					</mask>
@@ -99,8 +106,8 @@ export default function RainbowSvg({ pause }){
 						/>
 					)}
 				</g>
-				<g id="layer1"  fill="#f5e9ff" style={{transform:"scale(1.48) translate(-39px, 13px)"}} >
-					<g id="nimfm" style={{opacity:"0.7"}}>
+				<g id="layer1"  fill="#f5e9ff" style={{transform:"scale(1.48) translate(-39px, 9px)"}} >
+					<g id="nimfm" fill="url(#fade-nimfm)">
 						<path id="N0" d="m42.7 75 0.0576 1.92q0 0.499-0.269 0.768-0.269 0.269-0.653 0.269-0.365 0-0.614-0.25t-0.25-0.537q0-0.307 0.0384-0.557 0.0576-0.269 0.096-0.595 0.096-0.557 0.096-2.78v-23.9l20.9 16.5v-11.4q0-1.31-0.0768-1.86-0.096-0.902-0.096-1.27 0-0.96 0.825-0.96 0.326 0 0.614 0.23 0.307 0.23 0.307 0.672v0.672l-0.0768 2.78v24.1l-20.9-16.4z" />
 						<path id="i0" d="m70 53.9q-1.98 0-3.09-0.883t-1.11-2.32q0-1.21 1.23-2.07 1.31-0.921 2.76-0.921 1.46 0 2.25 0.288 0.806 0.288 1.36 0.748 1.11 0.94 1.11 2.19 0 1.25-1.27 2.11-1.27 0.864-3.24 0.864zm-4.03 3.36h8.25v20.5h-8.25z" />
 						<path id="m0" d="m98.9 62.6q0.0384 0.461 0.0384 0.921v14.3h-8.23v-18.6q-0.211-0.096-0.499-0.096h-0.614q-1.5 0-3.49 2.05-0.614 0.633-1.17 1.4v15.3h-8.25v-20.5h8.25v3.09q3.24-3.44 7.25-3.44 5.18 0 6.39 3.84 1.65-1.9 3.63-2.86 2-0.979 4.01-0.979 3.44 0 5.09 1.63 1.65 1.63 1.65 4.93v14.3h-8.23v-18.6q-0.173-0.0768-0.864-0.0768-0.691 0-1.29 0.269-0.576 0.25-1.19 0.71-1.34 0.979-2.48 2.53z" />

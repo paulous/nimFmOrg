@@ -111,11 +111,14 @@ export const ShowTimeProvider = ({
 
 	useEffect(() => {
 		if(!updateNoSelect){
-			currentShowEffect()
-			offLineWake()
 			selectedTime()
+			currentShowEffect()
 		}
 	}, [currentShowEffect, offLineWake, unixTime, selectedTime])
+
+	useEffect(() => {
+		offLineWake()
+	}, [offLineWake])
 
 	useEffect(() => {
 		getUnixTime(wtResolved => {

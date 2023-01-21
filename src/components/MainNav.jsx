@@ -3,7 +3,6 @@ import styled from "styled-components"
 
 
 const Nav = styled.nav`
-	position:relative;
 	width:90%;
 	max-width:1000px;
 	font-size:clamp(1.3rem, 1.5vw, 3rem);
@@ -19,21 +18,20 @@ const Nav = styled.nav`
 		color:white;
 	}
 	.off{
-		color:gray;
+		color:rgba(182, 169, 187, 1);
 		&:hover{color:white;}
 	}
 	.log-in{
 		position:absolute;
 		right:30px;
-		display:flex;
-		align-items:center;
-	}
-    
+		color:#492c4e
+	}    
 `
 
 export default function MainNav(){
 	return (
 		<Nav>
+			<div className='log-in'><Link to="hackdb" >(./)</Link></div>
 			<ul>
 			  <li>
 			  <NavLink
@@ -63,7 +61,6 @@ export default function MainNav(){
 				</NavLink>
 			  </li>
 			</ul>
-			<div className='log-in'><Link to="hackdb" >log-in</Link></div>
 		</Nav>
 	  );
 }

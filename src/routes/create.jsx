@@ -1,15 +1,22 @@
 import {lazy, Suspense} from 'react'
 import {createBrowserRouter} from "react-router-dom"
 import ErrorPage from "../routes/error"
+
 import RootLayout, {loader as rootLoader} from '../components/RootLayout'
 import HomePage, {loader as homeLoader} from '../pages/HomePage'
-import ItemDetail from '../pages/shop/ItemDetail'
+
+import ShowsPage, {loader as showsLoader} from '../pages/ShowsPage'
 import {loader as adminProgramLoader} from '../pages/home/AdminProgram'
 import {loader as adminShowLoader, actions as adminShowAction} from '../pages/shows/AdminShow'
 import {actions as adminAddShowAction} from '../pages/home/AdminAddShow'
 import {actions as adminRemoveShowAction} from '../pages/home/AdminRemoveShow'
-import ShowsPage, {loader as showsLoader} from '../pages/ShowsPage'
+
 import ShopPage, {loader as shopLoader} from '../pages/ShopPage'
+import ItemDetail from '../pages/shop/ItemDetail'
+import {loader as adminShopUpdateLoader, actions as adminUpdateShopAction} from '../pages/shop/AdminShop'
+import {actions as adminAddShopAction} from '../pages/shop/AdminAddItem'
+import {actions as adminRemoveShopAction} from '../pages/shop/AdminRemoveItem'
+
 import DocsPage, {loader as docsLoader} from '../pages/DocsPage'
 import {actions as loginAction} from '../pages/LogInPage'
 
@@ -18,6 +25,10 @@ const AdminProgram = lazy(() => import('../pages/home/AdminProgram'))
 const AdminShow = lazy(() => import('../pages/shows/AdminShow'))
 const AdminAddShow = lazy(() => import('../pages/home/AdminAddShow'))
 const AdminRemoveShow = lazy(() => import('../pages/home/AdminRemoveShow'))
+
+const AdminShop = lazy(() => import('../pages/shop/AdminShop'))
+const AdminAddShop = lazy(() => import('../pages/shop/AdminAddItem'))
+const AdminRemoveShop = lazy(() => import('../pages/shop/AdminRemoveItem'))
 //const adminShowLoader = lazy(() => import('../pages/shows/AdminShow').then((func) => ({default: func.loader})))
 //const adminShowAction = lazy(() => import('../pages/shows/AdminShow').then((func) => ({default: func.actions})))
 
@@ -90,8 +101,33 @@ export const router = createBrowserRouter([
 				loader:shopLoader,
 				children:[
 					{				
-						path: ":indx",
-						element: <ItemDetail />
+						path: ":item",
+						element: <ItemDetail />,
+						children:[
+							{ 
+								path: "admin-update-item",
+								element: <Suspense fallback={<>loading...</>}>
+											<AdminShop />
+										  </Suspense>,
+								loader:adminShopUpdateLoader,
+								action:adminUpdateShopAction
+
+							}
+						]
+					},
+					{ 						
+						path: "admin-add-item",
+						element: <Suspense fallback={<>loading...</>}>
+									<AdminAddShop />
+								</Suspense>,
+						action:adminAddShopAction
+					},
+					{ 						
+						path: "admin-remove-item",
+						element: <Suspense fallback={<>loading...</>}>
+									<AdminRemoveShop />
+								</Suspense>,
+						action:adminRemoveShopAction
 					}
 				]
 			}
