@@ -20,10 +20,7 @@ const PlayBtnCont = styled.li`
         ? media.desktop` width: 55px; height: 55px;` 
         : media.desktop` top: 340px; width: 90px; height: 90px;`
     }
-    ${props => props.small 
-        ? media.laptop` width: 45px; height: 45px;`
-        : media.laptop` top: 220px; width: 70px; height: 70px;`
-    }
+
 `
 const PlayerBtn = styled.span`
 	display: flex;

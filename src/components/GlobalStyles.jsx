@@ -26,8 +26,8 @@ export const GlobalStyles = createGlobalStyle`
 	}
 
 	html, body{
-		overflow-x:hidden;
-		overflow-y:${props => props.bodyScrollOff ? 'hidden' : 'auto'};
+		overflow:hidden;
+		//overflow-y:${props => props.bodyScrollOff ? 'hidden' : 'auto'};
 	}
 	ul{	list-style:none;}
 
@@ -54,5 +54,9 @@ export const GlobalStyles = createGlobalStyle`
 
 	p{
 		//font-family: 'Merriweather', serif;
+	}
+
+	li{
+		list-style-type:none;
 	}
 `

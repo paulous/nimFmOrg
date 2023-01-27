@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react'
-import { useOutletContext, Form , useActionData, useNavigate, Link} from 'react-router-dom'
-import { addShow, removeShow } from '../../utils/actions'
+import { useOutletContext, Form , useActionData, useNavigate} from 'react-router-dom'
 //import media from '../media'
 import styled from 'styled-components'
+import BackButton from '../../components/buttons/BackButton'
 
 const Main = styled.div`
 	position:fixed;
@@ -106,7 +106,7 @@ export default function AdminShows() {
 
 		if(actionData?.result.modifiedCount === 1){
 
-			navigate(`/admin-program`)
+			navigate(`/program/admin-program`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -115,12 +115,9 @@ export default function AdminShows() {
 
   return <Main>
 		<h2>DELETE A SHOW</h2>
-		<div className='back-btn'>
-			<Link to='/admin-program'>back</Link>
-		</div>
 			{
 				admin.status && 
-				<Form method="delete" action={`/admin-program/admin-remove-show`}>
+				<Form method="delete" action={`/program/admin-program/remove-show`}>
 					<label> SELECT A SHOW TO DELETE:
 						<select name='delete' onChange={(e) => setTitleChange(e.target.value)} value={titleChange}>
 							{	
@@ -139,5 +136,6 @@ export default function AdminShows() {
 				</Form>
 	
 			}
+			<BackButton to={'/program/admin-program'} />
 	</Main>
 }

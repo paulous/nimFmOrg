@@ -3,7 +3,7 @@ import {useSpring, animated, useSprings} from '@react-spring/web'
 import {Card} from './springAnimationStyles'
 
 
-export const ChangeChars = ({text}) => {
+export const ChangeChars = ({text, min, max}) => {
 
 	const charsArr = [...text]
 
@@ -15,8 +15,8 @@ export const ChangeChars = ({text}) => {
 	<div>
 		{springs.map((s, i) => {
 		return (
-			<animated.span key={`char${i}`} style={{opacity:random(0.5, 1.0)}}>
-				{charsArr[i] === ' ' ? <>&nbsp;</> : charsArr[i]}
+			<animated.span key={`char${i}`} style={{opacity:random(min, max)}}>
+				{charsArr[i] === ' ' ? <> </> : charsArr[i]}
 			</animated.span>
 		)
 		})}

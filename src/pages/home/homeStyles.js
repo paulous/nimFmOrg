@@ -3,22 +3,25 @@ import media from '../../utils/media'
 
 export const Center = styled.div`
 	position: absolute;
-	top:0;
+	top:50px;
 	right:0;
 	left:0;		
 	display: flex;
 	flex-flow:column;
 	justify-content: center;
 	align-items:center;
-	margin-top: 30px;
 
-	${media.laptop` margin-top: 70px;`}
-	${media.phone` margin-top: 110px;`}
+	${media.laptop`top: 130px;`}
+	${media.phone`top: 175px;`}
 
-	.btn-top-margin{
-		margin-top:-115px;
-		${media.laptop` margin-top: -50px;`}
-		${media.phone` margin-top: 0;`}
+	.btn-position{
+		margin-top:-100px;
+		display: flex;
+		flex-flow:column;
+		align-items:center;
+
+		${media.phone`margin-top: -70px;`}
+
 	}
 
 `

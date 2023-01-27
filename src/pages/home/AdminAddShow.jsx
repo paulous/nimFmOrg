@@ -1,9 +1,8 @@
 import {useEffect} from 'react'
-import { useOutletContext, Form , useActionData, useNavigate, Link} from 'react-router-dom'
-import { addShow, removeShow } from '../../utils/actions'
-import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
+import { useOutletContext, Form , useActionData, useNavigate} from 'react-router-dom'
 //import media from '../media'
 import styled from 'styled-components'
+import BackButton from '../../components/buttons/BackButton'
 
 const Main = styled.div`
 	position:fixed;
@@ -34,7 +33,7 @@ const Main = styled.div`
 	}
 
 	h2{
-		margin:60px 30px 0;
+		//margin:30px 30px 0;
 	}
 
 	form{
@@ -135,7 +134,7 @@ export default function AdminShows() {
 
 		if(actionData?.result.modifiedCount === 1){
 
-			navigate(`/admin-program`)
+			navigate(`/program/admin-program`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -147,10 +146,7 @@ export default function AdminShows() {
 			admin.status &&
 			<Main>
 				<h2>CREATE A NEW SHOW</h2>
-				<div className='back-btn'>
-					<Link to='/admin-program'>back</Link>
-				</div>
-				<Form method="post" action={`/admin-program/admin-add-show`}>
+				<Form method="post" action={`/program/admin-program/add-show`}>
 					<label> TITLE:
 						<input
 						name="title"
@@ -246,6 +242,7 @@ export default function AdminShows() {
 					</label>
 					<input type="submit" value='CREATE SHOW' />
 				</Form>
+				<BackButton to={'/program/admin-program'} />
 			</Main>		
 		}
 	</>

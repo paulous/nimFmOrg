@@ -4,7 +4,7 @@ import {useLoaderData, Outlet } from 'react-router-dom'
 import {getShowsData} from '../utils/loaders'
 import AdminLinkBtn from '../components/buttons/AdminLinkBtn'
 import {AdminContext} from "../utils/AdminState"
-import { GlobalStyles } from '../components/GlobalStyles'
+import {ChangeChars} from '../utils/springAnimations'
 import BackButton from '../components/buttons/BackButton'
 
 export async function loader({ params }) {
@@ -36,15 +36,15 @@ export default function ShowsPage(){
 		linkUrl 
 	} = showsData[0]
 
+	console.log(showsData)
+
 	return <Main masthead={mastHead} bgImage={bgImage}>
-		<GlobalStyles bodyScrollOff={true} />
-		<BackButton here='/' />
 		<div className='wrap'>
 			<div className='head-wrap'>
-				<h1>{title.toUpperCase()}</h1>
+				<h1>{<ChangeChars text={title.toUpperCase()} min={0.1} max={1} />} </h1>
 				{mastHead && <div className='mast-head'></div>}
-				<h2>{parOne}</h2>
 			</div>
+			<h2>{parOne}</h2>
 			<div className='podcast-wrap'>
 				<h2>{podcastTitle}</h2>
 				<p>{podcastUrl}</p>
@@ -67,12 +67,13 @@ export default function ShowsPage(){
 			admin.status && <>
 			<AdminLinkBtn {...{
 				admin:admin.show,
-				link:`/show/${params.show}/admin-show`, 
+				link:`/program/show/${params.show}/admin-show`, 
 				setAdmin, 
 				area:'show'
 			}} />
 			<Outlet context={{showsData, admin, setAdmin}} />
 			</>
-		}	
+		}
+		<BackButton to={'/program'} />
 	</Main>
 }

@@ -1,16 +1,15 @@
 import {useMemo, useContext} from 'react'
-import { Center, RainbowCont, RadioCont, RadioTxt, Broadcast } from './headerStyles'
+import { Center, RainbowCont, RadioCont, RadioTxt, Broadcast } from './homeStyles'
 import { FaBroadcastTower } from 'react-icons/fa'
 import RainbowSvg from './RainbowSvg'
 import Rocks from './Rocks'
 import PlayBtn from '../../components/buttons/PlayBtn'
 import {AudioContext} from "../../utils/AudioState"
 
-
 const url = 'https://uk5.internet-radio.com/proxy/nimfm?mp=/stream'
 const http_url = 'http://uk5.internet-radio.com:8055/stream?type=http&nocache=327'
 
-export default function Header(){
+export default function Home(){
 
 	const {
 		audioStream, 
@@ -28,8 +27,7 @@ export default function Header(){
             <Center>
                 <RainbowCont>
                 	<RainbowSvg pause={playerUrl.url === url ? playerPause.pauseplay : false} />
-                </RainbowCont>
-				<div className='btn-top-margin'>
+				<div className='btn-position'>
 					<PlayBtn
 					{...{
 						playerUrl,
@@ -41,6 +39,7 @@ export default function Header(){
 					urls={{url, http_url}}
 					/>
 				</div>
+                </RainbowCont>
             </Center>
             <RadioCont>                                     
                 <Broadcast>

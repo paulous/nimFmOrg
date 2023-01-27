@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, Outlet} from 'react-router-dom'
 import {AdminContext} from "../../utils/AdminState"
 import {ShowTimeContext} from "../../utils/ShowTimeState"
-import { MainBodyOne, BodyOneCont, Days, Day, Listing, Time, TimeNum, AmPm, Title } from './bodyOneStyles'
+import { Main, Days, Day, Listing, Time, TimeNum, AmPm, Title } from './programStyles'
 import {ChangeChars} from '../../utils/springAnimations'
 import {animated, useTrail} from '@react-spring/web'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
+import BackButton from '../../components/buttons/BackButton'
 
+export async function loader() {
+	
+	return {showTitleId: 'hello'}
+}
 
-export default function BodyOne(){
+export default function Program(){
 
 	const {
 		admin,
@@ -54,10 +59,10 @@ export default function BodyOne(){
         setTrail.start({from:{opacity:0, y:100}, to:{opacity:1, y:0}, reset:true})
     }, [setTrail, programColl])
 
-    return (
-		<MainBodyOne>
-			<BodyOneCont>
-					<h2><ChangeChars text={'GET WITH THE PROGRAM'} /></h2>
+    return <>
+		<Main>
+			<div className='wrap'>
+				<h2><ChangeChars text={'GET WITH THE PROGRAM'} min={0.1} max={0.6} /></h2>
 				<Days>
 					{
 						justDays.map((day, i) => <Day key={`days${i}`} selected={i === selected} onClick={changeDay(i)} >{day.toUpperCase()}</Day>)
@@ -90,15 +95,17 @@ export default function BodyOne(){
 						)					
 					}
 				</ul>
-			</BodyOneCont>
-			{	admin.status && <AdminLinkBtn {...{
-				admin:admin.program,
-				link:'admin-program', 
-				setAdmin, 
-				area:'program',
-				position:true
-				}} />
-			}
-		</MainBodyOne>
-    )
+				{	admin.status && <AdminLinkBtn {...{
+					admin:admin.program,
+					link:'admin-program', 
+					setAdmin, 
+					area:'program',
+					position:true
+					}} />
+				}
+			</div>
+			<BackButton to={'/'} />
+		</Main>
+		<Outlet />
+	</>
 }

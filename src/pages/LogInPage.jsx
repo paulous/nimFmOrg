@@ -6,20 +6,17 @@ import {adminLogIn} from "../utils/Realm"
 import styled from 'styled-components'
 //import media from '../media'
 
-const {
-	BSON: { ObjectId },
-  } = Realm
-
-const app = new Realm.App({ id: import.meta.env.VITE_REALM_APP_ID})
-
 const Main = styled.div`
-    position:relative;
-    display:flex;
-    align-items:center;
+    position:fixed;
+	top:44px;
+	bottom:0;
+	left:0;
+	right:0;
+	display:flex;
 	justify-content:center;
-	width:100%;
-	height:100vh;
-	background-image: radial-gradient(circle at center center, rgb(93, 60, 152),rgb(10, 3, 9));
+	background-image: radial-gradient(circle at top right,rgb(184 220 220 / 50%) 0%,rgba(64,9,119,0.6) 48%,rgba(72,7,149,0.2) 48%,rgba(72,7,149,0.2) 53%,rgba(109,5,178,0.3) 53%,rgba(109,5,178,0.3) 56%,rgba(145,2,208,0.3) 56%,rgba(145,2,208,0.3) 69%,rgb(85 0 237 / 33%) 69%,rgb(237 193 0 / 31%) 100%), linear-gradient(0deg,rgba(119,8,119,0.504) 15%,rgb(3 53 36 / 51%) 95%);
+	${props => props.bgImage && `, url(${props.bgImage}); background-size:cover;`};
+	overflow-y:auto;
 
 	h1{
 		

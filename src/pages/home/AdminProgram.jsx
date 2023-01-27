@@ -6,7 +6,7 @@ import {AdminContext} from "../../utils/AdminState"
 import {ShowTimeContext} from "../../utils/ShowTimeState"
 import {getShowTitleId} from "../../utils/loaders"
 import {updateProgram} from "../../utils/actions"
-import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
+import BackButton from '../../components/buttons/BackButton'
 
 let times = [
     {time: '6', label:'06:00/AM'},
@@ -205,9 +205,6 @@ export default function AdminProgram(){
 				<Main>
 					<GlobalStyles bodyScrollOff={true} />
 					<h2>UPDATE THE PROGRAM</h2>
-					<div className='back-btn'>
-						<Link to='/'>back</Link>
-					</div>
 					<ul className='days'>
 						{programColl.map(show => show.day).map((d, i) => 
 							<Day 
@@ -237,9 +234,9 @@ export default function AdminProgram(){
 					</ul>
 					<div className='day-wrap'>
 					<div className='admin-btns'>
-							<Link to='/admin-program/admin-add-show'>CREATE A NEW SHOW</Link>
+							<Link to='/program/admin-program/add-show'>CREATE A NEW SHOW</Link>
 							{ saveBtn() }
-							<Link to='/admin-program/admin-remove-show'>DELETE A SHOW</Link>
+							<Link to='/program/admin-program/remove-show'>DELETE A SHOW</Link>
 						</div>
 						<div className='add-show' onClick={addShow}>ADD NEW ENTRY</div>
 						{dayHistory[programColl[day].day].map((dayshow, i) => (						
@@ -283,7 +280,8 @@ export default function AdminProgram(){
 							</Listing>
 						))
 						}
-					</div>	
+					</div>
+					<BackButton to={'/program'} />
 				</Main>
 				<Outlet context={{showTitleId,showsData:programColl[day].hosts[0] || {}, admin, setAdmin}} />
 			</>

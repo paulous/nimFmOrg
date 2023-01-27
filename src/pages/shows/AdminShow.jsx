@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 const Main = styled.div`
 	position:fixed;
+	z-index:1;
 	top:45px;
 	bottom:0;
 	left:0;
@@ -113,7 +114,7 @@ export default function AdminShow() {
 
 		if(actionData?.result.modifiedCount === 1){
 
-			navigate(`/show/${show}`)
+			navigate(`/program/show/${show}`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -122,7 +123,7 @@ export default function AdminShow() {
 
   return <Main>
 		<h2>EDIT SHOW: {title}</h2>
-		<Form method="post" action={`/show/${show}/admin-show`}>
+		<Form method="post" action={`/program/show/${show}/admin-show`}>
 			<label> TITLE:
 				<input
 				name="title"
@@ -222,7 +223,7 @@ export default function AdminShow() {
 			admin.status && 
 			<AdminLinkBtn {...{
 				admin:admin.show,
-				link:`/show/${show}`, 
+				link:`/program/show/${show}`, 
 				setAdmin, 
 				area:'show'
 			}} />
