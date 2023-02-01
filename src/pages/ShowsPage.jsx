@@ -1,79 +1,85 @@
-import {useContext} from 'react'
-import {Main} from './showsStyles'
-import {useLoaderData, Outlet } from 'react-router-dom'
-import {getShowsData} from '../utils/loaders'
-import AdminLinkBtn from '../components/buttons/AdminLinkBtn'
-import {AdminContext} from "../utils/AdminState"
-import {ChangeChars} from '../utils/springAnimations'
-import BackButton from '../components/buttons/BackButton'
+import {useRef, useState} from 'react'
+import {Outlet, useParams, useOutletContext, useNavigate} from "react-router-dom"
+import styled from 'styled-components'
+import media from '../utils/media'
 
-export async function loader({ params }) {
+export const ShowsNav = styled.div`
+	position:fixed;
+	top:50vh;
+	//bottom:0;
+	left:30px;
+	right:30px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	pointer-events: none;
 
-	return {showsData: await getShowsData(params.show), params}
-}
+	nav{
+		width:100%;
+		display:flex;
+		justify-content:space-between;
 
-export default function ShowsPage(){
-
-	const {
-		admin, 
-		setAdmin
-	} = useContext(AdminContext)
-
-	const {showsData, params} = useLoaderData()
-	let {
-		bgImage, 
-		mastHead, 
-		podcastTitle, 
-		podcastUrl, 
-		title, 
-		parOne, 
-		parTwo, 
-		audOne, 
-		audTwo, 
-		imgOne, 
-		imgTwo, 
-		linkDesc, 
-		linkUrl 
-	} = showsData[0]
-
-	console.log(showsData)
-
-	return <Main masthead={mastHead} bgImage={bgImage}>
-		<div className='wrap'>
-			<div className='head-wrap'>
-				<h1>{<ChangeChars text={title.toUpperCase()} min={0.1} max={1} />} </h1>
-				{mastHead && <div className='mast-head'></div>}
-			</div>
-			<h2>{parOne}</h2>
-			<div className='podcast-wrap'>
-				<h2>{podcastTitle}</h2>
-				<p>{podcastUrl}</p>
-			</div>
-			<div className='audio-wrap'>
-				<div>{audOne}</div>
-				<div>{audTwo}</div>
-			</div>
-			<div className='img-txt-wrap'>
-				{imgOne && <img src={imgOne} />}
-				{parTwo && <h2>{parTwo}</h2>}
-				{imgTwo && <img src={imgTwo} />}
-			</div>
-			<div className='links-wrap'>
-				<div>{linkDesc}</div>
-				<div>{linkUrl}</div>
-			</div>
-		</div>
-		{
-			admin.status && <>
-			<AdminLinkBtn {...{
-				admin:admin.show,
-				link:`/program/show/${params.show}/admin-show`, 
-				setAdmin, 
-				area:'show'
-			}} />
-			<Outlet context={{showsData, admin, setAdmin}} />
-			</>
+		span{
+			width:90px;
+			height:90px;
+			display:flex;
+			align-items:center;
+			justify-content:center;
+			border-radius:50%;
+			background:rgba(156, 68, 149, 0.8);
+			pointer-events:auto;
+			cursor: pointer;
+			font-size:3rem;
+			color:white;
 		}
-		<BackButton to={'/program'} />
-	</Main>
+	}
+`
+
+export default function ShowsPage() {
+
+	let param = useParams()
+
+ 	let navigate = useNavigate()
+
+	let {idsDaysTimes} = useOutletContext()
+
+
+	let navShowData = useRef(idsDaysTimes.filter((dup, i, arr) => i === arr.findIndex((obj) => obj.id === dup.id)))
+
+	let indx = useRef(navShowData.current.findIndex((obj) => obj.id === param.show))
+
+	let [currentShowIndx, setCurrentShowIndx] = useState(indx.current) 
+
+	const updateShowIndx = (left) => (e) => {
+		e.preventDefault()
+		
+		let csi = currentShowIndx === 0 
+			? left ? navShowData.current.length-2 : 1
+			: currentShowIndx === navShowData.current.length-1 
+				? left ? currentShowIndx -= 1 : 1
+				: left 
+					? currentShowIndx -= 1 
+					: currentShowIndx += 1 
+
+		setCurrentShowIndx(csi) 
+
+		navigate(`/program/show/${navShowData.current[csi].id}`)
+	}
+
+    return <>
+		<Outlet context={
+			{time: currentShowIndx !== -1 
+				? navShowData.current[currentShowIndx].time 
+				: programColl[selected].hosts[showIndx].time,  
+				day: currentShowIndx !== -1 
+				? navShowData.current[currentShowIndx].day 
+				: programColl[selected].day}
+		} />
+		<ShowsNav>
+			<nav>
+				<span onClick={updateShowIndx('left')} >{`<`}</span>
+				<span onClick={updateShowIndx('')} >{`>`}</span>
+			</nav>
+		</ShowsNav>
+	</>
 }
