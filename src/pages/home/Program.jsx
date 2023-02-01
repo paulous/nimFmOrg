@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import {Link, Outlet} from 'react-router-dom'
 import {AdminContext} from "../../utils/AdminState"
 import {ShowTimeContext} from "../../utils/ShowTimeState"
@@ -9,7 +9,7 @@ import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 import BackButton from '../../components/buttons/BackButton'
 
 export async function loader() {
-	
+	console.log('loader')
 	return {showTitleId: 'hello'}
 }
 
@@ -51,13 +51,19 @@ export default function Program(){
 
     const [trail, setTrail] = useTrail(today.length, () => ({from:{opacity:0, y:100}, to:{opacity:1, y:0}}))
     
-    const changeDay = useCallback(i => e => {
-        e && e.preventDefault()
+    const changeDay = i => e => {
+        e.preventDefault()
 		setSelectedDay(i)
         setSelected(i)
         setToday(programColl[i].hosts)
         setTrail.start({from:{opacity:0, y:100}, to:{opacity:1, y:0}, reset:true})
-    }, [setTrail, programColl])
+    }
+
+	const AdminUpdateToday = (i,shows) => {
+		setSelectedDay(i)
+        setSelected(i)
+        setToday(shows[shows.length-1])
+    }
 
     return <>
 		<Main>
@@ -79,7 +85,7 @@ export default function Program(){
 											<>
 												<Time getHour={selectDelay(i)}>
 													<TimeNum selected={selectDelay(i,true)}>
-														{Number(today[i].time) <= 12 ? today[i].time : today[i].time-12}
+														{today[i].time <= 12 ? today[i].time : today[i].time -12}
 													</TimeNum>
 													<AmPm selected={selectDelay(i,true)}>
 														{Number(today[i].time) < 12 ? 'AM' : 'PM'}
@@ -106,6 +112,20 @@ export default function Program(){
 			</div>
 			<BackButton to={'/'} />
 		</Main>
-		<Outlet />
+		<Outlet context={
+			{
+				AdminUpdateToday, 
+				idsDaysTimes: programColl.map((pc) => (
+					pc.hosts.map((hts) => (
+						{
+							id:hts.show_id, 
+							day:pc.day, 
+							time:hts.time
+						}
+					))))
+				.flat(1)
+			}
+		} 
+		/>
 	</>
 }

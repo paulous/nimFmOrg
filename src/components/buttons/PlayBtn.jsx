@@ -3,12 +3,9 @@ import styled from "styled-components"
 import media from '../../utils/media'
 import { FaPlay, FaPause} from 'react-icons/fa'
 
-const PlayBtnCont = styled.li`
-	//position: ${props => props.small ? 'relative' : 'absolute'};
-	//z-index:2;
+const PlayBtnCont = styled.div`
 	background: #c7a4c43b;
     display: flex;
-    //flex-grow:0;
     min-width:45px;
 	align-items: center;
 	justify-content: center;
@@ -18,7 +15,7 @@ const PlayBtnCont = styled.li`
 
     ${props => props.small 
         ? media.desktop` width: 55px; height: 55px;` 
-        : media.desktop` top: 340px; width: 90px; height: 90px;`
+        : media.desktop` width: 90px; height: 90px;`
     }
 
 `

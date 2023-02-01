@@ -69,8 +69,12 @@ export const Main = styled.div`
 			justify-content:center;
 			width:100%;
 		`}
+
 		${media.phone`
-			top:60px;
+			top:0;
+			padding:55px 5px 15px;
+			background:linear-gradient(0deg, rgba(42, 3, 42, 0.377) 25%, rgba(34, 2, 34, 0.873) 75%);
 		`}
 	}
+
 `

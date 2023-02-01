@@ -50,6 +50,7 @@ export const Main = styled.div`
 		}		
 	}
 `
+
 export const Days = styled.ul`
     display:inline-flex;
     flex-wrap:wrap;

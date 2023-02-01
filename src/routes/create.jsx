@@ -5,7 +5,8 @@ import ErrorPage from "../routes/error"
 import RootLayout, {loader as rootLoader} from '../components/RootLayout'
 import HomePage, {loader as homeLoader} from '../pages/HomePage'
 
-import ShowsPage, {loader as showsLoader} from '../pages/ShowsPage'
+import ShowsPage from '../pages/ShowsPage'
+import Show, {loader as showLoader} from '../pages/shows/Show'
 import {loader as programLoader} from '../pages/home/Program'
 import {loader as adminProgramLoader} from '../pages/home/AdminProgram'
 import {loader as adminShowLoader, actions as adminShowAction} from '../pages/shows/AdminShow'
@@ -62,17 +63,23 @@ export const router = createBrowserRouter([// change home to routes
 						loader:programLoader,						
 						children:[
 							{ 						
-								path: "show/:show",
+								path: "show",
 								element: <ShowsPage />,
-								loader:showsLoader,
 								children:[
-									{ 
-										path: "admin-show",
-										element: <Suspense fallback={<>loading...</>}>
-													<AdminShow />
-												</Suspense>,
-										loader:adminShowLoader,
-										action:adminShowAction
+									{
+										path: ":show",
+										element: <Show />,
+										loader:showLoader,
+										children:[
+											{ 
+												path: "admin-show",
+												element: <Suspense fallback={<>loading...</>}>
+															<AdminShow />
+														</Suspense>,
+												loader:adminShowLoader,
+												action:adminShowAction
+											}
+										]
 									}
 								]
 							},

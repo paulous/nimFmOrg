@@ -54,6 +54,7 @@ export const GlobalStyles = createGlobalStyle`
 
 	p{
 		//font-family: 'Merriweather', serif;
+		line-height:1.5;
 	}
 
 	li{

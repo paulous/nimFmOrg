@@ -60,7 +60,7 @@ export async function actions({ params, request }) {
 	let updatedShow = {
 		bgImage:formData.get("bgImage"), 
 		mastHead:formData.get("mastHead"), 
-		podcastTitle:formData.get("podcastTitle"), 
+		podcastTitle:formData.get("podcastTitle").split(/\r?\n/), 
 		podcastUrl:formData.get("podcastUrl"), 
 		title:formData.get("title"), 
 		parOne:formData.get("parOne"), 
@@ -72,8 +72,9 @@ export async function actions({ params, request }) {
 		linkDesc:formData.get("linkDesc"), 
 		linkUrl:formData.get("linkUrl") 
 	} 
+	console.log(updatedShow)
 
-	let result = await updateShow(params, updatedShow)
+	let result = null //await updateShow(params, updatedShow)
 
 	return {result, updatedShow}
 }
@@ -148,17 +149,19 @@ export default function AdminShow() {
 				/>
 			</label>
 			<label> PODCAST TITLE:
-				<input
+				<textarea
 				name="podcastTitle"
 				type="text"
-				defaultValue={podcastTitle}
+				rows={10}
+				defaultValue={podcastTitle.split(',').join(",\n")}
 				/>
 			</label>
 			<label> PODCAST URLS:
-				<input
+				<textarea
 				name="podcastUrl"
 				type="text"
-				defaultValue={podcastUrl}
+				rows={10}
+				defaultValue={podcastUrl.split(',').join(",\n")}
 				/>
 			</label>
 			<label> AUDIO CLIP ONE:

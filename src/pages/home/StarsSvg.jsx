@@ -55,7 +55,7 @@ export default function StarsSvg(){
     },[setSpring])
 
     useEffect(() => {
-        setInterval(() => {
+        let interval = setInterval(() => {
             for(let i = 0; i < 3; i++) {
                 let rnd = rand(0,numStars-1)
                 let elm = document.getElementById(`c${rnd}`)
@@ -63,12 +63,15 @@ export default function StarsSvg(){
                 if(attrGet){ 
                     let n = attrGet < 2 ? 2 : 1
                     elm.setAttribute("r", n)
-                    setTimeout(() => {
+                    let st = setTimeout(() => {
+						clearTimeout(st)
                         attrGet && elm.setAttribute("r", attrGet)
                     }, rand(25,100))
                 }   
             }
         }, rand(500,1000))
+
+		return () => clearInterval(interval)
     },[numStars])
 
     return <StarCont style={spring} vbx={xy[0]} vby={xy[1]}>
