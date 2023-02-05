@@ -62,6 +62,8 @@ export const updateProgram = async (data) => {
 	let days = Object.keys(data)
 	let shows = Object.values(data)
 
+	console.log(data)
+
 	let result = await Promise.all(
 		days.map(async (d,i) => {
 			return await mongo.collection("program").updateOne(

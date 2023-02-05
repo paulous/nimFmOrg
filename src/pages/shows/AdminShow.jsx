@@ -153,7 +153,7 @@ export default function AdminShow() {
 				name="podcastTitle"
 				type="text"
 				rows={10}
-				defaultValue={podcastTitle.split(',').join(",\n")}
+				defaultValue={podcastTitle && podcastTitle.split(',').join(",\n")}
 				/>
 			</label>
 			<label> PODCAST URLS:
@@ -161,7 +161,7 @@ export default function AdminShow() {
 				name="podcastUrl"
 				type="text"
 				rows={10}
-				defaultValue={podcastUrl.split(',').join(",\n")}
+				defaultValue={podcastUrl && podcastUrl.split(',').join(",\n")}
 				/>
 			</label>
 			<label> AUDIO CLIP ONE:

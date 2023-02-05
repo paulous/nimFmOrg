@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import {Link, Outlet} from 'react-router-dom'
 import {AdminContext} from "../../utils/AdminState"
 import {ShowTimeContext} from "../../utils/ShowTimeState"
@@ -21,18 +21,21 @@ export default function Program(){
 	} = useContext(AdminContext)
 
 	const {
-		unixTime:{
-			getDay,
-			getHour
-		},
+		unixTime,
+		selectedTime,
 		programColl,
 		setSelectedDay
 	} = useContext(ShowTimeContext)
 
+	let {
+		getDay,
+		getHour
+	} = unixTime
+
     const [selected, setSelected] = useState(getDay)
     const [today, setToday] = useState(programColl[getDay].hosts)
 
-    let times =  programColl[getDay].hosts.map(v => (Number(v.time)))
+    let times = programColl[getDay].hosts.map(v => (Number(v.time)))
 
     let justDays = programColl.map(day => day.day)
 
@@ -63,7 +66,14 @@ export default function Program(){
 		setSelectedDay(i)
         setSelected(i)
         setToday(shows[shows.length-1])
+		selectedTime(unixTime)
     }
+
+	useEffect(() => {
+	  setToday(programColl[getDay].hosts)
+	  setSelected(getDay)
+	}, [getDay])
+	
 
     return <>
 		<Main>

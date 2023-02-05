@@ -1,15 +1,17 @@
-import {createContext, useContext, useReducer, useState, useEffect, useCallback} from "react";
-import {HomeContext} from "./HomeState"
+import {createContext, useReducer, useState, useEffect, useCallback} from "react";
 import { worldTime } from '../utils/worldTime'
 
 
 const initialValues = (program, day) => ({
 	unixTime:{},
+	selectedTime:() => {},
 	setUnixTime:() => {},
 	programColl:program,
 	setProgramColl:() => {},
 	selectedDay:day,
-	setSelectedDay:() => {}
+	setSelectedDay:() => {},
+	currentShow:{title:'test title', started:false},
+    setCurrentShow: () => {}
 })
 
 export const ShowTimeContext = createContext(initialValues)
@@ -21,13 +23,14 @@ function reducer(state, action) {
 		return {...state, programColl:action.payload}
 	case "setSelectedDay": 
 		return {...state, selectedDay:action.payload}
+	case "setCurrentShow": 
+		return {...state, currentShow:action.payload}
 	default:
 		return state
     }
 }
 
 let timeout
-let updateNoSelect = false
 
 export const ShowTimeProvider = ({ 
 	wt, 
@@ -35,16 +38,9 @@ export const ShowTimeProvider = ({
 	children 
 	}) => {
 
-	const homeContext = useContext(HomeContext)
-	const {
-		setCurrentShow
-	} = homeContext
-
     const [state, dispatch] = useReducer(reducer, initialValues(program, wt.getDay))
 
-		
 	const [unixTime, setUnixTime] = useState(wt)
-
 
 	const getUnixTime = useCallback((callback) => {
 		new Promise((resolve, reject) => resolve( worldTime() ))
@@ -52,18 +48,21 @@ export const ShowTimeProvider = ({
 		.catch(err => console.log(err))
 	}, [])
 
-	let times =  program[unixTime.getDay].hosts.map(v => (Number(v.time)))
+	let selectedTime = useCallback((unixTime) => {
 
+		let times = state.programColl[unixTime.getDay].hosts.map(v => (Number(v.time)))
 
-	let foundHour = unixTime.getHour >= times[0]
-	?   times.reduce((prev, curr) => Math.abs(curr - unixTime.getHour) < Math.abs(prev - unixTime.getHour) && curr <= unixTime.getHour 
-		? curr 
-		: prev)
-	:   0
-
-	let showIndx = foundHour ? times.indexOf(foundHour) : 'before-hours'
-
-	let selectedTime = useCallback(() => {
+		let foundHour = unixTime.getHour >= times[0]
+		?   times.reduce((prev, curr) => Math.abs(curr - unixTime.getHour) < Math.abs(prev - unixTime.getHour) && curr <= unixTime.getHour 
+			? curr 
+			: prev)
+		:   0
+	
+		let showIndx = foundHour ? times.indexOf(foundHour) : 'before-hours'
+console.log(state.programColl[unixTime.getDay].hosts[showIndx].title)
+		unixTime.getHour >= times[0]
+		?   dispatch({type: "setCurrentShow", payload:{title:state.programColl[unixTime.getDay].hosts[showIndx].title, started:true}})
+		:   dispatch({type: "setCurrentShow", payload:{title:`First show starts at: ${times[0]} AM`, started:false}})
 		
 		let nextShowHour = showIndx !== 'before-hours' && showIndx+1 < times.length 
 		?   times[showIndx+1] 
@@ -83,56 +82,39 @@ export const ShowTimeProvider = ({
 
 		window.clearTimeout(timeout)
 		timeout = window.setTimeout( () => { 
-			updateNoSelect = false               
 			getUnixTime(wtResolved => {
 				setUnixTime(wtResolved)
+				selectedTime(wtResolved)
 			}) 
 		}, delay)
 
-		updateNoSelect = true               
-
-	}, [unixTime.getHour, unixTime.getMins, unixTime.getSecs, getUnixTime, setUnixTime, showIndx, times])
+	}, [])
 
 	const offLineWake = useCallback(() => {
 		window.addEventListener('online', () => { 
-			updateNoSelect = false
 			console.log('online wake was called.')
 			getUnixTime(wtResolved => {
 				setUnixTime(wtResolved)
+				selectedTime(wtResolved)
 			})                
 		})
-	}, [getUnixTime, setUnixTime])
-
-	let currentShowEffect = useCallback(() => {
-		unixTime.getHour >= times[0]
-		?   setCurrentShow({title:program[unixTime.getDay].hosts[showIndx].title, started:true}) 
-		:   setCurrentShow({title:`First show starts at: ${times[0]} AM`, started:false})
-	},[setCurrentShow, showIndx, program, unixTime.getHour, unixTime.getDay, times])
-
-	useEffect(() => {
-		if(!updateNoSelect){
-			selectedTime()
-			currentShowEffect()
-		}
-	}, [currentShowEffect, offLineWake, unixTime, selectedTime])
+	}, [])
 
 	useEffect(() => {
 		offLineWake()
-	}, [offLineWake])
-
-	useEffect(() => {
-		getUnixTime(wtResolved => {
-			setUnixTime(wtResolved)
-		}) 
+		selectedTime(wt)
 	}, [])
 
     return <ShowTimeContext.Provider
             value={{
 				unixTime,
+				selectedTime,
 				programColl:state.programColl,
 				setProgramColl:(arr) => dispatch({type: "setProgramColl", payload:arr}),
 				selectedDay:state.selectedDay,
-				setSelectedDay:(num) => dispatch({type: "setSelectedDay", payload:num})
+				setSelectedDay:(num) => dispatch({type: "setSelectedDay", payload:num}),
+				currentShow:state.currentShow,
+				setCurrentShow:(num) => dispatch({type: "setCurrentShow", payload:num})
             }}>
         {children}
         </ShowTimeContext.Provider>

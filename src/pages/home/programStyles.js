@@ -88,7 +88,7 @@ export const Listing = styled.li`
 	box-shadow: 2px 2px 3px rgba(13,3,15,1);
 	border-radius: 3px;
     background:${props => props.selected 
-		? 'linear-gradient(0deg, rgba(133, 202, 181, 0.753) 15%, rgb(54, 90, 74) 95%);'
+		? 'linear-gradient(0deg, rgba(133, 202, 181, 0.753) 15%, rgb(54, 90, 74) 95%) , url("/assets/program/leafs.jpg");'
 		: props.bg 
 			? 'rgba(33,24,28,0.9) ' 
 			: 'rgba(33,24,28,0.8) ' 
@@ -96,7 +96,7 @@ export const Listing = styled.li`
     cursor:pointer;
     box-shadow: 2px 2px 3px rgba(13,3,15,1);
     border-radius: 3px;
-    color:${props => props.selected ? 'rgba(13,3,15,1)' : 'papayawhip'};
+    color:${props => props.selected ? '#1e0723ff' : 'papayawhip'};
 	overflow:hidden;
 
 	${props => !props.selected && 
@@ -114,7 +114,7 @@ export const Time = styled.div`
 	justify-content:center;
 	min-width:150px;
 	color:#FFF8C2;
-	padding:40px;
+	padding:${props => props.getHour ? '50px 40px' : '40px'};
     background:${props => props.getHour 
 		? 'linear-gradient(90deg, rgba(217, 38, 38, 1) 15%, rgb(149, 12, 12) 95%);' 
 		: 'rgba(13,3,15,0.7)'
@@ -122,7 +122,7 @@ export const Time = styled.div`
 
     clip-path: polygon( 0% 0%, calc(100% - 0.8em) 0%, 100% 50%, calc(100% - 0.8em) 100%, 0% 100%);
 
-    ${media.laptop`padding:30px; min-width:120px;`}
+    ${media.laptop`padding:35px; min-width:120px;`}
     ${media.phone`padding:25px; min-width:100px;`}
 `
 export const TimeNum = styled.span`
@@ -145,12 +145,13 @@ export const Title = styled.p`
 	padding:0 15px;
 
 	${props => props.selected &&
-	`font-size:2rem;
+	`font-size:1.6rem;
 	line-height:2;
 	opacity:1;
 	`};
 
-    ${media.laptop`font-size:1.4rem; left:145px;`}
+	
+    ${media.laptop`font-size:1.4rem; line-height:1.13; left:145px;`}
     ${media.phone`font-size:1.2rem; left:115px;`}
 
 `

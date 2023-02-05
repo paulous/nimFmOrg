@@ -1,11 +1,11 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useContext} from 'react'
 import {Link} from 'react-router-dom'
 import styled from "styled-components"
 import media from '../../utils/media'
 import Player from './Player'
 import PlayerControl from './PlayerControl'
 import {AudioContext} from "../../utils/AudioState"
-import {HomeContext} from "../../utils/HomeState"
+import {ShowTimeContext} from "../../utils/ShowTimeState"
 
 
 const PlayerWrap= styled.div`
@@ -93,7 +93,7 @@ export default function PlayerCont () {
 
 	const {
 		currentShow
-	} = useContext(HomeContext)
+	} = useContext(ShowTimeContext)
 
     //const [currentShow, setcurrentShow] = useState(currentShow)
 

@@ -31,8 +31,30 @@ export const ShowsNav = styled.div`
 			cursor: pointer;
 			font-size:3rem;
 			color:white;
+
+			${media.laptop`
+				width:75px;
+				height:75px;
+				font-size:2rem;
+			`}
+
+			${media.phone`
+				width:50px;
+				height:50px;
+				font-size:1.5rem;
+			`}
 		}
 	}
+
+	${media.laptop`
+		left:20px;
+		right:20px;
+	`}
+
+	${media.phone`
+		left:15px;
+		right:15px;
+	`}
 `
 
 export default function ShowsPage() {

@@ -239,10 +239,10 @@ export default function AdminProgram() {
                 )
             );
 
-            AdminUpdateToday(day, shows);
-            navigate("/program");
+            AdminUpdateToday(day, shows)
+            navigate("/program")
         } else {
-            console.log("nothing was updated");
+            console.log("nothing was updated")
         }
     };
 

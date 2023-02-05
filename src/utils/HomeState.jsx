@@ -2,9 +2,7 @@ import {createContext, useReducer} from "react"
 
 const initialValues = {
 	programHostList:[],
-	setProgramHostList: () => {},
-	currentShow:{title:'test title', started:false},
-    setCurrentShow: () => {}
+	setProgramHostList: () => {}
 }
 
 export const HomeContext = createContext(initialValues)
@@ -22,8 +20,6 @@ function reducer(state, action) {
 
 		return {...state, programHostList:filterDups}
 
-	case "setCurrentShow": 
-		return {...state, currentShow:action.payload}
 	default:
 		return state
     }
@@ -36,9 +32,7 @@ export const HomeProvider = ({ children }) => {
     return <HomeContext.Provider
             value={{
 				programHostList:state.programHostList,
-				setProgramHostList:(arr) => dispatch({type: "setProgramHostList", payload:arr}),
-				currentShow:state.currentShow,
-				setCurrentShow:(obj) => dispatch({type: "setCurrentShow", payload:obj})
+				setProgramHostList:(arr) => dispatch({type: "setProgramHostList", payload:arr})
             }}>
         {children}
         </HomeContext.Provider>

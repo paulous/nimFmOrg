@@ -84,9 +84,10 @@ export default function PlayerControl ({audioStream, isPodcast}) {
                 setProgress((audioStream.currentTime / audioStream.duration)*100 + "%")
             })
             audioStream.addEventListener('progress', () => {
-                var duration =  audioStream.duration
+				if(!isPodcast) return
+                let duration =  audioStream.duration
                 if (duration > 0) {
-                for (var i = 0; i < audioStream.buffered.length; i++) {
+                for (let i = 0; i < audioStream.buffered.length; i++) {
                         if (audioStream.buffered.start(audioStream.buffered.length - 1 - i) < audioStream.currentTime) {
                             setBuffered((audioStream.buffered.end(audioStream.buffered.length - 1 - i) / duration) * 100 + "%")
                             break

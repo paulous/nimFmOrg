@@ -4,6 +4,9 @@ import ErrorPage from "../routes/error"
 
 import RootLayout, {loader as rootLoader} from '../components/RootLayout'
 import HomePage, {loader as homeLoader} from '../pages/HomePage'
+import AboutPage from '../pages/AboutPage'
+import SponsorsPage, {loader as sponsorsLoader} from '../pages/SponsorsPage'
+import ContactPage from '../pages/ContactPage'
 
 import ShowsPage from '../pages/ShowsPage'
 import Show, {loader as showLoader} from '../pages/shows/Show'
@@ -107,7 +110,20 @@ export const router = createBrowserRouter([// change home to routes
 								]
 							},
 						]
-					}
+					},
+					{ 
+						path: "about",
+						element: <AboutPage />					
+					},
+					{ 
+						path: "sponsors",
+						element: <SponsorsPage />,
+						loader:sponsorsLoader
+					},
+					{ 
+						path: "contact",
+						element: <ContactPage />					
+					},
 			]},
 			{ 
 				path: "docs",
