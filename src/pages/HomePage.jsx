@@ -36,19 +36,19 @@ export default function HomePage() {
           <li>
             <NavLink
               className={({ isActive }) => (isActive ? "on" : "off")}
-              to="/sponsors"
+              to="/contact"
               end
             >
-              SPONSORS
+              CONTACT
             </NavLink>
           </li>
           <li>
             <NavLink
               className={({ isActive }) => (isActive ? "on" : "off")}
-              to="/contact"
+              to="/sponsors"
               end
             >
-              CONTACT
+              SPONSORS
             </NavLink>
           </li>
         </ul>

@@ -63,3 +63,27 @@ export const getShowsData = async (_id) => {
 		console.log("error shop...dude", error)
 	}
 }
+
+export const getSponsors = async () => {
+
+	const data =  await mongo.collection("sponsors").find({})
+	try {
+		if (data.length) return data.sort((a,b) => (a.order - b.order))
+		else  console.log("no sponsor data...dude")
+		
+	} catch (error) {
+		console.log("error sponsor...dude", error)
+	}
+}
+
+export const getDocs = async () => {
+
+	const data =  await mongo.collection("docs").find({})
+	try {
+		if (data.length) return data.sort((a,b) => (a.title - b.title))
+		else  console.log("no docs data...dude")
+		
+	} catch (error) {
+		console.log("error docs...dude", error)
+	}
+}

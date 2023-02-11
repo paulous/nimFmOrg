@@ -15,27 +15,27 @@ const Main = styled.div`
     //justify-content:center;
     padding-top: clamp(50px, 3vw, 100px);
     background-image: radial-gradient(
-            circle at top left,
+            circle at center center,
             rgb(153 26 194 / 73%) 0%,
             rgb(89 19 99 / 35%) 26%,
             rgb(61 0 90 / 71%) 45%,
-            rgb(126 7 192 / 3%) 65%,
-            rgb(37 93 144 / 5%) 65%,
-            rgb(0 151 255 / 27%) 73%,
-            rgb(0 255 100 / 11%) 73%,
-            rgb(7 252 8 / 31%) 78%,
-            rgb(224 234 0 / 20%) 78%,
-            rgb(234 205 0 / 55%) 83%,
-            rgb(255 170 0 / 26%) 83%,
-            rgb(255 148 0 / 58%) 88%,
-            rgb(255 0 0 / 31%) 88%,
-            rgb(255 0 0 / 51%) 93%,
-            rgb(220 0 255 / 0%) 93%
+            rgb(126 7 192 / 3%) 50%,
+            rgb(37 93 144 / 5%) 50%,
+            rgb(0 151 255 / 27%) 60%,
+            rgb(0 255 100 / 11%) 60%,
+            rgb(7 252 8 / 31%) 68%,
+            rgb(224 234 0 / 20%) 68%,
+            rgb(234 205 0 / 55%) 76%,
+            rgb(255 170 0 / 26%) 76%,
+            rgb(255 148 0 / 58%) 84%,
+            rgb(255 0 0 / 31%) 84%,
+            rgb(255 0 0 / 51%) 92%,
+            rgb(220 0 255 / 0%) 92%
         ),
         linear-gradient(
-            308deg,
-            rgb(87 17 70 / 43%) 15%,
-            rgb(255 0 170 / 13%) 95%
+            358deg,
+            rgb(87 17 70 / 73%) 15%,
+            rgb(42 13 100 / 58%) 95%
         ),
         url(/assets/about/snake-opacity2.svg);
     background-size: contain;
@@ -50,7 +50,7 @@ const Main = styled.div`
         margin: 0 250px;
         max-width: 1100px;
 
-        p {
+        .head-line {
             display: flex;
             flex-flow: row;
             font-size: 15rem;
@@ -104,14 +104,14 @@ export default function AboutPage() {
     return (
         <Main>
             <div className="wrap">
-                <p>
+                <span className="head-line">
                     <ChangeChars
                         text={`Jinggiwahla, Bugalbeh & Welcome`.toUpperCase()}
                         min={0.5}
                         max={1}
                     />
-                </p>
-                <p className="about-text">
+                </span>
+                <span className="about-text">
                     {
                         <ChangeChars
                             text={`Broadcasting 24/7 from the heart of Bundjalung country to the Nimbin valley and beyond since before the turn of the century; 
@@ -124,7 +124,7 @@ supported financially by a dedicated and righteous team of local Sponsors, Membe
                             max={1}
                         />
                     }
-                </p>
+                </span>
             </div>
         </Main>
     );

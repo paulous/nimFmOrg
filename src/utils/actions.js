@@ -108,3 +108,69 @@ export const removeShop = async (params) => {
 		console.log("error deleteShop...dude", error)
 	}
 }
+
+export const updateSponsors = async (_id, updatedSponsors) => {
+
+	const data =  await mongo.collection("sponsors").updateOne({'_id':ObjectId(_id) }, updatedSponsors, {'upsert':false})
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error update Sponsors...dude", error)
+	}
+}
+
+export const addSponsors = async (_id, addSponsors) => {
+
+	const data =  await mongo.collection("sponsors").insertOne({'_id':ObjectId(_id)  }, addSponsors, {'upsert':false})
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error add Sponsors...dude", error)
+	}
+}
+
+export const removeSponsors = async (_id) => {
+
+	const data =  await mongo.collection("sponsors").deleteOne({'_id':ObjectId(_id)  })
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error delete Sponsors...dude", error)
+	}
+}
+
+export const updateDocs = async (_id, updatedDocs) => {
+
+	const data =  await mongo.collection("docs").updateOne({'_id':ObjectId(_id) }, updatedDocs, {'upsert':false})
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error update docs...dude", error)
+	}
+}
+
+export const addDocs = async (_id, addDocs) => {
+
+	const data =  await mongo.collection("docs").insertOne({'_id':ObjectId(_id)  }, addDocs, {'upsert':false})
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error add docs...dude", error)
+	}
+}
+
+export const removeDocs = async (_id) => {
+
+	const data =  await mongo.collection("docs").deleteOne({'_id':ObjectId(_id)  })
+	try {
+		return data
+		
+	} catch (error) {
+		console.log("error delete docs...dude", error)
+	}
+}

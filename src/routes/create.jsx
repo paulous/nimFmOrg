@@ -5,8 +5,12 @@ import ErrorPage from "../routes/error"
 import RootLayout, {loader as rootLoader} from '../components/RootLayout'
 import HomePage, {loader as homeLoader} from '../pages/HomePage'
 import AboutPage from '../pages/AboutPage'
-import SponsorsPage, {loader as sponsorsLoader} from '../pages/SponsorsPage'
 import ContactPage from '../pages/ContactPage'
+
+import SponsorsPage, {loader as sponsorsLoader} from '../pages/SponsorsPage'
+import {actions as adminSponsorsAction} from '../pages/sponsors/AdminSponsors'
+import {actions as adminAddSponsorsAction} from '../pages/sponsors/AdminAdd'
+import {actions as adminRemoveSponsorsAction} from '../pages/sponsors/AdminRemove'
 
 import ShowsPage from '../pages/ShowsPage'
 import Show, {loader as showLoader} from '../pages/shows/Show'
@@ -23,6 +27,10 @@ import {actions as adminAddShopAction} from '../pages/shop/AdminAddItem'
 import {actions as adminRemoveShopAction} from '../pages/shop/AdminRemoveItem'
 
 import DocsPage, {loader as docsLoader} from '../pages/DocsPage'
+import {actions as adminDocsAction} from '../pages/docs/AdminDocs'
+import {actions as adminAddDocsAction} from '../pages/docs/AdminAdd'
+import {actions as adminRemoveDocsAction} from '../pages/docs/AdminRemove'
+
 import {actions as loginAction} from '../pages/LogInPage'
 
 const LogInPage = lazy(() => import('../pages/LogInPage'))
@@ -36,6 +44,15 @@ const AdminRemoveShow = lazy(() => import('../pages/home/AdminRemoveShow'))
 const AdminShop = lazy(() => import('../pages/shop/AdminShop'))
 const AdminAddShop = lazy(() => import('../pages/shop/AdminAddItem'))
 const AdminRemoveShop = lazy(() => import('../pages/shop/AdminRemoveItem'))
+
+
+const AdminSponsors = lazy(() => import('../pages/sponsors/AdminSponsors'))
+const AdminAddSponsors = lazy(() => import('../pages/sponsors/AdminAdd'))
+const AdminRemoveSponsors = lazy(() => import('../pages/sponsors/AdminRemove'))
+
+const AdminDocs = lazy(() => import('../pages/docs/AdminDocs'))
+const AdminAddDocs = lazy(() => import('../pages/docs/AdminAdd'))
+const AdminRemoveDocs = lazy(() => import('../pages/docs/AdminRemove'))
 //const adminShowLoader = lazy(() => import('../pages/shows/AdminShow').then((func) => ({default: func.loader})))
 //const adminShowAction = lazy(() => import('../pages/shows/AdminShow').then((func) => ({default: func.actions})))
 
@@ -118,7 +135,30 @@ export const router = createBrowserRouter([// change home to routes
 					{ 
 						path: "sponsors",
 						element: <SponsorsPage />,
-						loader:sponsorsLoader
+						loader:sponsorsLoader,
+						children:[
+							{
+								path: "admin",
+								element: <Suspense fallback={<>loading...</>}>
+											<AdminSponsors />
+										  </Suspense>,
+								action:adminSponsorsAction
+							},
+							{ 						
+								path: "add",
+								element: <Suspense fallback={<>loading...</>}>
+											<AdminAddSponsors />
+										</Suspense>,
+								action:adminAddSponsorsAction
+							},
+							{ 						
+								path: "remove",
+								element: <Suspense fallback={<>loading...</>}>
+											<AdminRemoveSponsors />
+										</Suspense>,
+								action:adminRemoveSponsorsAction
+							}
+						]
 					},
 					{ 
 						path: "contact",
@@ -128,7 +168,30 @@ export const router = createBrowserRouter([// change home to routes
 			{ 
 				path: "docs",
 				element: <DocsPage />,
-				loader:docsLoader
+				loader:docsLoader,
+				children:[
+					{
+						path: "admin",
+						element: <Suspense fallback={<>loading...</>}>
+									<AdminDocs />
+								  </Suspense>,
+						action:adminDocsAction
+					},
+					{ 						
+						path: "add",
+						element: <Suspense fallback={<>loading...</>}>
+									<AdminAddDocs />
+								</Suspense>,
+						action:adminAddDocsAction
+					},
+					{ 						
+						path: "remove",
+						element: <Suspense fallback={<>loading...</>}>
+									<AdminRemoveDocs />
+								</Suspense>,
+						action:adminRemoveDocsAction
+					}
+				]
 			},
 			{ 
 				path: "shop",

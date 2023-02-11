@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import { useState, memo} from 'react'
 import {useSpring, animated, useSprings} from '@react-spring/web'
 import {Card} from './springAnimationStyles'
 
-
-export const ChangeChars = ({text, min, max}) => {
+const ChangeCharsMemo = ({text, min, max}) => {
 
 	const charsArr = [...text]
 
@@ -23,7 +22,7 @@ export const ChangeChars = ({text, min, max}) => {
 	</div>
 	)
 }
-
+export const ChangeChars = memo(ChangeCharsMemo)
 
 export const HeadlineTrail = props => {
 

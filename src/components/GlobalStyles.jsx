@@ -40,7 +40,7 @@ export const GlobalStyles = createGlobalStyle`
 		font-family: 'Londrina Solid', cursive;
 		font-size:clamp(8rem, 15vw, 20rem);
 		font-weight: 900;
-		line-height:0.75;
+		line-height:0.72;
 		letter-spacing:-8px ;
 	}
 	h2{

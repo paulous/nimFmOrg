@@ -59,7 +59,7 @@ export const ShowTimeProvider = ({
 		:   0
 	
 		let showIndx = foundHour ? times.indexOf(foundHour) : 'before-hours'
-console.log(state.programColl[unixTime.getDay].hosts[showIndx].title)
+
 		unixTime.getHour >= times[0]
 		?   dispatch({type: "setCurrentShow", payload:{title:state.programColl[unixTime.getDay].hosts[showIndx].title, started:true}})
 		:   dispatch({type: "setCurrentShow", payload:{title:`First show starts at: ${times[0]} AM`, started:false}})
