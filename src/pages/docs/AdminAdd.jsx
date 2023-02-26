@@ -1,6 +1,6 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
-import { addSponsors } from '../../utils/actions'
+import { addDocs } from '../../utils/actions'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 //import media from '../media'
 import styled from 'styled-components'
@@ -62,16 +62,14 @@ export async function actions({ request }) {
 	let formData = await request.formData()
 
 	let newItem = {
-		title:formData.get("title"), 
-		site:formData.get("site"), 
-		thumbnail:formData.get("thumbnail"),
-		order:formData.get("order")
+		description:formData.get("description"), 
+		url:formData.get("url")
 	}
 	console.log(newItem)
 
 	return {newItem}
 
-	//let result = await addSponsors(newItem)
+	//let result = await addDocs(newItem)
 
 	//return {result, newItem}
 }
@@ -79,9 +77,6 @@ export async function actions({ request }) {
 export default function AdminAdd() {
 
 	let {
-		indx,
-		setIndx,
-		sponsors,
 		admin,
 		setAdmin
 	} = useOutletContext()
@@ -93,7 +88,7 @@ export default function AdminAdd() {
 
 		if(actionData?.result?.modifiedCount === 1){
 
-			navigate(`/sponsors`)
+			navigate(`/docs`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -103,52 +98,28 @@ export default function AdminAdd() {
 	return 	<>	
 			{
 				admin.status && <Main>
-				<h2>ADD NEW SPONSOR</h2>
-				<Form method="post" action={`/sponsors/admin`}>
-					<label> NAME:
+				<h2>ADD NEW DOCUMENT</h2>
+				<Form method="post" action={`/docs/admin`}>
+					<label> TITLE:
 						<input
-						name="title"
+						name="description"
 						type="text"
 						autoFocus
 						/>
 					</label>
-					<label> SPONSORS URL:
+					<label> URL:
 						<input
-						name="site"
+						name="url"
 						type="text"
 						/>
-					</label>
-					<label> THUMBNAIL URL:
-						<input
-						name="thumbnail"
-						type="text"
-						/>
-					</label>
-					<label> PLACEMENT:
-					<select
-					name={'order'}
-					value={indx}
-					onChange={(e) => setIndx(e.target.value)}
-					>
-					{
-						sponsors.map((s, i) => (
-							<option
-								key={`sp${i}`}
-								value={s.order}
-							>
-								{s.order}
-							</option>
-						))
-					}
-					</select>
 					</label>
 					<input type="submit" />
 				</Form>
 				<AdminLinkBtn {...{
-					admin:admin.sponsors,
-					link:`/sponsors`, 
+					admin:admin.docs,
+					link:`/docs`, 
 					setAdmin, 
-					area:'sponsors'
+					area:'docs'
 				}} />
 				
 			</Main>

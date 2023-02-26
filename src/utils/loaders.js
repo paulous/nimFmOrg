@@ -26,8 +26,8 @@ export const getShowTitleId = async () => {
 }
 
 export const getProgramData = async () => {
-
-	const data =  await mongo.collection("program").find({})
+	// mongo init await mongoClient
+	const data =  await app.currentUser.mongoClient("mongodb-atlas").db("nimfm").collection("program").find({})
 	try {
 		if (data.length) return data.sort((a,b) => (a.indx - b.indx))
 		else  console.log("no program data...dude")

@@ -17,7 +17,6 @@ export default function App() {
 
 	const [realmAnon, setRealmAnon] = useState()
 	useEffect(() => {!realmAnon && anonLogIn(setRealmAnon)}, [])
-		
 	
 	return (
 		<>
@@ -25,11 +24,11 @@ export default function App() {
 			<AdminProvider>
 				<AudioProvider>
 					<HomeProvider>
-							{
-								realmAnon 
-								? 	<RouterProvider router={router} />
-								: 	<div>Loading...</div>
-							}
+						{
+							realmAnon 
+							? 	<RouterProvider router={router} />
+							: 	<div>Loading...</div>
+						}
 					</HomeProvider>
 				</AudioProvider>
 			</AdminProvider>

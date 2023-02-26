@@ -62,10 +62,8 @@ export async function actions({ request }) {
 	let formData = await request.formData()
 
 	let updatedItem = {
-		title:formData.get("title"), 
-		site:formData.get("site"), 
-		thumbnail:formData.get("thumbnail"),
-		order:formData.get("order")
+		description:formData.get("description"), 
+		url:formData.get("url")
 	}
 	console.log(updatedItem, formData.get("_id"))
 
@@ -87,10 +85,8 @@ export default function AdminDocs() {
 	} = useOutletContext()
 
 	let {
-		title,
-		site,
-		thumbnail,
-		order,
+		description,
+		url,
 		_id
 	} = docs[indx]
 
@@ -112,28 +108,21 @@ export default function AdminDocs() {
 		{
 			admin.status && 
 			<Main>
-				<h2>EDIT: {title}</h2>
+				<h2>EDIT: {description}</h2>
 				<Form method="post" action={`/docs/admin`}>
 					<label> NAME:
 						<input
-						name="title"
+						name="description"
 						type="text"
-						defaultValue={title}
+						defaultValue={description}
 						autoFocus
 						/>
 					</label>
-					<label> SPONSORS URL:
+					<label> URL:
 						<input
-						name="site"
+						name="url"
 						type="text"
-						defaultValue={site}
-						/>
-					</label>
-					<label> THUMBNAIL URL:
-						<input
-						name="thumbnail"
-						type="text"
-						defaultValue={thumbnail}
+						defaultValue={url}
 						/>
 					</label>
 					<input name='_id' type='hidden' defaultValue={_id} />

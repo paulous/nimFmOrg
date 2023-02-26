@@ -1,6 +1,6 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
-import { addDocs } from '../../utils/actions'
+import { addSponsors } from '../../utils/actions'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 //import media from '../media'
 import styled from 'styled-components'
@@ -62,14 +62,16 @@ export async function actions({ request }) {
 	let formData = await request.formData()
 
 	let newItem = {
-		description:formData.get("description"), 
-		url:formData.get("url")
+		title:formData.get("title"), 
+		site:formData.get("site"), 
+		thumbnail:formData.get("thumbnail"),
+		order:formData.get("order")
 	}
 	console.log(newItem)
 
 	return {newItem}
 
-	//let result = await addDocs(newItem)
+	//let result = await addSponsors(newItem)
 
 	//return {result, newItem}
 }
@@ -79,7 +81,7 @@ export default function AdminAdd() {
 	let {
 		indx,
 		setIndx,
-		docs,
+		sponsors,
 		admin,
 		setAdmin
 	} = useOutletContext()
@@ -91,7 +93,7 @@ export default function AdminAdd() {
 
 		if(actionData?.result?.modifiedCount === 1){
 
-			navigate(`/docs`)
+			navigate(`/sponsors`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -101,28 +103,52 @@ export default function AdminAdd() {
 	return 	<>	
 			{
 				admin.status && <Main>
-				<h2>ADD NEW DOCUMENT</h2>
-				<Form method="post" action={`/docs/admin`}>
-					<label> TITLE:
+				<h2>ADD NEW SPONSOR</h2>
+				<Form method="post" action={`/sponsors/admin`}>
+					<label> NAME:
 						<input
-						name="description"
+						name="title"
 						type="text"
 						autoFocus
 						/>
 					</label>
-					<label> URL:
+					<label> SPONSORS URL:
 						<input
-						name="url"
+						name="site"
 						type="text"
 						/>
+					</label>
+					<label> THUMBNAIL URL:
+						<input
+						name="thumbnail"
+						type="text"
+						/>
+					</label>
+					<label> PLACEMENT:
+					<select
+					name={'order'}
+					value={indx}
+					onChange={(e) => setIndx(e.target.value)}
+					>
+					{
+						sponsors.map((s, i) => (
+							<option
+								key={`sp${i}`}
+								value={s.order}
+							>
+								{s.order}
+							</option>
+						))
+					}
+					</select>
 					</label>
 					<input type="submit" />
 				</Form>
 				<AdminLinkBtn {...{
-					admin:admin.docs,
-					link:`/docs`, 
+					admin:admin.sponsors,
+					link:`/sponsors`, 
 					setAdmin, 
-					area:'docs'
+					area:'sponsors'
 				}} />
 				
 			</Main>
