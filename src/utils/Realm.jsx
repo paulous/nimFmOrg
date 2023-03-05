@@ -1,20 +1,16 @@
-import * as Realm from "realm-web"
-import { redirect } from 'react-router-dom'
+import { getApp, Credentials, MongoDBRealmError } from "realm-web"
 
+const app = getApp(import.meta.env.VITE_REALM_APP_ID)
 
-const app = new Realm.App({ id: import.meta.env.VITE_REALM_APP_ID})
+export const anonLogIn = async () => {
 
-export const anonLogIn = async (setRealmAnon) => {
+	await app.logIn(Credentials.anonymous())
 
-	await app.logIn(Realm.Credentials.anonymous())
-
-console.log('anonLogin'); 
-
-	if(app.currentUser){
-
-		setRealmAnon(true)
-
-	}else{console.log('mongo failed to load anon...')}
+	try {
+		console.log('anonLogin'); 
+	} catch (err) {
+		console.log('mongo failed to load anon...', err)
+	}
 }
 
 export const adminLogIn = async ({email, pass}) => {

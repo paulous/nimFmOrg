@@ -45,25 +45,29 @@ export default function Player ({
 
     let pausePlay = useCallback(() => {
 
+        if(!audioStream.src) return
+
 		let isPlaying = audioStream.currentTime > 0 && 
 		!audioStream.paused && 
 		!audioStream.ended && 
 		audioStream.readyState > audioStream.HAVE_CURRENT_DATA;
-        
+		
 		if(!isPlaying){
 			console.log('url changed in pausePlay audioStream play pause true')
-			audioStream.load()             
-			audioStream.play().then((e) => {console.log('the end', e)}).catch((e) => console.log('errrrr', e))
-			setPlayerPause({pauseplay:true, btn:false})                
+
+			//audioStream.load()             
+			audioStream.play().then(() => {
+				setPlayerPause({pauseplay:true, btn:false}) }).catch((e) => console.log('errrrr', e))
+			               
 		}
 		else if(audioStream.ended){
 			setPlayerPause({pauseplay:false, btn:false})
 		}
 		else if(audioStream.paused){
 			console.log('load and play in pausePlay', audioStream.src, audioStream.paused)
-			url === nimfm_url && audioStream.load()
-			audioStream.play()
-			setPlayerPause({pauseplay:true, btn:false})
+			//url === nimfm_url && audioStream.load()
+			audioStream.play().then(() => {
+				setPlayerPause({pauseplay:true, btn:false}) }).catch((e) => console.log('errrrr', e))
 		}
 		else{
 			console.log('else pause in pausePlay', audioStream.src, audioStream.paused)
@@ -76,7 +80,7 @@ export default function Player ({
     }, [audioStream, url, setPlayerPause, nimfm_url])
 
     useEffect(() => {
-        //console.log('url changed in url effect in player', url)
+        console.log('url changed in url effect in player', url)
 		if(url && audioStream.src !== url){
 
 			lastUrl.current = ''
@@ -86,16 +90,16 @@ export default function Player ({
     }, [url, audioStream, pausePlay])
 
     useEffect(() => {
-        //console.log('playerPause called from Player effect')
+        console.log('playerPause called from Player effect')
         if(intro && playerPause.pauseplay) setIntro(false)
         playerPause.btn && pausePlay()
     }, [playerPause, pausePlay, intro])
 
-    useEffect(() => {
+    /*useEffect(() => {
         audioStream.addEventListener("ended", () => {
             setPlayerPause({pauseplay:false, btn:false})
         })
-    }, [audioStream, setPlayerPause])
+    }, [audioStream, setPlayerPause])*/
 
     return <>
             {!intro

@@ -2,9 +2,19 @@ import { useState, memo} from 'react'
 import {useSpring, animated, useSprings} from '@react-spring/web'
 import {Card} from './springAnimationStyles'
 
-const ChangeCharsMemo = ({text, min, max}) => {
+const ChangeCharsMemo = ({text, min, max, bg}) => {
 
 	const charsArr = [...text]
+
+	let colorArr = [
+		'rgba(255, 0 , 0, 0.3)', 
+		'rgba(255, 127, 0, 0.3)', 
+		'rgba(255, 255, 0, 0.3)', 
+		'rgba(0, 255, 0, 0.3)', 
+		'rgba(0, 0, 255, 0.3)', 
+		'rgba(75, 0, 130, 0.3)', 
+		'rgba(148, 0, 211, 0.3)'
+	]
 
 	const springs = useSprings(charsArr.length, charsArr.map(() => (null)))
 
@@ -14,7 +24,7 @@ const ChangeCharsMemo = ({text, min, max}) => {
 	<div>
 		{springs.map((s, i) => {
 		return (
-			<animated.span key={`char${i}`} style={{opacity:random(min, max)}}>
+			<animated.span key={`char${i}`} style={{opacity:random(min, max), background: bg ? colorArr[Math.round(random(0, 6))] : 'none'}}>
 				{charsArr[i] === ' ' ? <> </> : charsArr[i]}
 			</animated.span>
 		)

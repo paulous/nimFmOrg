@@ -109,6 +109,7 @@ export default function AboutPage() {
                         text={`Jinggiwahla, Bugalbeh & Welcome`.toUpperCase()}
                         min={0.5}
                         max={1}
+						bg
                     />
                 </span>
                 <span className="about-text">
@@ -122,6 +123,7 @@ supported financially by a dedicated and righteous team of local Sponsors, Membe
 				`.toUpperCase()}
                             min={0.5}
                             max={1}
+							bg
                         />
                     }
                 </span>

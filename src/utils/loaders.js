@@ -1,9 +1,7 @@
-import * as Realm from "realm-web"
-const {
-  BSON: { ObjectId },
-} = Realm
+import { getApp, BSON, MongoDBRealmError } from "realm-web"
+let {ObjectId} = BSON
 
-const app = new Realm.App({ id:import.meta.env.VITE_REALM_APP_ID})
+const app = getApp(import.meta.env.VITE_REALM_APP_ID)
 const mongo = app.currentUser.mongoClient("mongodb-atlas").db("nimfm")
 
 

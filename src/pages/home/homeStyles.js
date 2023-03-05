@@ -12,7 +12,7 @@ export const Center = styled.div`
 	align-items:center;
 
 	${media.laptop`top: 130px;`}
-	${media.phone`top: 175px;`}
+	${media.phone`top: 100px;`}
 
 	.btn-position{
 		margin-top:-100px;
@@ -33,7 +33,7 @@ export const RainbowCont = styled.div`
 export const RadioCont = styled.div`
 	position:absolute;
 	right:0;
-	bottom:15px;
+	bottom:5px;
 	left:0;
 	display: flex;
 	align-items: baseline;
@@ -41,7 +41,7 @@ export const RadioCont = styled.div`
 	font-family:Arial, Helvetica, sans-serif;
 	cursor: pointer;
 
-    ${media.phone`flex-direction:column; align-items: center;`}
+    ${media.phone`flex-direction:column; align-items: center; bottom:50px;`}
 `
 export const RadioTxt = styled.span`
   	font-family: 'Londrina Solid', cursive;
@@ -58,7 +58,7 @@ export const Broadcast = styled.div`
 	color:#fff8c2;
 	font-size:0.8rem;
 	padding-left:10px;
-	margin-right:15px;
+	margin-right:5px;
 
-    ${media.phone`flex-flow:wrap-reverse; margin:0 0 100px 0;`}
+    ${media.phone`flex-flow:wrap-reverse; margin:0;`}
 `

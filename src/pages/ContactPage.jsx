@@ -129,6 +129,7 @@ export default function ContactPage() {
                         text={`MAKE CONTACT`.toUpperCase()}
                         min={0.5}
                         max={1}
+						bg
                     />
                 </span>
                 <span className="contact-text">
@@ -141,6 +142,7 @@ If you have an idea for your own show, call us on (02) 6689 0279, send an email 
 Full training is available.`.toUpperCase()}
                             min={0.7}
                             max={1}
+							bg
                         />
                     }
                 </span>

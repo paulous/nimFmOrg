@@ -72,19 +72,20 @@ export default function PlayerControl ({audioStream, isPodcast}) {
     }, [audioStream.currentTime])
 
     useEffect(() => {
-        if(once){
-            once = false
+		console.log('playercontrol useeffect')
+		
 			audioStream.addEventListener('stalled', () => {
 				if(audioStream.paused) return
-				audioStream.load()
+				//audioStream.load()
 				audioStream.play()
             })
+
             audioStream.addEventListener('timeupdate', () => {
                 setCurrentTime(updateDur())
                 setProgress((audioStream.currentTime / audioStream.duration)*100 + "%")
             })
-            audioStream.addEventListener('progress', () => {
-				if(!isPodcast) return
+
+            isPodcast && audioStream.addEventListener('progress', () => {
                 let duration =  audioStream.duration
                 if (duration > 0) {
                 for (let i = 0; i < audioStream.buffered.length; i++) {
@@ -95,7 +96,6 @@ export default function PlayerControl ({audioStream, isPodcast}) {
                     }
                 }
             })
-        } 
     }, [])
         
     return(

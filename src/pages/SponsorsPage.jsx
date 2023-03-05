@@ -191,6 +191,7 @@ export default function SponsorsPage() {
                             text="COMMUNITY SPONSORS"
                             min={0.5}
                             max={1}
+							bg
                         />
                     </h1>
                     {sponsors.map((s, i) => (

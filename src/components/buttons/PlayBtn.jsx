@@ -1,12 +1,11 @@
-import React from 'react'
 import styled from "styled-components"
 import media from '../../utils/media'
 import { FaPlay, FaPause} from 'react-icons/fa'
 
-const PlayBtnCont = styled.div`
+const PlayBtnCont = styled.span`
 	background: #c7a4c43b;
     display: flex;
-    min-width:45px;
+    min-width:55px;
 	align-items: center;
 	justify-content: center;
 	border-radius: 50%;
@@ -31,25 +30,21 @@ const PlayerBtn = styled.span`
 `
 
 export default function PlayBtn ({
-        setPlayerUrl, 
-        urls, 
-        setPlayerPause, 
+		togglePlay,
         playerPause,
-        small,
-        audioStream
+        small
     }) {
 
     let player = e => {
         e && e.preventDefault()
-        urls.url === audioStream.src
-        ? setPlayerPause({pauseplay:!playerPause.pauseplay, btn:true})
-        : setPlayerUrl(urls)
+		togglePlay()
+        //setPlayerPause({pauseplay:!playerPause.pauseplay, btn:true})
     }
 
     return(
         <PlayBtnCont onClick={player} small={small}>
             {
-                playerPause.pauseplay && urls.url === audioStream.src
+                playerPause.pauseplay
                 ?   <PlayerBtn>
                         <FaPause size={small ? 25 : 40} color={'#FFF8C2'} />
                     </PlayerBtn>

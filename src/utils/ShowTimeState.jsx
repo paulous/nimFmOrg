@@ -10,7 +10,7 @@ const initialValues = (program, day) => ({
 	setProgramColl:() => {},
 	selectedDay:day,
 	setSelectedDay:() => {},
-	currentShow:{title:'test title', started:false},
+	currentShow:{title:'nimFm', started:false},
     setCurrentShow: () => {}
 })
 
@@ -50,7 +50,8 @@ export const ShowTimeProvider = ({
 
 	let selectedTime = useCallback((unixTime) => {
 
-		let times = state.programColl[unixTime.getDay].hosts.map(v => (Number(v.time)))
+		let hosts = state.programColl[unixTime.getDay].hosts
+		let times = hosts.map(v => (Number(v.time)))
 
 		let foundHour = unixTime.getHour >= times[0]
 		?   times.reduce((prev, curr) => Math.abs(curr - unixTime.getHour) < Math.abs(prev - unixTime.getHour) && curr <= unixTime.getHour 
@@ -61,7 +62,7 @@ export const ShowTimeProvider = ({
 		let showIndx = foundHour ? times.indexOf(foundHour) : 'before-hours'
 
 		unixTime.getHour >= times[0]
-		?   dispatch({type: "setCurrentShow", payload:{title:state.programColl[unixTime.getDay].hosts[showIndx].title, started:true}})
+		?   dispatch({type: "setCurrentShow", payload:{title:hosts[showIndx].title, started:true, id:hosts[showIndx].show_id}})
 		:   dispatch({type: "setCurrentShow", payload:{title:`First show starts at: ${times[0]} AM`, started:false}})
 		
 		let nextShowHour = showIndx !== 'before-hours' && showIndx+1 < times.length 

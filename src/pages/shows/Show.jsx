@@ -69,6 +69,7 @@ export default function Show() {
                                 text={title.toUpperCase()}
                                 min={0.1}
                                 max={1}
+								bg
                             />
                         }{" "}
                     </h1>

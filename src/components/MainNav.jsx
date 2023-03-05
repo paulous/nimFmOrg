@@ -29,6 +29,7 @@ const Nav = styled.nav`
 `
 
 export default function MainNav(){
+	
 	return (
 		<Nav>
 			<div className='log-in'><Link to="hackdb" >(./)</Link></div>
