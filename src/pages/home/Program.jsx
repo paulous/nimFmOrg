@@ -8,17 +8,14 @@ import {animated, useTrail} from '@react-spring/web'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 import BackButton from '../../components/buttons/BackButton'
 
-export async function loader() {
-	console.log('loader')
-	return {showTitleId: 'hello'}
-}
-
 export default function Program(){
 
 	const {
 		admin,
 		setAdmin
 	} = useContext(AdminContext)
+
+	console.log(admin.user.id)
 
 	const {
 		unixTime,

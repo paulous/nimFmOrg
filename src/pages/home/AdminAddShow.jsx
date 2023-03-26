@@ -75,10 +75,10 @@ const Main = styled.div`
 `
 
 export async function actions({ params, request }) {
-console.log(request, request.type)
+	
 	let formData = await request.formData()
 
-	let addNewShow = {
+	let data = {
 		bgImage:formData.get("bgImage"), 
 		mastHead:formData.get("mastHead"), 
 		podcastTitle:formData.get("podcastTitle"), 
@@ -94,17 +94,26 @@ console.log(request, request.type)
 		linkUrl:formData.get("linkUrl") 
 	} 
 
-	let result = {}//await addShow(params, addNewShow)
+	try {
 
-	return {result, addNewShow}
+		let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_show', 
+		{ 
+			method:'POST', 
+			headers: {"Content-Type": ["application/json"]}, 
+			body:JSON.stringify({data, type:'ADD'})
+		})
+		
+		let response = await request.json()
+
+		console.log(response)
+		return {response, data}
+	
+	} catch (error) {
+		console.log("error addshow...dude", error)
+	}
 }
 
-export async function loader({ params }) {
-
-	return {showData: 'hello'}
-}
-
-export default function AdminShows() {
+export default function AdminAddShow() {
 	let {
 		showsData,
 		admin,
@@ -132,7 +141,7 @@ export default function AdminShows() {
 
 	useEffect(() => {
 
-		if(actionData?.result.modifiedCount === 1){
+		if(actionData?.response.insertedId){
 
 			navigate(`/program/admin-program`)
 		}else{

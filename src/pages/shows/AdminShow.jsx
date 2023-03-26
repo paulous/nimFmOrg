@@ -1,6 +1,5 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useParams , useActionData, useNavigate} from 'react-router-dom'
-import { updateShow } from '../../utils/actions'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 //import media from '../media'
 import styled from 'styled-components'
@@ -57,10 +56,10 @@ export async function actions({ params, request }) {
 
 	let formData = await request.formData()
 
-	let updatedShow = {
+	let data = {
 		bgImage:formData.get("bgImage"), 
 		mastHead:formData.get("mastHead"), 
-		podcastTitle:formData.get("podcastTitle").split(/\r?\n/), 
+		podcastTitle:formData.get("podcastTitle"), 
 		podcastUrl:formData.get("podcastUrl"), 
 		title:formData.get("title"), 
 		parOne:formData.get("parOne"), 
@@ -72,16 +71,22 @@ export async function actions({ params, request }) {
 		linkDesc:formData.get("linkDesc"), 
 		linkUrl:formData.get("linkUrl") 
 	} 
-	console.log(updatedShow)
 
-	let result = null //await updateShow(params, updatedShow)
+	try {
 
-	return {result, updatedShow}
-}
-
-export async function loader({ params }) {
-
-	return {showData: 'hello'}
+		let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_show', 
+		{ 
+			method:'POST', 
+			headers: {"Content-Type": ["application/json"]}, 
+			body:JSON.stringify({data, id:params.show, type:'UPDATE'})
+		})
+		
+		let response = await request.json()
+		return {response, data}
+		
+	} catch (error) {
+		console.log("error updateShow...dude", error)
+	}
 }
 
 export default function AdminShow() {
@@ -113,7 +118,7 @@ export default function AdminShow() {
 
 	useEffect(() => {
 
-		if(actionData?.result.modifiedCount === 1){
+		if(actionData?.response.modifiedCount === 1){
 
 			navigate(`/program/show/${show}`)
 		}else{

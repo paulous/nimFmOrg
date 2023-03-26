@@ -73,20 +73,31 @@ const Main = styled.div`
 
 export async function actions({ params, request }) {
 
-
 		let formData = await request.formData()
 
-		let deleteShopId = formData.get("delete")
-		console.log(deleteShopId)
+		let id = formData.get("delete")
 
-		let result = {}//await removeShop(deleteShopId)
+		//let result = {}//await removeShop(deleteShopId)
 
-		return {result}
-}
+		try {
 
-export async function loader({ params }) {
+			let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_shop', 
+			{ 
+				method:'POST', 
+				headers: {"Content-Type": ["application/json"]}, 
+				body:JSON.stringify({id, type:'DELETE'})
+			})
+			
+			let response = await request.json()
+			console.log(response)
 
-	return {shopData: 'hello'}
+			return {response, id}
+			
+		} catch (error) {
+			console.log("error deleteShop...dude", error)
+		}
+
+		return null
 }
 
 export default function AdminRemoveItem() {
@@ -94,7 +105,7 @@ export default function AdminRemoveItem() {
 	let [titleChange, setTitleChange] = useState('Permanently DELETE a shop')
 
 	let {
-		shopTitleId,
+		shopColl,
 		admin,
 		setAdmin
 	} = useOutletContext()
@@ -104,9 +115,9 @@ export default function AdminRemoveItem() {
 
 	useEffect(() => {
 
-		if(actionData?.result.modifiedCount === 1){
+		if(actionData?.response.deletedCount === 1){
 
-			navigate(`/admin-program`)
+			navigate(`/shop`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -114,22 +125,22 @@ export default function AdminRemoveItem() {
 	}, [actionData])
 
   return <Main>
-		<h2>DELETE A SHOp</h2>
+		<h2>DELETE AN ITEM</h2>
 		<div className='back-btn'>
-			<Link to='/admin-program'>back</Link>
+			<Link to='/shop'>back</Link>
 		</div>
 			{
 				admin.status && 
-				<Form method="delete" action={`/admin-program/admin-remove-item`}>
+				<Form method="delete" action={"/shop/admin-remove-item"}>
 					<label> SELECT ITEM TO DELETE:
 						<select name='delete' onChange={(e) => setTitleChange(e.target.value)} value={titleChange}>
 							{	
-								shopTitleId.map((shop,i) => (
+								shopColl.map((itm,i) => (
 									<option 
 									key={`kyp${i}`} 
-									value={shop._id.toString()}
+									value={itm._id.toString()}
 									>
-										{shop.name}
+										{itm.name}
 									</option>
 								))
 							}

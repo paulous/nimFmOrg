@@ -1,7 +1,7 @@
-import {createContext, useReducer} from "react"
+import {createContext, useReducer, useEffect} from "react"
 
 const initialValues = {
-	admin:{status:false, program:false, show:false, sponsors:false, shop:false, docs:false},
+	admin:{status:false, user:{}, program:false, show:false, sponsors:false, shop:false, docs:false},
 	setAdmin:() => {}
 }
 
@@ -17,10 +17,14 @@ function reducer(state, action) {
     }
 }
 
-export const AdminProvider= ({ children }) => {
+export const AdminProvider= ({ user, children }) => {
 
     const [state, dispatch] = useReducer(reducer, initialValues)
 
+	useEffect(() => {
+	  	dispatch({type: "setAdmin", payload:{user}})
+	}, [])
+	
     return <AdminContext.Provider
             value={{
 				admin:state.admin,

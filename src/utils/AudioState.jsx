@@ -30,6 +30,7 @@ export const AudioProvider= ({ children }) => {
 		e && e.preventDefault()
 
 		if(!state.playerPause.pauseplay){ 
+			//if(!audioStream.current) audioStream.current.src = 'https://uk5.internet-radio.com/proxy/nimfm?mp=/stream'
 			audioStream.current
 			.play()
 			.then(() => dispatch({type: "setPlayerPause", payload:{pauseplay:true, btn:true}}))
@@ -50,13 +51,13 @@ export const AudioProvider= ({ children }) => {
 
 		audioStream.current.addEventListener('stalled', (e) => {
 			console.log('useeffect stalled')
-
-			audioStream.current.load()
-			//audioStream.current.src = 'https://uk5.internet-radio.com/proxy/nimfm?mp=/stream'
-			audioStream.current
-			.play()
-			.then(() => state.setPlayerPause({pauseplay:true, btn:true}))
-			.catch((e) => console.log('errrrr', e))
+			if(!audioStream.current.paused){
+				audioStream.current.load()
+				audioStream.current
+				.play()
+				.then(() => state.setPlayerPause({pauseplay:true, btn:true}))
+				.catch((e) => console.log('errrrr', e))
+			}
 		})
 
 

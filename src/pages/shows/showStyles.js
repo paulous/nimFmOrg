@@ -26,7 +26,7 @@ export const Main = styled.div`
 	.wrap{
 		padding:45px 15px;
 		width:100%;
-		margin-right:65px;;
+		margin-right:65px;
 
 		.par{
 			border-radius:21px;
@@ -41,9 +41,8 @@ export const Main = styled.div`
 
 			${media.phone`
 				font-size:1.3rem;
-		`}
+			`}
 		}
-
 
 		.head-wrap{
 			position:relative;
@@ -52,6 +51,7 @@ export const Main = styled.div`
 			width:100%;
 
 			h2{
+				margin-bottom:10px;
 
 				${media.laptop`
 					font-size:1.6rem;
@@ -66,6 +66,7 @@ export const Main = styled.div`
 			h1{
 				width:clamp(200px, 60vw, 1500px);
 				min-height:clamp(250px, 35vw, 500px);
+				transform:rotate(1.5deg);
 
 				${media.phone`
 					font-size:5rem;

@@ -73,20 +73,19 @@ export default function AdminProgram() {
                 .map((sho, j) =>
                     i === j
                         ? {
-                              ...sho,
-                              slot: e.target.value,
-                              time: newTime,
-                              selected:
-                                  newTime !== sho.origVals.time
-                                      ? {
-                                            ...sho.selected,
-                                            [sho.origVals.time]: true,
-                                        }
-                                      : {
-                                            ...sho.selected,
-                                            [sho.origVals.time]: false,
-                                        },
-                          }
+							...sho,
+							slot: e.target.value,
+							time: newTime,
+							selected: newTime !== sho.origVals.time
+									? {
+										...sho.selected,
+										[sho.origVals.time]: true,
+									}
+									: {
+										...sho.selected,
+										[sho.origVals.time]: false,
+									}
+						}
                         : sho
                 )
                 .sort((a, b) => a.slot - b.slot);
@@ -228,7 +227,7 @@ export default function AdminProgram() {
     };
 
     let addUpdateDeleteProgram = async (data) => {
-        let { result, days, shows } = await updateProgram(data);
+        let { result, days, shows } = await updateProgram(data, admin.user);
 
         if (result.length && result.some((r) => r.modifiedCount === 1)) {
             setProgramColl(

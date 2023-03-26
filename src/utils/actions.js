@@ -1,7 +1,9 @@
-import { getApp, BSON, MongoDBRealmError } from "realm-web"
-let {ObjectId} = BSON
+import * as Realm from "realm-web"
+const {
+  BSON: { ObjectId },
+} = Realm
 
-const app = getApp(import.meta.env.VITE_REALM_APP_ID)
+const app = new Realm.App({ id:import.meta.env.VITE_REALM_APP_ID})
 const mongo = app.currentUser.mongoClient("mongodb-atlas").db("nimfm")
 
 export const addShow = async (addShow) => {
@@ -28,9 +30,18 @@ export const removeShow = async (params) => {
 
 export const updateShow = async (params, updatedShow) => {
 
-	const data =  await mongo.collection("hosts").updateOne({'_id':ObjectId(params.show) }, updatedShow, {'upsert':false})
 	try {
-		return data
+
+		//let data =  await mongo.collection("hosts").updateOne({'_id':ObjectId(params.show) }, updatedShow, {'upsert':false})
+		let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/update_show', 
+		{ 
+			method:'POST', 
+			headers: {"Content-Type": ["application/json"]}, 
+			body:JSON.stringify({updatedShow, id:params.show})
+		})
+		
+		let response = await request.json()
+		return response
 		
 	} catch (error) {
 		console.log("error updateShow...dude", error)
@@ -55,8 +66,8 @@ export const getTitleId = async () => {
 		}
 }
 
-export const updateProgram = async (data) => {
-
+export const updateProgram = async (data, user) => {
+console.log(user.id)
 	let days = Object.keys(data)
 	let shows = Object.values(data)
 
@@ -64,7 +75,7 @@ export const updateProgram = async (data) => {
 
 	let result = await Promise.all(
 		days.map(async (d,i) => {
-			return await mongo.collection("program").updateOne(
+			return await user.mongoClient("mongodb-atlas").db("nimfm").collection("program").updateOne(
 				{ "day": d }, 
 				{ "$set": { "hosts": shows[i] || {} }}, 
 				{ "upsert": false } )

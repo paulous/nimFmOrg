@@ -1,5 +1,5 @@
-import {useContext} from 'react';
-import { Outlet, Link, useLoaderData } from 'react-router-dom'
+import {useContext, useState} from 'react';
+import { Outlet, useNavigate, useLoaderData } from 'react-router-dom'
 import {AdminContext} from "../utils/AdminState"
 import {Main} from './shopStyles'
 //import Loader from '../utils/Loader'
@@ -12,12 +12,23 @@ export async function loader() {
 
 export default function ShopPage(){
 
+	const [itmIndx, setItmIndx] = useState(0)
+
 	const {
 		admin, 
 		setAdmin
 	} = useContext(AdminContext)
 
 	const {shopColl} = useLoaderData()
+
+	const navigate = useNavigate()
+
+	let selectedItem = (indx) => (e) => {
+		e.preventDefault()
+		setItmIndx(indx)
+		let itm = shopColl[indx]
+		navigate(`${itm._id.toString()}`)
+	}
 
 	return <Main>
 			<div>
@@ -27,18 +38,25 @@ export default function ShopPage(){
 				</h3>
 			</div>
 			<div className='items'>
-				
-					{shopColl.map((itm, i) => (
-						<Link to={`${i}`} key={`itm${i}`}>
-							<div  className='item'>
-								<img className='itm-img' src={itm.images[0]} />							
-								<h3>{itm.name}</h3>
-								<h3>Price: ${itm.unit_amount.value} AUD</h3>
+					{
+						admin.status && 
+						<div  className='add-remove'>
+							<span onClick={() => navigate('admin-add-item')}>Add new Item</span>	
+							<span onClick={() => navigate('admin-remove-item')}>Remove Item</span>	
+						</div>
+					}
+					{
+						shopColl.map((itm, i) => (
+							<div onClick={selectedItem(i)} key={`itm${i}`}>
+								<div  className='item'>
+									<img className='itm-img' src={itm.images[0]} />							
+									<h3>{itm.name}</h3>
+									<h3>Price: ${itm.unit_amount.value} AUD</h3>
+								</div>
 							</div>
-						</Link>
-					))}
-				
+						))
+					}				
 			</div>
-			<div className='details-outlet'><Outlet context={{shopColl,	admin, setAdmin}}/></div>
+			<div className='details-outlet'><Outlet context={{item:shopColl[itmIndx], shopColl, admin, setAdmin}}/></div>
 		</Main>
 }

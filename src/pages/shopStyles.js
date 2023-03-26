@@ -56,7 +56,7 @@ export const Main = styled.div`
 	};
 	.itm-img{
 		width:100%;
-		aspect-ratio:10/10;
+		aspect-ratio:1/1;
 		object-fit:contain;
 	};
 	.link-wrap{

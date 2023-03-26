@@ -79,17 +79,25 @@ export async function actions({ params, request }) {
 		let deleteShowId = formData.get("delete")
 		console.log(deleteShowId)
 
-		let result = {}//await removeShow(deleteShowId)
+		try {
 
-		return {result}
+			let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_show', 
+			{ 
+				method:'POST', 
+				headers: {"Content-Type": ["application/json"]}, 
+				body:JSON.stringify({id:deleteShowId, type:'DELETE'})
+			})
+			
+			let response = await request.json()
+			console.log(response)
+			return {response, deleteShowId}
+		
+		} catch (error) {
+			console.log("error addshow...dude", error)
+		}
 }
 
-export async function loader({ params }) {
-
-	return {showData: 'hello'}
-}
-
-export default function AdminShows() {
+export default function AdminRemoveShow() {
 
 	let [titleChange, setTitleChange] = useState('Permanently DELETE a show')
 
@@ -104,7 +112,7 @@ export default function AdminShows() {
 
 	useEffect(() => {
 
-		if(actionData?.result.modifiedCount === 1){
+		if(actionData?.response.deletedCount === 1){
 
 			navigate(`/program/admin-program`)
 		}else{

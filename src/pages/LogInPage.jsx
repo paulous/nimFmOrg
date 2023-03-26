@@ -78,7 +78,7 @@ export default function LogIn(){
 
 	useEffect(() => {
 		if(actionData?.user){
-			setAdmin({status:true})
+			setAdmin({status:true, user:actionData.user})
 			navigate('/')
 		}
 	}, [actionData?.user])

@@ -2,7 +2,7 @@ import {lazy, Suspense} from 'react'
 import {createBrowserRouter} from "react-router-dom"
 import ErrorPage from "../routes/error"
 
-import RootLayout, {loader as rootLoader} from '../components/RootLayout'
+import RootLayout from '../components/RootLayout'
 import HomePage, {loader as homeLoader} from '../pages/HomePage'
 import AboutPage from '../pages/AboutPage'
 import ContactPage from '../pages/ContactPage'
@@ -14,15 +14,14 @@ import {actions as adminRemoveSponsorsAction} from '../pages/sponsors/AdminRemov
 
 import ShowsPage from '../pages/ShowsPage'
 import Show, {loader as showLoader} from '../pages/shows/Show'
-import {loader as programLoader} from '../pages/home/Program'
 import {loader as adminProgramLoader} from '../pages/home/AdminProgram'
-import {loader as adminShowLoader, actions as adminShowAction} from '../pages/shows/AdminShow'
+import {actions as adminShowAction} from '../pages/shows/AdminShow'
 import {actions as adminAddShowAction} from '../pages/home/AdminAddShow'
 import {actions as adminRemoveShowAction} from '../pages/home/AdminRemoveShow'
 
 import ShopPage, {loader as shopLoader} from '../pages/ShopPage'
 import ItemDetail from '../pages/shop/ItemDetail'
-import {loader as adminShopUpdateLoader, actions as adminUpdateShopAction} from '../pages/shop/AdminShop'
+import {actions as adminUpdateShopAction} from '../pages/shop/AdminShop'
 import {actions as adminAddShopAction} from '../pages/shop/AdminAddItem'
 import {actions as adminRemoveShopAction} from '../pages/shop/AdminRemoveItem'
 
@@ -61,7 +60,6 @@ export const router = createBrowserRouter([// change home to routes
 		path: "/",
 		element: <RootLayout />,
 		errorElement: <ErrorPage />,
-		loader:rootLoader,
 		children:[
 			{ 
 				path: "/",
@@ -80,7 +78,6 @@ export const router = createBrowserRouter([// change home to routes
 						element: <Suspense fallback={<>loading...</>}>
 									<Program />
 					  			</Suspense>,
-						loader:programLoader,						
 						children:[
 							{ 						
 								path: "show",
@@ -96,7 +93,6 @@ export const router = createBrowserRouter([// change home to routes
 												element: <Suspense fallback={<>loading...</>}>
 															<AdminShow />
 														</Suspense>,
-												loader:adminShowLoader,
 												action:adminShowAction
 											}
 										]
@@ -199,7 +195,7 @@ export const router = createBrowserRouter([// change home to routes
 				loader:shopLoader,
 				children:[
 					{				
-						path: ":item",
+						path: ":shop",
 						element: <ItemDetail />,
 						children:[
 							{ 
@@ -207,7 +203,6 @@ export const router = createBrowserRouter([// change home to routes
 								element: <Suspense fallback={<>loading...</>}>
 											<AdminShop />
 										  </Suspense>,
-								loader:adminShopUpdateLoader,
 								action:adminUpdateShopAction
 
 							}

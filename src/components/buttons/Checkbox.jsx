@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 
@@ -37,17 +36,17 @@ let Main = styled.label`
 	width: 26px;
 	left: 4px;
 	bottom: 4px;
-	background-color: white;
+	background-color: rgb(178, 143, 184);
 	-webkit-transition: .4s;
 	transition: .4s;
 	}
 
 	input:checked + .slider {
-	background-color: #1eddd6;
+	background-color: rgb(231, 239, 6);
 	}
 
 	input:focus + .slider {
-	box-shadow: 0 0 1px #1eddd6;
+	box-shadow: 0 0 1px rgb(231, 239, 6);
 	}
 
 	input:checked + .slider:before {

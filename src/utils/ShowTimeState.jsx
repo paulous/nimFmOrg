@@ -49,6 +49,7 @@ export const ShowTimeProvider = ({
 	}, [])
 
 	let selectedTime = useCallback((unixTime) => {
+		console.log('selected time called-----------')
 
 		let hosts = state.programColl[unixTime.getDay].hosts
 		let times = hosts.map(v => (Number(v.time)))
@@ -91,20 +92,9 @@ export const ShowTimeProvider = ({
 
 	}, [])
 
-	const offLineWake = useCallback(() => {
-		window.addEventListener('online', () => { 
-			console.log('online wake was called.')
-			getUnixTime(wtResolved => {
-				setUnixTime(wtResolved)
-				selectedTime(wtResolved)
-			})                
-		})
-	}, [])
-
 	useEffect(() => {
-		offLineWake()
 		selectedTime(wt)
-	}, [])
+	}, [wt])
 
     return <ShowTimeContext.Provider
             value={{
