@@ -9,6 +9,9 @@ import {
 //import media from '../media'
 import styled from "styled-components";
 import Checkbox from '../../components/buttons/Checkbox'
+import BackButton from "../../components/buttons/BackButton";
+import { basicAddDB } from "../../utils/actions";
+
 
 const Main = styled.div`
     position: fixed;
@@ -176,7 +179,7 @@ export async function actions({ params, request }) {
 	let data = {
 		name:formData.get("name"), 
 		description:formData.get("description"), 
-		sku:params.shop, 
+		sku:'0000000', 
 		unit_amount:{
 			currency_code: "AUD",
 			value: formData.get("amount")
@@ -195,25 +198,9 @@ export async function actions({ params, request }) {
 
     //let result = {}//await addShow(params, addNewShow)
 
-    try {
-        let request = await fetch(
-            "https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_shop",
-            {
-                method: "POST",
-                headers: { "Content-Type": ["application/json"] },
-                body: JSON.stringify({ data, type: "ADD" }),
-            }
-        );
-
-        let response = await request.json()
-        console.log(response)
-
-        return { response, data }
-    } catch (error) {
-        console.log("error updateShow...dude", error)
-    }
-
-	return null
+	let addedId = await basicAddDB('shop', data)
+	
+	return {addedId, data}
 }
 
 export default function AdminAddItem() {
@@ -244,7 +231,7 @@ export default function AdminAddItem() {
 	}
 
     useEffect(() => {
-        if (actionData?.response.insertedId) {
+        if (actionData?.addedId) {
             navigate(`/shop`)
         } else {
             console.log("nothing was updated")
@@ -356,6 +343,7 @@ export default function AdminAddItem() {
 						</label>
 						<input type="submit" value="ADD ITEM TO SHOP"/>
 					</Form>
+					<BackButton to={"/shop"} />
                 </Main>
             )}
         </>

@@ -22,7 +22,7 @@ export const Main = styled.div`
 		margin:0 50px;
 
 		${media.laptop`margin:70px 15px 0;`}
-		${media.phone`margin:30px 10px 0;`}
+		${media.phone`margin:30px 10px 100px;`}
 	}
 
 	h2{

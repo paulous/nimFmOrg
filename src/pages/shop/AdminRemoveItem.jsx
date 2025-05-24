@@ -1,8 +1,10 @@
 import {useEffect, useState} from 'react'
-import { useOutletContext, Form , useActionData, useNavigate, Link} from 'react-router-dom'
-import { addShop, removeShop } from '../../utils/actions'
-//import media from '../media'
+import { useOutletContext, Form , useActionData, useNavigate} from 'react-router-dom'
 import styled from 'styled-components'
+//import media from '../media'
+import BackButton from '../../components/buttons/BackButton'
+import { basicRemoveDB } from "../../utils/actions";
+
 
 const Main = styled.div`
 	position:fixed;
@@ -44,6 +46,7 @@ const Main = styled.div`
 
 		label{
 			display:flex;
+			align-items:center;
 			flex-wrap:wrap;
 			font-size:1.3rem;
 			border-radius:30px;
@@ -77,27 +80,9 @@ export async function actions({ params, request }) {
 
 		let id = formData.get("delete")
 
-		//let result = {}//await removeShop(deleteShopId)
+		let deleteShowId = await basicRemoveDB('shop', id)
 
-		try {
-
-			let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_shop', 
-			{ 
-				method:'POST', 
-				headers: {"Content-Type": ["application/json"]}, 
-				body:JSON.stringify({id, type:'DELETE'})
-			})
-			
-			let response = await request.json()
-			console.log(response)
-
-			return {response, id}
-			
-		} catch (error) {
-			console.log("error deleteShop...dude", error)
-		}
-
-		return null
+		return {deleteShowId}
 }
 
 export default function AdminRemoveItem() {
@@ -115,7 +100,7 @@ export default function AdminRemoveItem() {
 
 	useEffect(() => {
 
-		if(actionData?.response.deletedCount === 1){
+		if(actionData?.deleteShowId){
 
 			navigate(`/shop`)
 		}else{
@@ -126,9 +111,6 @@ export default function AdminRemoveItem() {
 
   return <Main>
 		<h2>DELETE AN ITEM</h2>
-		<div className='back-btn'>
-			<Link to='/shop'>back</Link>
-		</div>
 			{
 				admin.status && 
 				<Form method="delete" action={"/shop/admin-remove-item"}>
@@ -138,7 +120,7 @@ export default function AdminRemoveItem() {
 								shopColl.map((itm,i) => (
 									<option 
 									key={`kyp${i}`} 
-									value={itm._id.toString()}
+									value={itm._id}
 									>
 										{itm.name}
 									</option>
@@ -148,7 +130,7 @@ export default function AdminRemoveItem() {
 						<input type="submit" value="DELETE"/>
 					</label>
 				</Form>
-	
 			}
+			<BackButton to={"/shop"} />
 	</Main>
 }

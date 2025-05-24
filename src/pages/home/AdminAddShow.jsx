@@ -3,6 +3,7 @@ import { useOutletContext, Form , useActionData, useNavigate} from 'react-router
 //import media from '../media'
 import styled from 'styled-components'
 import BackButton from '../../components/buttons/BackButton'
+import { basicAddDB } from "../../utils/actions";
 
 const Main = styled.div`
 	position:fixed;
@@ -94,23 +95,10 @@ export async function actions({ params, request }) {
 		linkUrl:formData.get("linkUrl") 
 	} 
 
-	try {
-
-		let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_show', 
-		{ 
-			method:'POST', 
-			headers: {"Content-Type": ["application/json"]}, 
-			body:JSON.stringify({data, type:'ADD'})
-		})
-		
-		let response = await request.json()
-
-		console.log(response)
-		return {response, data}
+	let added = await basicAddDB('shows', data)
 	
-	} catch (error) {
-		console.log("error addshow...dude", error)
-	}
+	return {added, data}
+
 }
 
 export default function AdminAddShow() {

@@ -166,8 +166,7 @@ export default function AdminProgram() {
         for (const day in dayhistory) {
             //take out no change days and selected:{}
 
-            if (
-                dayhistory[day].some(
+            if (dayhistory[day].some(
                     (m) =>
                         m.selected[m.origVals.title] || //changed title or time
                         m.selected[m.origVals.time]
@@ -227,9 +226,9 @@ export default function AdminProgram() {
     };
 
     let addUpdateDeleteProgram = async (data) => {
-        let { result, days, shows } = await updateProgram(data, admin.user);
+        let { operationsAdded, days, shows } = await updateProgram(data, admin.user);
 
-        if (result.length && result.some((r) => r.modifiedCount === 1)) {
+        if (operationsAdded) {
             setProgramColl(
                 programColl.map((d) =>
                     days.some((sd) => d.day === sd)

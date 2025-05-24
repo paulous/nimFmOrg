@@ -2,15 +2,17 @@ import styled from 'styled-components'
 import media from '../../utils/media'
 
 export const Main = styled.div`
-	position:relative;
-    display:flex;
+	position:fixed;
+	top:45px;
+	bottom:0;
+	left:0;
+	right:0;
+	display:flex;
 	flex-flow:column;
-    align-items:center;
-	width:100vw;
-	min-height:100vh;
+	align-items:center;
+	overflow-y:auto;
 	background-image: linear-gradient(0deg, #1a102849 0%, #110d15da 75%), repeating-radial-gradient(circle at 17% 32%, rgba(234, 243, 60, 0.565),rgba(149, 112, 197, 0.508),rgba(115, 252, 225, 0.468),rgba(116, 72, 5, 0.496),rgba(223, 46, 170, 0.599),rgba(73, 80, 75, 0.508),rgba(233, 248, 17, 0.479) 2px);
-	overflow-x:hidden;
-	padding:30px;
+
 
 	h2{
 		margin-top:60px; 

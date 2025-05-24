@@ -1,8 +1,6 @@
 import {useContext, useEffect} from 'react'
 import {useNavigate, Form, useActionData} from "react-router-dom"
-import * as Realm from "realm-web"
 import {AdminContext} from "../utils/AdminState"
-import {adminLogIn} from "../utils/Realm"
 import styled from 'styled-components'
 //import media from '../media'
 

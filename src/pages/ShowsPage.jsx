@@ -59,15 +59,15 @@ export const ShowsNav = styled.div`
 
 export default function ShowsPage() {
 
+
 	let param = useParams()
 
  	let navigate = useNavigate()
 
 	let {idsDaysTimes} = useOutletContext()
-
-
+	
 	let navShowData = useRef(idsDaysTimes.filter((dup, i, arr) => i === arr.findIndex((obj) => obj.id === dup.id)))
-
+	
 	let indx = useRef(navShowData.current.findIndex((obj) => obj.id === param.show))
 
 	let [currentShowIndx, setCurrentShowIndx] = useState(indx.current) 
@@ -93,7 +93,7 @@ export default function ShowsPage() {
 			{time: currentShowIndx !== -1 
 				? navShowData.current[currentShowIndx].time 
 				: programColl[selected].hosts[showIndx].time,  
-				day: currentShowIndx !== -1 
+			day: currentShowIndx !== -1 
 				? navShowData.current[currentShowIndx].day 
 				: programColl[selected].day}
 		} />

@@ -1,5 +1,6 @@
 import { NavLink, Link } from 'react-router-dom'
 import styled from "styled-components"
+import SignIn from './SignIn';
 
 
 const Nav = styled.nav`
@@ -32,7 +33,7 @@ export default function MainNav(){
 	
 	return (
 		<Nav>
-			<div className='log-in'><Link to="hackdb" >(./)</Link></div>
+			<div className='log-in'><SignIn /></div>
 			<ul>
 			  <li>
 			  <NavLink

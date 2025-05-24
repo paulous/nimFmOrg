@@ -2,6 +2,7 @@ import {Main} from './itemDetailStyles'
 import Slider from '../../components/slider/Slider'
 import { useOutletContext, Outlet } from "react-router-dom"
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
+import BackButton from '../../components/buttons/BackButton'
 
 //import { FiPlus, FiHeart } from 'react-icons/fi'
 
@@ -26,11 +27,12 @@ export default function ItemDetail() {
 				admin.status && 
 				<AdminLinkBtn {...{
 					admin:admin.shop,
-					link:`/shop/${item._id.toString()}/admin-update-item`, 
+					link:`/shop/${item._id}/admin-update-item`, 
 					setAdmin, 
 					area:'shop'
 				}} />
 			}
+			<BackButton to={"/shop"} />
         </Main>
 		<Outlet context={{item, admin, setAdmin}} />
 		</>

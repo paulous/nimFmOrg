@@ -1,88 +1,120 @@
-import * as Realm from "realm-web"
-const {
-  BSON: { ObjectId },
-} = Realm
-
-const app = new Realm.App({ id:import.meta.env.VITE_REALM_APP_ID})
-const mongo = app.currentUser.mongoClient("mongodb-atlas").db("nimfm")
+import { db } from "../firebase"; // Import your Firestore instance
+import { collection, query, getDocs, getDoc, doc, DocumentSnapshot } from "firebase/firestore"; // Import Firestore methods
 
 export const getShowTitleId = async () => {
 
-	const data =  await mongo.collection("hosts").aggregate([
-		{
-		  $project: {
-			title: 1,
-		  },
-		},
-	  ])
-	try {
-		if (data.length) return data.sort((a, b) =>  a.title.localeCompare(b.title))// sort abc...
-		else  console.log("no program data...dude")
-		
-	} catch (error) {
-		console.log("error program...dude", error)
-	}
-}
+    try {
+        const collectionRef = collection(db, "shows");
+        const snapshot = await getDocs(query(collectionRef)); // Use getDocs and await the result
+
+        const docs = [];
+        snapshot.forEach((doc) => {
+            // doc.data() gives you the document data as a plain object
+            // doc.id gives you the document ID (a string)
+
+            const show = {
+                title: doc.data().title, // Spread the existing document data
+                _id: doc.id, // Add the document ID under the '_id' key
+            };
+
+            docs.push(show);
+        });
+        
+        if (docs.length) return docs.sort((a, b) =>  a.title.localeCompare(b.title))// sort abc;
+        else console.log("no shop data...dude"); return []; 
+
+    } catch (e) {
+        console.error("Error getting shows document: ", e);
+    }
+};
 
 export const getProgramData = async () => {
-	// mongo init await mongoClient
-	const data =  await app.currentUser.mongoClient("mongodb-atlas").db("nimfm").collection("program").find({})
-	try {
-		if (data.length) return data.sort((a,b) => (a.indx - b.indx))
-		else  console.log("no program data...dude")
-		
-	} catch (error) {
-		console.log("error program...dude", error)
-	}
-}
 
+    try {
+        const collectionRef = collection(db, 'program');
+        const snapshot = await getDocs(query(collectionRef)); // Use getDocs and await the result
+        const docs = snapshot.docs.map((p) => p.data());
 
+		if (docs.length) return docs.sort((a, b) => a.indx - b.indx);
+    	else console.log("no program data...dude");
+        console.log(docs);
+
+    } catch (e) {console.error("Error getting program document: ", e);}
+};
 
 export const getShopData = async () => {
 
-	const data =  await mongo.collection("shop").find({})
 	try {
-		if (data.length) return data
-		else  console.log("no shop data...dude")
-		
-	} catch (error) {
-		console.log("error shop...dude", error)
-	}
-}
+        const collectionRef = collection(db, 'shop');
+        const snapshot = await getDocs(query(collectionRef)); // Use getDocs and await the result
+        const docs = [];
+        snapshot.forEach((doc) => {
 
+            const shop = {
+                ...doc.data(), // Spread the existing document data
+                _id: doc.id, // Add the document ID under the '_id' key
+            };
 
-export const getShowsData = async (_id) => {
+            docs.push(shop);
+        });
+       
+        return docs;
 
-	const data =  await mongo.collection("hosts").find({'_id':ObjectId(_id)})
+    } catch (e) {console.error("Error getting program document: ", e);}
+};
+
+export const getShowsData = async (id) => {
 	try {
-		if (data.length) return data.sort((a,b) => (a.indx - b.indx))
-		else  console.log("no shop data...dude")
-		
-	} catch (error) {
-		console.log("error shop...dude", error)
-	}
-}
+        const collectionRef = doc(db, 'shows', id);
+        const snapshot = await getDoc(query(collectionRef)); // Use getDocs and await the result
+        const showDoc = snapshot.data();
+
+		return showDoc
+
+    } catch (e) {console.error("Error getting shows document: ", e);}
+
+};
 
 export const getSponsors = async () => {
 
-	const data =  await mongo.collection("sponsors").find({})
 	try {
-		if (data.length) return data.sort((a,b) => (a.order - b.order))
-		else  console.log("no sponsor data...dude")
-		
-	} catch (error) {
-		console.log("error sponsor...dude", error)
-	}
-}
+        const collectionRef = collection(db, 'sponsors');
+        const snapshot = await getDocs(query(collectionRef)); // Use getDocs and await the result
+        
+        const docs = [];
+        snapshot.forEach((doc) => {
 
-export const getDocs = async () => {
+            const shop = {
+                ...doc.data(), // Spread the existing document data
+                _id: doc.id, // Add the document ID under the '_id' key
+            };
 
-	const data =  await mongo.collection("docs").find({})
+            docs.push(shop);
+        });
+       
+        return docs.sort((a, b) => a.order - b.order);
+
+    } catch (e) {console.error("Error getting program document: ", e);}
+};
+
+export const getDocuments = async () => {
+
 	try {
-		if (data.length) return data.sort((a,b) => (a.title - b.title))
-		else  console.log("no docs data...dude")
-		
-	} catch (error) {
-		console.log("error docs...dude", error)
-	}
-}
+        const collectionRef = collection(db, 'docs');
+        const snapshot = await getDocs(query(collectionRef)); // Use getDocs and await the result
+
+        const docs = [];
+        snapshot.forEach((doc) => {
+
+            const shop = {
+                ...doc.data(), // Spread the existing document data
+                _id: doc.id, // Add the document ID under the '_id' key
+            };
+
+            docs.push(shop);
+        });
+       
+        return docs.sort((a, b) => a.order - b.order);
+
+    } catch (e) {console.error("Error getting program document: ", e);}
+};

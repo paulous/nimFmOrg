@@ -1,9 +1,9 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
-import { addSponsors } from '../../utils/actions'
-import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
+import { basicAddDB } from "../../utils/actions";
 //import media from '../media'
 import styled from 'styled-components'
+import BackButton from '../../components/buttons/BackButton'
 
 const Main = styled.div`
 	position:fixed;
@@ -61,19 +61,16 @@ export async function actions({ request }) {
 
 	let formData = await request.formData()
 
-	let newItem = {
+	let data = {
 		title:formData.get("title"), 
 		site:formData.get("site"), 
 		thumbnail:formData.get("thumbnail"),
 		order:formData.get("order")
 	}
-	console.log(newItem)
 
-	return {newItem}
+	let addedId = await basicAddDB('sponsors', data)
 
-	//let result = await addSponsors(newItem)
-
-	//return {result, newItem}
+	return {addedId, data}
 }
 
 export default function AdminAdd() {
@@ -91,7 +88,7 @@ export default function AdminAdd() {
 
 	useEffect(() => {
 
-		if(actionData?.result?.modifiedCount === 1){
+		if(actionData?.addedId){
 
 			navigate(`/sponsors`)
 		}else{
@@ -104,7 +101,7 @@ export default function AdminAdd() {
 			{
 				admin.status && <Main>
 				<h2>ADD NEW SPONSOR</h2>
-				<Form method="post" action={`/sponsors/admin`}>
+				<Form method="post" action={`/sponsors/add`}>
 					<label> NAME:
 						<input
 						name="title"
@@ -144,13 +141,7 @@ export default function AdminAdd() {
 					</label>
 					<input type="submit" />
 				</Form>
-				<AdminLinkBtn {...{
-					admin:admin.sponsors,
-					link:`/sponsors`, 
-					setAdmin, 
-					area:'sponsors'
-				}} />
-				
+				<BackButton to={"/sponsors"} />
 			</Main>
 		}
 	</>

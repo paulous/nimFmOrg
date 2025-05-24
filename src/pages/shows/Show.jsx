@@ -27,6 +27,7 @@ export default function Show() {
     const { time, day } = useOutletContext()
 
     const { showsData, params } = useLoaderData()
+
     let {
         bgImage,
         mastHead,
@@ -41,7 +42,7 @@ export default function Show() {
         imgTwo,
         linkDesc,
         linkUrl,
-    } = showsData[0];
+    } = showsData;
 
     //let outletToday = today.filter((t) => t.show_id === params.show) || 0;
     let getTime = Number(time);
@@ -119,6 +120,7 @@ export default function Show() {
 						<div>{linkUrl}</div>
 					</div>
 				}
+                <div className="margBottom" />
             </div>
             {admin.status && (
                 <>

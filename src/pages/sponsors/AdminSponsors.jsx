@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
-//import { updateSponsors } from '../../utils/actions'
-import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
+import { basicUpdateDB } from "../../utils/actions";
+import BackButton from '../../components/buttons/BackButton'
 //import media from '../media'
 import styled from 'styled-components'
 
@@ -61,19 +61,17 @@ export async function actions({ request }) {
 
 	let formData = await request.formData()
 
-	let updatedItem = {
+	let id = formData.get("_id")
+	let data = {
 		title:formData.get("title"), 
 		site:formData.get("site"), 
 		thumbnail:formData.get("thumbnail"),
-		order:formData.get("order")
+		order:Number(formData.get("new-order"))
 	}
-	console.log(updatedItem, formData.get("_id"))
 
-	return {updatedItem}
-
-	//let result = await updateSponsors(formData.get("_id"), updatedItem)
-
-	//return {result, updatedItem}
+	let updated = await basicUpdateDB('sponsors', id, data)
+	
+	return {updated, data}
 }
 
 export default function AdminSponsors() {
@@ -83,7 +81,6 @@ export default function AdminSponsors() {
 		setIndx,
 		sponsors,
 		admin,
-		setAdmin
 	} = useOutletContext()
 
 	let {
@@ -99,7 +96,7 @@ export default function AdminSponsors() {
 
 	useEffect(() => {
 
-		if(actionData?.result?.modifiedCount === 1){
+		if(actionData?.updated){
 
 			navigate(`/sponsors`)
 		}else{
@@ -138,7 +135,7 @@ export default function AdminSponsors() {
 					</label>
 					<label> PLACEMENT:
 					<select
-					name={'order'}
+					name={'new-order'}
 					value={indx}
 					onChange={(e) => setIndx(e.target.value)}
 					>
@@ -148,7 +145,7 @@ export default function AdminSponsors() {
 								key={`sp${i}`}
 								value={s.order}
 							>
-								{s.order}
+								{`${s.order} - ${s.title}`}
 							</option>
 						))
 					}
@@ -156,14 +153,8 @@ export default function AdminSponsors() {
 					</label>
 					<input name='_id' type='hidden' defaultValue={_id} />
 					<input type="submit" />
-				</Form> 
-				<AdminLinkBtn {...{
-					admin:admin.sponsors,
-					link:`/sponsors`, 
-					setAdmin, 
-					area:'sponsors'
-				}} />
-				
+				</Form>
+				<BackButton to={"/sponsors"} />
 			</Main>
 		}
 	</>

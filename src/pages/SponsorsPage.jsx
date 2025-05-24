@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { useLoaderData, Outlet, useNavigate, Link } from "react-router-dom";
+import { useLoaderData, Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import media from "../utils/media";
 import { getSponsors } from "../utils/loaders";
 import { ChangeChars } from "../utils/springAnimations";
-import AdminLinkBtn from "../components/buttons/AdminLinkBtn";
+import AdminNav from "../components/AdminNav";
 import { AdminContext } from "../utils/AdminState";
 import BackButton from "../components/buttons/BackButton";
 
@@ -145,23 +145,6 @@ const Main = styled.div`
             ${media.phone`margin:5px; padding-right:0`}
         }
     }
-
-    .btn-wrap {
-        position: fixed;
-        right: 30px;
-        bottom: 20vh;
-        display: flex;
-        align-items: center;
-        flex-flow: column;
-
-        a {
-            color: rgb(255, 238, 254);
-            border-radius: 30px;
-            padding: 15px;
-            background: rgba(36, 1, 34, 0.5);
-            margin: 15px 0;
-        }
-    }
 `;
 
 export async function loader() {
@@ -191,41 +174,27 @@ export default function SponsorsPage() {
                             text="COMMUNITY SPONSORS"
                             min={0.5}
                             max={1}
-							bg
                         />
                     </h1>
+					{
+						admin.status && <AdminNav {...{navigate, add:'/sponsors/add', remove:'/sponsors/remove'}} />
+					}
                     {sponsors.map((s, i) => (
                         <li key={`srs${i}`}>
                             {admin.status ? (
                                 <div onClick={sponsor(i)}>
-                                    <img src={s.thumbnail}></img>
+                                    <img src={s.thumbnail} />
                                     <span>{s.title.toUpperCase()}</span>
                                 </div>
                             ) : (
                                 <a href={s.site} target={"_blank"}>
-                                    <img src={s.thumbnail}></img>
+                                    <img src={s.thumbnail} />
                                     <span>{s.title.toUpperCase()}</span>
                                 </a>
                             )}
                         </li>
                     ))}
                 </ul>
-                {admin.status && (
-                    <>
-                        <div className="btn-wrap">
-                            <Link to="/sponsors/add">ADD</Link>
-                            <Link to="/sponsors/remove">REMOVE</Link>
-                        </div>
-                        <AdminLinkBtn
-                            {...{
-                                admin: admin.show,
-                                link: `/sponsors/admin`,
-                                setAdmin,
-                                area: "sponsors",
-                            }}
-                        />
-                    </>
-                )}
             </Main>
             <BackButton to={"/"} />
             <Outlet context={{ admin, setAdmin, sponsors, indx, setIndx }} />

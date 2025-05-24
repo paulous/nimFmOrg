@@ -34,6 +34,7 @@ export const Main = styled.div`
 			padding:25px;
 			font-size:1.5rem;
 			line-height:2;
+			overflow-x:hidden;
 
 			${media.laptop`
 				width:auto;
@@ -143,7 +144,7 @@ export const Main = styled.div`
 
 			${media.phone`
 				padding:15px;
-				margin:50px 0px 0 0;
+				margin:50px 0 0 0;
 				font-size:1.3rem;
 			`}
 		}
@@ -169,11 +170,15 @@ export const Main = styled.div`
 
 			`}
 			}
-
-				
 			h2{
 				width:clamp(500px, 100%, 800px);
 			}
+		}
+
+		.margBottom{
+
+			height:100px;
+
 		}
 
 		${media.laptop`
@@ -192,6 +197,6 @@ export const Main = styled.div`
 	`}
 
 	${media.phone`
-		padding:5px;		
+		padding:5px;
 	`}
 `

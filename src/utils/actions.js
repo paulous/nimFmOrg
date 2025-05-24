@@ -1,185 +1,175 @@
-import * as Realm from "realm-web"
-const {
-  BSON: { ObjectId },
-} = Realm
+import {
+    collection,
+    query,
+    where,
+    getDocs,
+    addDoc,
+    writeBatch,
+    doc,
+    getDoc,
+	setDoc,
+    updateDoc,
+    deleteDoc,
+} from "firebase/firestore"; // Import Firestore methods
+import { db } from "../firebase"; // Import your Firestore instance
 
-const app = new Realm.App({ id:import.meta.env.VITE_REALM_APP_ID})
-const mongo = app.currentUser.mongoClient("mongodb-atlas").db("nimfm")
+//import { useAuth } from "../contexts/AuthContext"; // Import the custom hook
+//const { user, loading } = useAuth();
+/////////author_uid: currentUserUid, // <-- This is the crucial part matching your rules
 
-export const addShow = async (addShow) => {
+export const basicAddDB = async (coll, addShow) => {
+    try {
+        const docRef = await addDoc(collection(db, coll), addShow);
+        console.log("Document written with ID:", docRef.id);
 
-	const data =  await mongo.collection("hosts").insertOne({}, addShow, {'upsert':false})
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error addShow...dude", error)
-	}
-}
+        return docRef.id;
+    } catch (e) {
+        console.error("Error adding document: ", e);
+    }
+};
 
-export const removeShow = async (params) => {
+export const basicRemoveDB = async (coll, documentId) => {
 
-	const data =  await mongo.collection("hosts").deleteOne({'_id':ObjectId(params.show) })
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error deleteShow...dude", error)
-	}
-}
+    const hostDocRef = doc(db, coll, documentId);
 
-export const updateShow = async (params, updatedShow) => {
+    try {
+        // This operation will FAIL if the document does NOT exist or if security rules prevent deletion
+        await deleteDoc(hostDocRef);
 
-	try {
+        console.log(
+            `Document with ID ${documentId} in collection ${coll} successfully deleted.`
+        );
 
-		//let data =  await mongo.collection("hosts").updateOne({'_id':ObjectId(params.show) }, updatedShow, {'upsert':false})
-		let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/update_show', 
-		{ 
-			method:'POST', 
-			headers: {"Content-Type": ["application/json"]}, 
-			body:JSON.stringify({updatedShow, id:params.show})
-		})
-		
-		let response = await request.json()
-		return response
-		
-	} catch (error) {
-		console.log("error updateShow...dude", error)
-	}
-}
+        return documentId;
+    } catch (error) {
+        console.error(`Error deleting document with ID ${documentId}:`, error);
+        throw error;
+    }
+};
+
+export const basicUpdateDB = async (coll, documentId, dataToUpdate) => {
+
+    const hostDocRef = doc(db, coll, documentId);
+
+    try {
+        // This operation will FAIL if the document does NOT exist (this is the upsert: false behavior)
+        await updateDoc(hostDocRef, dataToUpdate);
+
+        console.log(
+            `Document with ID ${documentId} in collection ${coll} successfully updated.`
+        );
+
+        return { documentId };
+    } catch (error) {
+        console.error(`Error updating document with ID ${documentId}:`, error);
+        throw error;
+    }
+};
 
 export const getTitleId = async () => {
+    try {
+        const collectionRef = collection(db, "shows");
+        const snapshot = await getDocs(query(collectionRef)); // Use getDocs and await the result
 
-		const data =  await mongo.collection("hosts").aggregate([
-			{
-			  $project: {
-				title: 1
-			  },
-			}
-		])
-		try {
-			if (data.length) return data
-			else  console.log("no hosts data...dude")
-			
-		} catch (error) {
-			console.log("error hosts...dude", error)
-		}
-}
+        const docs = [];
+        snapshot.forEach((doc) => {
+            // doc.data() gives you the document data as a plain object
+            // doc.id gives you the document ID (a string)
+
+            const show = {
+                ...doc.data(), // Spread the existing document data
+                _id: doc.id, // Add the document ID under the '_id' key
+            };
+
+            docs.push(show);
+        });
+
+        console.log(docs);
+        if (docs.length) return docs;
+        else return [];
+        console.log("no shop data...dude");
+    } catch (e) {
+        console.error("Error getting shows document: ", e);
+    }
+};
 
 export const updateProgram = async (data, user) => {
-console.log(user.id)
-	let days = Object.keys(data)
-	let shows = Object.values(data)
+    /*let with_uid = {}
 
-	console.log(data)
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
 
-	let result = await Promise.all(
-		days.map(async (d,i) => {
-			return await user.mongoClient("mongodb-atlas").db("nimfm").collection("program").updateOne(
-				{ "day": d }, 
-				{ "$set": { "hosts": shows[i] || {} }}, 
-				{ "upsert": false } )
-		})
-	)
-	
-	return {result, days, shows}
-}
+			with_uid[key] = data[key].map((p) => ({ ...p, author_uid: user.uid }));
+        }
+    }*/
 
-export const updateShop = async (params, updatedShop) => {
+    let days = Object.keys(data);
+    let shows = Object.values(data);
 
-	const data =  await mongo.collection("shop").updateOne({'_id':ObjectId(params.shop) }, updatedShop, {'upsert':false})
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error updateShow...dude", error)
-	}
-}
+    const programCollectionRef = collection(db, "program");
+    const batch = writeBatch(db);
+    const queryPromises = [];
 
-export const addShop = async (params, addShop) => {
+    console.log("Starting batch update process for program hosts...");
 
-	const data =  await mongo.collection("shop").insertOne({'_id':ObjectId(params.shop)  }, addShop, {'upsert':false})
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error addShop...dude", error)
-	}
-}
+    // Step 1: Prepare queries for each day and collect promises
+    days.forEach((day, index) => {
+        const q = query(programCollectionRef, where("day", "==", day));
+        queryPromises.push(getDocs(q));
+    });
 
-export const removeShop = async (params) => {
+    try {
+        // Step 2: Wait for all queries to complete
+        const querySnapshots = await Promise.all(queryPromises);
 
-	const data =  await mongo.collection("shop").deleteOne({'_id':ObjectId(params.shop)  })
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error deleteShop...dude", error)
-	}
-}
+        let operationsAdded = 0;
 
-export const updateSponsors = async (_id, updatedSponsors) => {
+        // Step 3: Process query results and add update operations to the batch
+        querySnapshots.forEach((querySnapshot, index) => {
+            const currentDay = days[index];
+            const currentNewHostsData = shows[index]; // Get the hosts data for this specific day
 
-	const data =  await mongo.collection("sponsors").updateOne({'_id':ObjectId(_id) }, updatedSponsors, {'upsert':false})
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error update Sponsors...dude", error)
-	}
-}
+            if (querySnapshot.empty) {
+                console.warn(
+                    `No document found in 'program' collection with day: ${currentDay}. Skipping update for this day.`
+                );
+            } else {
+                // Document(s) found with this 'day' value, so we'll update
+                if (querySnapshot.docs.length > 1) {
+                    console.warn(
+                        `Found multiple documents for day: ${currentDay}. Updating the first one found.`
+                    );
+                }
+                // Get reference to the first found document
+                const docToUpdateRef = querySnapshot.docs[0].ref;
 
-export const addSponsors = async (_id, addSponsors) => {
+                // Add the update operation to the batch
+                batch.update(docToUpdateRef, {
+                    hosts: currentNewHostsData, // Replace the existing 'hosts' field
+                });
+                console.log(
+                    `Added update to batch for document with day: ${currentDay} (Document ID: ${docToUpdateRef.id})`
+                );
+                operationsAdded++;
+            }
+        });
 
-	const data =  await mongo.collection("sponsors").insertOne({'_id':ObjectId(_id)  }, addSponsors, {'upsert':false})
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error add Sponsors...dude", error)
-	}
-}
+        // Step 4: Commit the batch as a single atomic operation
+        if (operationsAdded > 0) {
+            await batch.commit();
+            console.log(
+                `Batch update committed successfully. ${operationsAdded} documents updated.`
+            );
 
-export const removeSponsors = async (_id) => {
-
-	const data =  await mongo.collection("sponsors").deleteOne({'_id':ObjectId(_id)  })
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error delete Sponsors...dude", error)
-	}
-}
-
-export const updateDocs = async (_id, updatedDocs) => {
-
-	const data =  await mongo.collection("docs").updateOne({'_id':ObjectId(_id) }, updatedDocs, {'upsert':false})
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error update docs...dude", error)
-	}
-}
-
-export const addDocs = async (_id, addDocs) => {
-
-	const data =  await mongo.collection("docs").insertOne({'_id':ObjectId(_id)  }, addDocs, {'upsert':false})
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error add docs...dude", error)
-	}
-}
-
-export const removeDocs = async (_id) => {
-
-	const data =  await mongo.collection("docs").deleteOne({'_id':ObjectId(_id)  })
-	try {
-		return data
-		
-	} catch (error) {
-		console.log("error delete docs...dude", error)
-	}
-}
+            return { operationsAdded, days, shows };
+        } else {
+            console.log(
+                "No documents found for the provided days, batch commit skipped."
+            );
+        }
+    } catch (error) {
+        console.error("Error performing batch update:", error);
+        // Rethrow or handle the error
+        throw error;
+    }
+};

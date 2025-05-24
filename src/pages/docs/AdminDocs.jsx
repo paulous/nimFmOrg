@@ -1,9 +1,9 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
-import { updateDocs } from '../../utils/actions'
-import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
-//import media from '../media'
 import styled from 'styled-components'
+//import media from '../media'
+import { basicUpdateDB } from "../../utils/actions";
+import BackButton from '../../components/buttons/BackButton'
 
 const Main = styled.div`
 	position:fixed;
@@ -61,17 +61,15 @@ export async function actions({ request }) {
 
 	let formData = await request.formData()
 
-	let updatedItem = {
+	let id = formData.get("_id")
+	let data = {
 		description:formData.get("description"), 
 		url:formData.get("url")
 	}
-	console.log(updatedItem, formData.get("_id"))
 
-	return {updatedItem}
-
-	//let result = await updateDocs(formData.get("_id"), updatedItem)
-
-	//return {result, updatedItem}
+	let updated = await basicUpdateDB('docs', id, data)
+	
+	return {updated, data}
 }
 
 export default function AdminDocs() {
@@ -95,7 +93,7 @@ export default function AdminDocs() {
 
 	useEffect(() => {
 
-		if(actionData?.result?.modifiedCount === 1){
+		if(actionData?.updated){
 
 			navigate(`/docs`)
 		}else{
@@ -127,14 +125,8 @@ export default function AdminDocs() {
 					</label>
 					<input name='_id' type='hidden' defaultValue={_id} />
 					<input type="submit" />
-				</Form> 
-				<AdminLinkBtn {...{
-					admin:admin.docs,
-					link:`/docs`, 
-					setAdmin, 
-					area:'docs'
-				}} />
-				
+				</Form>
+				<BackButton to={"/docs"} />
 			</Main>
 		}
 	</>

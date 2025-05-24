@@ -1,7 +1,7 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
-import { addDocs } from '../../utils/actions'
-import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
+import { basicAddDB } from "../../utils/actions";
+import BackButton from '../../components/buttons/BackButton'
 //import media from '../media'
 import styled from 'styled-components'
 
@@ -61,17 +61,14 @@ export async function actions({ request }) {
 
 	let formData = await request.formData()
 
-	let newItem = {
+	let data = {
 		description:formData.get("description"), 
 		url:formData.get("url")
 	}
-	console.log(newItem)
 
-	return {newItem}
+	let addedId = await basicAddDB('docs', data)
 
-	//let result = await addDocs(newItem)
-
-	//return {result, newItem}
+	return {addedId, data}
 }
 
 export default function AdminAdd() {
@@ -86,7 +83,7 @@ export default function AdminAdd() {
 
 	useEffect(() => {
 
-		if(actionData?.result?.modifiedCount === 1){
+		if(actionData?.addedId){
 
 			navigate(`/docs`)
 		}else{
@@ -99,7 +96,7 @@ export default function AdminAdd() {
 			{
 				admin.status && <Main>
 				<h2>ADD NEW DOCUMENT</h2>
-				<Form method="post" action={`/docs/admin`}>
+				<Form method="post" action={`/docs/add`}>
 					<label> TITLE:
 						<input
 						name="description"
@@ -115,13 +112,7 @@ export default function AdminAdd() {
 					</label>
 					<input type="submit" />
 				</Form>
-				<AdminLinkBtn {...{
-					admin:admin.docs,
-					link:`/docs`, 
-					setAdmin, 
-					area:'docs'
-				}} />
-				
+				<BackButton to={"/docs"} />
 			</Main>
 		}
 	</>

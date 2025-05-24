@@ -12,6 +12,8 @@ import {actions as adminSponsorsAction} from '../pages/sponsors/AdminSponsors'
 import {actions as adminAddSponsorsAction} from '../pages/sponsors/AdminAdd'
 import {actions as adminRemoveSponsorsAction} from '../pages/sponsors/AdminRemove'
 
+import {loader as programLoader} from '../pages/home/Program'
+
 import ShowsPage from '../pages/ShowsPage'
 import Show, {loader as showLoader} from '../pages/shows/Show'
 import {loader as adminProgramLoader} from '../pages/home/AdminProgram'
@@ -29,10 +31,6 @@ import DocsPage, {loader as docsLoader} from '../pages/DocsPage'
 import {actions as adminDocsAction} from '../pages/docs/AdminDocs'
 import {actions as adminAddDocsAction} from '../pages/docs/AdminAdd'
 import {actions as adminRemoveDocsAction} from '../pages/docs/AdminRemove'
-
-import {actions as loginAction} from '../pages/LogInPage'
-
-const LogInPage = lazy(() => import('../pages/LogInPage'))
 
 const Program = lazy(() => import('../pages/home/Program'))
 const AdminProgram = lazy(() => import('../pages/home/AdminProgram'))
@@ -67,17 +65,11 @@ export const router = createBrowserRouter([// change home to routes
 				loader:homeLoader,
 				children:[
 					{ 
-						path: "hackdb",
-						element: <Suspense fallback={<>loading...</>}>
-									<LogInPage />
-								</Suspense>,
-						action:loginAction
-					},
-					{ 
 						path: "program",
 						element: <Suspense fallback={<>loading...</>}>
 									<Program />
 					  			</Suspense>,
+						loader:programLoader,
 						children:[
 							{ 						
 								path: "show",

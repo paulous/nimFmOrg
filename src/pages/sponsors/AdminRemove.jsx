@@ -1,8 +1,9 @@
 import {useEffect, useState} from 'react'
 import { useOutletContext, Form , useActionData, useNavigate, Link} from 'react-router-dom'
-import { removeSponsors } from '../../utils/actions'
+import { basicRemoveDB } from "../../utils/actions";
 //import media from '../media'
 import styled from 'styled-components'
+import BackButton from '../../components/buttons/BackButton'
 
 const Main = styled.div`
 	position:fixed;
@@ -44,6 +45,7 @@ const Main = styled.div`
 
 		label{
 			display:flex;
+			align-items:center;
 			flex-wrap:wrap;
 			font-size:1.3rem;
 			border-radius:30px;
@@ -71,17 +73,16 @@ const Main = styled.div`
 	}
 `
 
-export async function actions({ request }) {
+export async function actions({ params, request }) {
 
+	let formData = await request.formData()
 
-		let formData = await request.formData()
+	let id = formData.get("delete")
 
-		let deleteSponsorId = formData.get("delete")
-		console.log(deleteSponsorId)
+	//let result = {}//await removeShop(deleteShopId)
+	let deleteShowId = await basicRemoveDB('sponsors', id)
 
-		let result = {}//await removeSponsors(deleteSponsorId)
-
-		return {result}
+	return {deleteShowId}
 }
 
 export default function AdminRemove() {
@@ -99,9 +100,9 @@ export default function AdminRemove() {
 
 	useEffect(() => {
 
-		if(actionData?.result.modifiedCount === 1){
+		if(actionData?.deleteShowId){
 
-			navigate(`sponsors/admin`)
+			navigate(`/sponsors`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -119,7 +120,7 @@ export default function AdminRemove() {
 								sponsors.map((s,i) => (
 									<option 
 									key={`sp${i}`} 
-									value={s._id.toString()}
+									value={s._id}
 									>
 										{s.title}
 									</option>
@@ -129,7 +130,7 @@ export default function AdminRemove() {
 						<input type="submit" value="DELETE"/>
 					</label>
 				</Form>
-	
 			}
+			<BackButton to={"/sponsors"} />
 	</Main>
 }

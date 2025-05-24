@@ -1,4 +1,5 @@
 import {createContext, useReducer, useEffect} from "react"
+import { useAuth } from "../contexts/AuthContext"; // Import the custom hook
 
 const initialValues = {
 	admin:{status:false, user:{}, program:false, show:false, sponsors:false, shop:false, docs:false},
@@ -17,7 +18,8 @@ function reducer(state, action) {
     }
 }
 
-export const AdminProvider= ({ user, children }) => {
+export const AdminProvider= ({ children }) => {
+	const { user, loading } = useAuth();
 
     const [state, dispatch] = useReducer(reducer, initialValues)
 

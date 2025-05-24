@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 import Checkbox from '../../components/buttons/Checkbox'
+import { basicUpdateDB } from "../../utils/actions";
 
 //import media from '../media'
 import styled from 'styled-components'
@@ -130,21 +131,9 @@ export async function actions({ params, request }) {
 		tags:formData.get("tags")
 	}
 
-	try {
-
-		let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_shop', 
-		{ 
-			method:'POST', 
-			headers: {"Content-Type": ["application/json"]}, 
-			body:JSON.stringify({data, id:params.shop, type:'UPDATE'})
-		})
-		
-		let response = await request.json()
-		return {response, data}
-		
-	} catch (error) {
-		console.log("error updateShow...dude", error)
-	}
+	let updated = await basicUpdateDB('shop', params.shop, data)
+	
+	return {updated, data}
 }
 
 export default function AdminShop() {
@@ -196,9 +185,9 @@ export default function AdminShop() {
 
 	useEffect(() => {
 
-		if(actionData?.response.modifiedCount === 1){
+		if(actionData?.updated){
 
-			navigate(`/shop/${_id.toString()}`)
+			navigate(`/shop/${_id}`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -207,7 +196,7 @@ export default function AdminShop() {
 
 	return <Main>
 		<h2>EDIT: {name}</h2>
-		<Form method="post" action={`/shop/${_id.toString()}/admin-update-item`}>
+		<Form method="post" action={`/shop/${_id}/admin-update-item`}>
 			<label> NAME:
 				<input
 				name="name"

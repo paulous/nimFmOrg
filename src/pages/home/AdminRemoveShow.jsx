@@ -3,6 +3,7 @@ import { useOutletContext, Form , useActionData, useNavigate} from 'react-router
 //import media from '../media'
 import styled from 'styled-components'
 import BackButton from '../../components/buttons/BackButton'
+import { basicRemoveDB } from "../../utils/actions";
 
 const Main = styled.div`
 	position:fixed;
@@ -37,13 +38,12 @@ const Main = styled.div`
 	}
 
 	form{
-		width:100%;
-		max-width:1000px;
 		margin:30px;
 		padding:30px;
 
 		label{
 			display:flex;
+			align-items:center;
 			flex-wrap:wrap;
 			font-size:1.3rem;
 			border-radius:30px;
@@ -64,8 +64,6 @@ const Main = styled.div`
 				padding:10px;
 				margin:15px;
 				font-size:1.1rem;
-				flex-grow:1;
-				min-width:200px;
 			}
 		}
 	}
@@ -75,27 +73,12 @@ export async function actions({ params, request }) {
 
 
 		let formData = await request.formData()
-
 		let deleteShowId = formData.get("delete")
-		console.log(deleteShowId)
 
-		try {
+		let removed = await basicRemoveDB('shows', deleteShowId)
 
-			let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_show', 
-			{ 
-				method:'POST', 
-				headers: {"Content-Type": ["application/json"]}, 
-				body:JSON.stringify({id:deleteShowId, type:'DELETE'})
-			})
-			
-			let response = await request.json()
-			console.log(response)
-			return {response, deleteShowId}
-		
-		} catch (error) {
-			console.log("error addshow...dude", error)
-		}
-}
+		return {removed, deleteShowId}
+	}
 
 export default function AdminRemoveShow() {
 
@@ -112,17 +95,15 @@ export default function AdminRemoveShow() {
 
 	useEffect(() => {
 
-		if(actionData?.response.deletedCount === 1){
+		if(actionData?.removed.documentId === showTitleId){
 
 			navigate(`/program/admin-program`)
-		}else{
-			console.log('nothing was updated')
 		}
 
 	}, [actionData])
 
   return <Main>
-		<h2>DELETE A SHOW</h2>
+		<h2>DELETE A SHOW FOREVER</h2>
 			{
 				admin.status && 
 				<Form method="delete" action={`/program/admin-program/remove-show`}>

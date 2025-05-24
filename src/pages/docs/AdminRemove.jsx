@@ -1,8 +1,9 @@
 import {useEffect, useState} from 'react'
 import { useOutletContext, Form , useActionData, useNavigate, Link} from 'react-router-dom'
-import { removeDocs } from '../../utils/actions'
-//import media from '../media'
 import styled from 'styled-components'
+//import media from '../media'
+import { basicRemoveDB } from "../../utils/actions";
+import BackButton from '../../components/buttons/BackButton'
 
 const Main = styled.div`
 	position:fixed;
@@ -44,6 +45,7 @@ const Main = styled.div`
 
 		label{
 			display:flex;
+			align-items:center;
 			flex-wrap:wrap;
 			font-size:1.3rem;
 			border-radius:30px;
@@ -71,17 +73,16 @@ const Main = styled.div`
 	}
 `
 
-export async function actions({ request }) {
+export async function actions({ params, request }) {
 
+	let formData = await request.formData()
 
-		let formData = await request.formData()
+	let id = formData.get("delete")
 
-		let deleteDocsId = formData.get("delete")
-		console.log(deleteDocsId)
+	let deleteShowId = await basicRemoveDB('docs', id)
 
-		let result = {}//await removeDocs(deleteDocsId)
+	return {deleteShowId}
 
-		return {result}
 }
 
 export default function AdminRemove() {
@@ -99,9 +100,9 @@ export default function AdminRemove() {
 
 	useEffect(() => {
 
-		if(actionData?.result.modifiedCount === 1){
+		if(actionData?.deleteShowId){
 
-			navigate(`docs/admin`)
+			navigate(`/docs`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -109,7 +110,7 @@ export default function AdminRemove() {
 	}, [actionData])
 
   return <Main>
-		<h2>REMOVE A SPONSOR</h2>
+		<h2>REMOVE A DOCUMENT</h2>
 			{
 				admin.status && 
 				<Form method="delete" action={`/docs/remove`}>
@@ -119,7 +120,7 @@ export default function AdminRemove() {
 								docs.map((s,i) => (
 									<option 
 									key={`sp${i}`} 
-									value={s._id.toString()}
+									value={s._id}
 									>
 										{s.description}
 									</option>
@@ -129,7 +130,7 @@ export default function AdminRemove() {
 						<input type="submit" value="DELETE"/>
 					</label>
 				</Form>
-	
 			}
+			<BackButton to={"/docs"} />
 	</Main>
 }

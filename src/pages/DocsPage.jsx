@@ -2,9 +2,9 @@ import { useContext, useState } from "react";
 import { useLoaderData, Outlet, useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import media from "../utils/media";
-import { getDocs } from "../utils/loaders";
+import { getDocuments } from "../utils/loaders";
 import { ChangeChars } from "../utils/springAnimations";
-import AdminLinkBtn from "../components/buttons/AdminLinkBtn";
+import AdminNav from "../components/AdminNav";
 import { AdminContext } from "../utils/AdminState";
 
 const Main = styled.div`
@@ -74,6 +74,7 @@ const Main = styled.div`
 
         h1 {
             text-align: center;
+			background-clip: text;
 
             ${media.laptop`
 				font-size:10rem;
@@ -163,27 +164,10 @@ const Main = styled.div`
             ${media.phone`margin:5px; padding-right:0`}
         }
     }
-
-    .btn-wrap {
-        position: fixed;
-        right: 30px;
-        bottom: 20vh;
-        display: flex;
-        align-items: center;
-        flex-flow: column;
-
-        a {
-            color: rgb(255, 238, 254);
-            border-radius: 30px;
-            padding: 15px;
-            background: rgba(36, 1, 34, 0.5);
-            margin: 15px 0;
-        }
-    }
 `;
 
 export async function loader() {
-    return { docs: await getDocs() };
+    return { docs: await getDocuments() };
 }
 
 export default function DocsPage() {
@@ -203,10 +187,13 @@ export default function DocsPage() {
     return (
         <>
             <Main>
-                <ul>
+                <ul style={{marginBottom:"100px"}}>
                     <h1>
                         <ChangeChars text="DOCUMENTS" min={0.5} max={1} />
                     </h1>
+					{
+						admin.status && <AdminNav {...{navigate, add:'/docs/add', remove:'/docs/remove'}} />
+                	}
                     {docs.map((s, i) => (
                         <li key={`dcs${i}`}>
                             {admin.status ? (
@@ -221,22 +208,6 @@ export default function DocsPage() {
                         </li>
                     ))}
                 </ul>
-                {admin.status && (
-                    <>
-                        <div className="btn-wrap">
-                            <Link to="/docs/add">ADD</Link>
-                            <Link to="/docs/remove">REMOVE</Link>
-                        </div>
-                        <AdminLinkBtn
-                            {...{
-                                admin: admin.docs,
-                                link: `/docs/admin`,
-                                setAdmin,
-                                area: "docs",
-                            }}
-                        />
-                    </>
-                )}
             </Main>
             <Outlet context={{ admin, setAdmin, docs, indx, setIndx }} />
         </>

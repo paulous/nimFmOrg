@@ -1,6 +1,9 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useParams , useActionData, useNavigate} from 'react-router-dom'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
+import { basicUpdateDB } from "../../utils/actions";
+
+
 //import media from '../media'
 import styled from 'styled-components'
 
@@ -72,21 +75,10 @@ export async function actions({ params, request }) {
 		linkUrl:formData.get("linkUrl") 
 	} 
 
-	try {
+	const updatedDataId = await basicUpdateDB('shows', params.show, data)
 
-		let request = await fetch('https://ap-southeast-2.aws.data.mongodb-api.com/app/nimfmorg-xkjvc/endpoint/admin_show', 
-		{ 
-			method:'POST', 
-			headers: {"Content-Type": ["application/json"]}, 
-			body:JSON.stringify({data, id:params.show, type:'UPDATE'})
-		})
-		
-		let response = await request.json()
-		return {response, data}
-		
-	} catch (error) {
-		console.log("error updateShow...dude", error)
-	}
+	return {updatedDataId, data}
+
 }
 
 export default function AdminShow() {
@@ -110,7 +102,7 @@ export default function AdminShow() {
 		imgTwo, 
 		linkDesc, 
 		linkUrl
-	} = showsData[0]
+	} = showsData
 
 	let actionData = useActionData()
 	let navigate = useNavigate()
@@ -118,11 +110,9 @@ export default function AdminShow() {
 
 	useEffect(() => {
 
-		if(actionData?.response.modifiedCount === 1){
+		if(actionData?.updatedDataId.documentId === show){
 
 			navigate(`/program/show/${show}`)
-		}else{
-			console.log('nothing was updated')
 		}
 
 	}, [actionData])
