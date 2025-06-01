@@ -2,8 +2,8 @@ import {lazy, Suspense} from 'react'
 import {createBrowserRouter} from "react-router-dom"
 import ErrorPage from "../routes/error"
 
-import RootLayout from '../components/RootLayout'
-import HomePage, {loader as homeLoader} from '../pages/HomePage'
+import RootLayout, {loader as programLoader} from '../components/RootLayout'
+import HomePage from '../pages/HomePage'
 import AboutPage from '../pages/AboutPage'
 import ContactPage from '../pages/ContactPage'
 
@@ -12,7 +12,7 @@ import {actions as adminSponsorsAction} from '../pages/sponsors/AdminSponsors'
 import {actions as adminAddSponsorsAction} from '../pages/sponsors/AdminAdd'
 import {actions as adminRemoveSponsorsAction} from '../pages/sponsors/AdminRemove'
 
-import {loader as programLoader} from '../pages/home/Program'
+//import {loader as programLoader} from '../pages/home/Program'
 
 import ShowsPage from '../pages/ShowsPage'
 import Show, {loader as showLoader} from '../pages/shows/Show'
@@ -58,18 +58,17 @@ export const router = createBrowserRouter([// change home to routes
 		path: "/",
 		element: <RootLayout />,
 		errorElement: <ErrorPage />,
+		loader:programLoader,
 		children:[
 			{ 
 				path: "/",
 				element: <HomePage />,
-				loader:homeLoader,
 				children:[
 					{ 
 						path: "program",
 						element: <Suspense fallback={<>loading...</>}>
 									<Program />
 					  			</Suspense>,
-						loader:programLoader,
 						children:[
 							{ 						
 								path: "show",

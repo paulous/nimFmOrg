@@ -3,7 +3,7 @@ import media from '../../utils/media'
 
 export const Center = styled.div`
 	position: absolute;
-	top:50px;
+	top:30px;
 	right:0;
 	left:0;		
 	display: flex;
@@ -12,7 +12,7 @@ export const Center = styled.div`
 	align-items:center;
 
 	${media.laptop`top: 130px;`}
-	${media.phone`top: 100px;`}
+	${media.phone`top: 15px;`}
 
 	.btn-position{
 		margin-top:-100px;

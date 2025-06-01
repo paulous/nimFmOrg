@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import {Link, Outlet, useLoaderData} from 'react-router-dom'
-import { getProgramData } from "../../utils/loaders";
+import {Link, Outlet} from 'react-router-dom'
 import {AdminContext} from "../../utils/AdminState"
 import { Main, Days, Day, Listing, Time, TimeNum, AmPm, Title } from './programStyles'
 import {ChangeChars} from '../../utils/springAnimations'
@@ -8,11 +7,6 @@ import {animated, useTrail} from '@react-spring/web'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 import BackButton from '../../components/buttons/BackButton'
 import {ShowTimeContext} from "../../utils/ShowTimeState"
-import useProgramSelectedTime from './useProgramSelectedTime';
-
-export async function loader() {
-	return { programColl: await getProgramData() };
-}
 
 export default function Program(){
 
@@ -22,17 +16,17 @@ export default function Program(){
 	} = useContext(AdminContext)
 
 	const {
+		updateTimeDate,
+		programColl,
 		setSelectedDay
 	} = useContext(ShowTimeContext)
 
-	const { programColl } = useLoaderData()
+	//const {timeData} = useProgramSelectedTime()
 	
-	const {timeData, selectedTime} = useProgramSelectedTime()
-
 	let {
 		getDay,
 		getHour
-	} = timeData
+	} = updateTimeDate
 	
     const [selected, setSelected] = useState(getDay)
     const [today, setToday] = useState(programColl[getDay].hosts)
@@ -52,7 +46,7 @@ export default function Program(){
     let selectDelay = (i, others) => {
 		return (
         !others
-        ?   showIndx === i  && (getDay === selected && getHour >= times[0] )
+        ?   showIndx === i  && getDay === selected && getHour >= times[0]
         :   showIndx === i && getDay === selected
 	)}
 
@@ -70,20 +64,21 @@ export default function Program(){
 		setSelectedDay(i)
         setSelected(i)
         setToday(shows[shows.length-1])
-		//selectedTime(unixTime)
+		//selectedTime(timeData, programColl)/////////////hmmmmmm
+
     }
 
 	useEffect(() => {
 		setToday(programColl[getDay].hosts)
 	  	setSelected(getDay)
-		selectedTime(timeData, programColl)
-	}, [timeData])
+		//selectedTime(timeData, programColl)
+	}, [updateTimeDate])
 	
 
     return <>
 		<Main>
 			<div className='wrap'>
-				<h2><ChangeChars text={'GET WITH THE PROGRAM'} min={0.1} max={0.6} /></h2>
+				<h1><ChangeChars text={'Lit it up!'} min={0.3} max={0.7} /></h1>
 				<Days>
 					{
 						justDays.map((day, i) => <Day key={`days${i}`} selected={i === selected} onClick={changeDay(i)} >{day.toUpperCase()}</Day>)

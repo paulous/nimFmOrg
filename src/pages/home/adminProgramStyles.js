@@ -19,6 +19,9 @@ export const Main = styled.div`
 	h2{
 		text-align:center;
 		width:100%;
+
+		${media.laptop`margin: 80px 0 30px;`}
+		${media.phone`margin: 40px 0 10px;`}
 	}
 
 	.back-btn{
@@ -58,6 +61,7 @@ export const Main = styled.div`
 
 	.day-wrap{
 		width:clamp(200px, 95vw, 1000px);
+		margin-bottom:200px;
 
 		.add-show{
 			display:flex;

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase'; // Import your initialized auth instance
+import Loader from '../utils/Loader';
 
 // Create the context
 // The default value here is an object with initial loading state and null user
@@ -32,7 +33,7 @@ export function AuthProvider({ children }) {
 		<AuthContext.Provider value={value}>
 			{/* Render children only when auth state is determined (optional, but good practice) */}
 			{!loading && children}
-			{loading && <p>Loading authentication state...</p>}
+			{loading && <div style={{vw:"100%", vh:"100%"}}><Loader /></div>}
 		</AuthContext.Provider>
 	);
 }

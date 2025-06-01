@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import media from "../utils/media";
 import { ChangeChars } from "../utils/springAnimations";
+import Footer from "./Footer";
 
 const Main = styled.div`
     position: fixed;
@@ -109,6 +110,26 @@ const Main = styled.div`
 				font-size: 3rem;
 			`}
         }
+        .bottom-btns{
+            display:flex;
+            justify-content:space-around;
+            align-items:center;
+            margin:90px 0 150px;
+			font-size: 3rem;
+
+            ${media.phone`margin-bottom:100px; font-size: 1.5rem;`}
+
+            .facebook{
+                display:flex;
+                align-items:center;
+                cursor: pointer;
+                    }
+            .audio-link{
+                display:flex;
+                align-items:center;
+                cursor: pointer;
+            }
+        }
 
         ${media.laptop`
 			margin:75px 50px 0;
@@ -129,7 +150,7 @@ export default function ContactPage() {
                         text={`MAKE CONTACT`.toUpperCase()}
                         min={0.5}
                         max={1}
-						bg
+                        bg
                     />
                 </span>
                 <span className="contact-text">
@@ -142,10 +163,11 @@ If you have an idea for your own show, call us on (02) 6689 0279, send an email 
 Full training is available.`.toUpperCase()}
                             min={0.7}
                             max={1}
-							bg
+                            bg
                         />
                     }
                 </span>
+                    <Footer />
             </div>
         </Main>
     );

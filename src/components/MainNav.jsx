@@ -1,7 +1,7 @@
 import { NavLink, Link } from 'react-router-dom'
 import styled from "styled-components"
 import SignIn from './SignIn';
-
+import media from '../utils/media';
 
 const Nav = styled.nav`
 	width:90%;
@@ -25,7 +25,9 @@ const Nav = styled.nav`
 	.log-in{
 		position:absolute;
 		right:30px;
-		color:#492c4e
+		color:#492c4e;
+			${media.laptop`right:25px;`}
+			${media.phone`right:7px;`}
 	}    
 `
 

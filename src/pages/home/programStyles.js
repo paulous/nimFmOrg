@@ -56,8 +56,12 @@ export const Days = styled.ul`
     flex-wrap:wrap;
     align-items:center;
     justify-content:center;
-    margin-top:25px;
+    margin-top:65px;
+
+    ${media.laptop`margin-top:45px;`}
+    ${media.phone`margin-top:30px;`}
 `
+
 export const Day = styled.li`
     margin: 0 3px 6px 3px;
     color:${props => props.selected ? 'rgba(33,24,28,1)' : '#C7A4C4'};
@@ -96,7 +100,7 @@ export const Listing = styled.li`
     cursor:pointer;
     box-shadow: 2px 2px 3px rgba(13,3,15,1);
     border-radius: 3px;
-    color:${props => props.selected ? '#1e0723ff' : 'papayawhip'};
+    color:${props => props.selected ? 'white' : '#cccccc'};
 	overflow:hidden;
 
 	${props => !props.selected && 

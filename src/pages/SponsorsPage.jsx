@@ -7,6 +7,7 @@ import { ChangeChars } from "../utils/springAnimations";
 import AdminNav from "../components/AdminNav";
 import { AdminContext } from "../utils/AdminState";
 import BackButton from "../components/buttons/BackButton";
+import Footer from "./Footer";
 
 const Main = styled.div`
     position: fixed;
@@ -176,9 +177,9 @@ export default function SponsorsPage() {
                             max={1}
                         />
                     </h1>
-					{
-						admin.status && <AdminNav {...{navigate, add:'/sponsors/add', remove:'/sponsors/remove'}} />
-					}
+                    {
+                        admin.status && <AdminNav {...{ navigate, add: '/sponsors/add', remove: '/sponsors/remove' }} />
+                    }
                     {sponsors.map((s, i) => (
                         <li key={`srs${i}`}>
                             {admin.status ? (
@@ -195,6 +196,7 @@ export default function SponsorsPage() {
                         </li>
                     ))}
                 </ul>
+                <Footer />
             </Main>
             <BackButton to={"/"} />
             <Outlet context={{ admin, setAdmin, sponsors, indx, setIndx }} />

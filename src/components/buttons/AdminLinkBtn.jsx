@@ -1,5 +1,7 @@
 import {useNavigate} from 'react-router-dom'
 import styled from 'styled-components'
+import { GiPirateSkull } from "react-icons/gi";
+
 
 const Main = styled.div`
 	position:${props => props.position ? 'absolute' : 'fixed'};
@@ -26,6 +28,6 @@ export default function AdminLinkBtn({ admin, link, setAdmin, area, position}){
 	}
 
 
-	return <Main onClick={toggleAdmin} position={position}>
+	return <Main onClick={toggleAdmin} position={position}><GiPirateSkull size={70} />
 		</Main>
 }

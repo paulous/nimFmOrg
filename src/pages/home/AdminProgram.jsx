@@ -39,10 +39,10 @@ export async function loader() {
 }
 
 export default function AdminProgram() {
+
     const { admin, setAdmin } = useContext(AdminContext);
 
-    const { programColl, setProgramColl, selectedDay } =
-        useContext(ShowTimeContext);
+    const { selectedDay, programColl, setProgramColl } = useContext(ShowTimeContext);
 
     let navigate = useNavigate();
 
@@ -231,11 +231,11 @@ export default function AdminProgram() {
         if (operationsAdded) {
             setProgramColl(
                 programColl.map((d) =>
-                    days.some((sd) => d.day === sd)
-                        ? { ...d, hosts: shows[days.indexOf(d.day)] }
-                        : d
-                )
-            );
+                       days.some((sd) => d.day === sd)
+                           ? { ...d, hosts: shows[days.indexOf(d.day)] }
+                           : d
+                   )
+                );
 
             AdminUpdateToday(day, shows)
             navigate("/program")

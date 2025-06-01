@@ -12,7 +12,9 @@ export const worldTime = () => {
         const parts = dateTimeFormat.formatToParts(date);
         const partValues = parts.map((p,i) => i !== parts.length-1 ? Number(p.value) : p.value).filter((_, i) => i % 2 === 0);
 
-        if(partValues[partValues.length - 1] === "pm") {partValues[0] += 12;};
+        if(partValues[partValues.length - 1] === "pm" && partValues[0] < 12) { 
+            partValues[0] += 12; 
+        }
         partValues.pop();
         partValues.unshift(date.getDay())
 

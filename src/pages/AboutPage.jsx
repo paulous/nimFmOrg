@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import media from "../utils/media";
 import { ChangeChars } from "../utils/springAnimations";
+import Footer from "./Footer";
 
 const Main = styled.div`
     position: fixed;
@@ -106,10 +107,10 @@ export default function AboutPage() {
             <div className="wrap">
                 <span className="head-line">
                     <ChangeChars
-                        text={`Jinggiwahla, Bugalbeh & Welcome`.toUpperCase()}
+                        text={`Jinggi Wahla, Bugalbeh & Welcome`.toUpperCase()}
                         min={0.5}
                         max={1}
-						bg
+                        bg
                     />
                 </span>
                 <span className="about-text">
@@ -123,10 +124,11 @@ supported financially by a dedicated and righteous team of local Sponsors, Membe
 				`.toUpperCase()}
                             min={0.5}
                             max={1}
-							bg
+                            bg
                         />
                     }
                 </span>
+                <Footer />
             </div>
         </Main>
     );
