@@ -2,7 +2,7 @@ import {createContext, useReducer, useEffect} from "react"
 import { useAuth } from "../contexts/AuthContext"; // Import the custom hook
 
 const initialValues = {
-	admin:{status:false, user:{}, program:false, show:false, sponsors:false, shop:false, docs:false},
+	admin:{status:false, user:{}, program:false, show:false, sponsors:false, shop:false, docs:false, about:false},
 	setAdmin:() => {}
 }
 

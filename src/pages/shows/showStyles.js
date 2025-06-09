@@ -29,19 +29,30 @@ export const Main = styled.div`
 		margin-right:65px;
 
 		.par{
+			position:relative;
 			border-radius:21px;
-			background: linear-gradient(0deg, rgba(42, 3, 42, 0.25) 25%, rgba(34, 2, 34, 0.356) 75%);
-			padding:25px;
+			background: linear-gradient(0deg, rgba(42, 3, 42, 0.6) 25%, rgba(34, 2, 34, 0.9) 75%);
+			padding:15px 50px 30px 30px;
 			font-size:1.5rem;
-			line-height:2;
+			line-height:1.7;
 			overflow-x:hidden;
+			color:rgba(218, 182, 218, 0.8);
+
+			::first-line {
+				font-size: 2.3rem;
+			}
 
 			${media.laptop`
 				width:auto;
 			`}
 
 			${media.phone`
-				font-size:1.3rem;
+				font-size:1rem;
+				padding:15px 30px;
+
+				::first-line {
+				font-size: 1.3rem;
+			}
 			`}
 		}
 
@@ -52,6 +63,7 @@ export const Main = styled.div`
 			width:100%;
 
 			h2{
+				position:relative;
 				margin-bottom:10px;
 
 				${media.laptop`
@@ -60,14 +72,18 @@ export const Main = styled.div`
 
 				${media.phone`
 					width:100%;
-					font-size:1.3rem;
+					font-size:1.1rem;
 				`}
 			}
 
 			h1{
 				width:clamp(200px, 60vw, 1500px);
-				min-height:clamp(250px, 35vw, 500px);
+				min-height:clamp(200px, 35vw, 350px);
 				transform:rotate(1.5deg);
+
+				${media.laptop`
+					min-height:auto;
+				`}
 
 				${media.phone`
 					font-size:5rem;
@@ -79,34 +95,33 @@ export const Main = styled.div`
 
 			.mast-head{
 				position:absolute;
-				top:0px;
-				right:50px;
+				top:-30px;
+				right:30px;
 				display:flex;
 				justify-content:flex-end;
-				width:clamp(250px, 35vw, 450px);
-				height:clamp(250px, 35vw, 450px);
+				width:clamp(250px, 30vw, 450px);
+				height:clamp(250px, 30vw, 450px);
 				border-radius:50% 50%;
 				${props => props.masthead && `background-image:url(${props.masthead}); background-size:cover;`};
 				padding:50px;
 				box-shadow:20px 20px 1px rgba(0,0,0,1);
-				border:25px solid #8835b5ff;
+				z-index:-1;
 				
 				${media.laptop`
-					top:40px;
+					//z-index:1;
+					top:-20px;
 					right:0px;
 				`}
 
 				${media.phone`
+					z-index:1;
 					top:0px;
-					margin:15px 0 0;
 					position:relative;
 					box-shadow:10px 10px 1px rgba(0,0,0,1);
-					border:15px solid #8835b5ff;
 				`}
 			}
 
 			${media.phone`
-				margin-bottom:15px;
 				flex-flow:wrap;
 				justify-content:center;
 				overflow:hidden;
@@ -149,7 +164,7 @@ export const Main = styled.div`
 			`}
 		}
 
-		.audio-wrap{}
+		.audio-wrap{margin:20px 0;}
 
 		.img-txt-wrap{
 			display:flex;
@@ -174,6 +189,23 @@ export const Main = styled.div`
 				width:clamp(500px, 100%, 800px);
 			}
 		}
+
+		.links-wrap{
+			display:flex;
+			justify-content:center;
+			font-size:1.3rem;
+			padding:20px;
+			margin:20px 0;
+			background:rgba(39, 8, 56, 1);
+			border-radius:30px;
+			max-width:500px;
+			cursor:pointer;
+
+			a{
+				color:rgba(182, 150, 199, 1);
+;}
+				&:hover{background:rgba(8, 0, 7, 1);}
+			}
 
 		.margBottom{
 

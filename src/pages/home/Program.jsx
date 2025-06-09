@@ -2,7 +2,6 @@ import { useState, useContext, useEffect } from 'react'
 import {Link, Outlet} from 'react-router-dom'
 import {AdminContext} from "../../utils/AdminState"
 import { Main, Days, Day, Listing, Time, TimeNum, AmPm, Title } from './programStyles'
-import {ChangeChars} from '../../utils/springAnimations'
 import {animated, useTrail} from '@react-spring/web'
 import AdminLinkBtn from '../../components/buttons/AdminLinkBtn'
 import BackButton from '../../components/buttons/BackButton'
@@ -78,7 +77,6 @@ export default function Program(){
     return <>
 		<Main>
 			<div className='wrap'>
-				<h1><ChangeChars text={'Lit it up!'} min={0.3} max={0.7} /></h1>
 				<Days>
 					{
 						justDays.map((day, i) => <Day key={`days${i}`} selected={i === selected} onClick={changeDay(i)} >{day.toUpperCase()}</Day>)

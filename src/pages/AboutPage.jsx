@@ -1,8 +1,13 @@
-import React from "react";
+import { useContext } from "react";
 import styled from "styled-components";
+import {useLoaderData, Outlet} from "react-router-dom";
 import media from "../utils/media";
 import { ChangeChars } from "../utils/springAnimations";
 import Footer from "./Footer";
+import { getEqualityDoc } from "../utils/loaders";
+import AdminLinkBtn from '../components/buttons/AdminLinkBtn'
+import { AdminContext } from "../utils/AdminState";
+
 
 const Main = styled.div`
     position: fixed;
@@ -45,11 +50,37 @@ const Main = styled.div`
     background-blend-mode: lighten;
     overflow-x: hidden;
     overflow-y: auto;
-    font-family: "Londrina Solid", cursive;
 
     .wrap {
         margin: 0 250px;
         max-width: 1100px;
+
+        .body-txt{
+            position:relative;
+            border-radius:21px;
+            background: linear-gradient(0deg, rgba(42, 3, 42, 0.7) 25%, rgba(34, 2, 34, 0.9) 75%);
+            padding:30px;
+            font-size:1.5rem;
+            line-height:1.7;
+			color:rgba(243, 214, 243, 0.8);
+
+            ::first-line{
+                font-size:2.3rem;
+            }
+
+            ${media.laptop`
+                width:auto;
+            `}
+
+            ${media.phone`
+                font-size:1.1rem;
+                padding:15px;
+
+                ::first-line{
+                    font-size:1.5rem;
+                }
+            `}
+        }
 
         .head-line {
             display: flex;
@@ -57,7 +88,7 @@ const Main = styled.div`
             font-size: 15rem;
             letter-spacing: 0.4;
             line-height: 0.71;
-            margin-bottom: 50px;
+            font-family: "Londrina Solid", cursive;
 
             ${media.laptop`
 				font-size: 10rem;
@@ -67,26 +98,6 @@ const Main = styled.div`
             ${media.phone`
 				font-size: 5rem;
 				line-height: 0.72;
-			`}
-        }
-
-        .about-text {
-            font-size: 10rem;
-            letter-spacing: 0.5;
-            line-height: 0.72;
-            white-space: pre-wrap;
-            background: linear-gradient(
-                90deg,
-                rgba(40, 24, 56, 0.5) 15%,
-                rgba(0, 71, 137, 0.1) 95%
-            );
-
-            ${media.laptop`
-				font-size: 6rem;
-			`}
-
-            ${media.phone`
-				font-size: 3rem;
 			`}
         }
 
@@ -101,8 +112,16 @@ const Main = styled.div`
     }
 `;
 
+export async function loader() {
+    return { about: await getEqualityDoc('general', {key:'name', val:'about'}) };
+}
+
 export default function AboutPage() {
-    return (
+
+    const { admin, setAdmin } = useContext(AdminContext);
+    let { about } = useLoaderData();
+
+    return (<>
         <Main>
             <div className="wrap">
                 <span className="head-line">
@@ -113,23 +132,19 @@ export default function AboutPage() {
                         bg
                     />
                 </span>
-                <span className="about-text">
-                    {
-                        <ChangeChars
-                            text={`Broadcasting 24/7 from the heart of Bundjalung country to the Nimbin valley and beyond since before the turn of the century; 
-
-kept afloat and navigating the treacherous seas of time with a 100% Volunteer crew of movers, shakers, dreamers, planners and the occasional reformed pirate; 
-
-supported financially by a dedicated and righteous team of local Sponsors, Members and the CBF (Community Broadcasting Foundation) and committed to the principles of Truth, Justice and Respect for our Elders, our Planet, and all living things, NIM-FM is the voice of the Alternative Nation.
-				`.toUpperCase()}
-                            min={0.5}
-                            max={1}
-                            bg
-                        />
-                    }
-                </span>
+                <div className="body-txt">{about.description}</div>
                 <Footer />
             </div>
         </Main>
+        {	admin.status && <AdminLinkBtn {...{
+            admin:admin.about,
+            link:'/about/admin', 
+            setAdmin, 
+            area:'about',
+            position:true
+            }} />
+        }
+        <Outlet context={{ admin, about }} />
+        </>
     );
 }

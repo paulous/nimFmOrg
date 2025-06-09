@@ -26,11 +26,15 @@ export const ShowsNav = styled.div`
 			align-items:center;
 			justify-content:center;
 			border-radius:50%;
-			background:rgba(156, 68, 149, 0.8);
+			background:rgba(156, 68, 149, 0.3);
 			pointer-events:auto;
 			cursor: pointer;
 			font-size:3rem;
-			color:white;
+			color:rgb(255, 180, 249);
+
+			&:hover{
+				background:rgba(68, 26, 65, 0.3);
+			}
 
 			${media.laptop`
 				width:75px;
@@ -42,6 +46,7 @@ export const ShowsNav = styled.div`
 				width:50px;
 				height:50px;
 				font-size:1.5rem;
+				background:rgba(156, 68, 149, 0.3);
 			`}
 		}
 	}
@@ -52,8 +57,8 @@ export const ShowsNav = styled.div`
 	`}
 
 	${media.phone`
-		left:15px;
-		right:15px;
+		left:5px;
+		right:5px;
 	`}
 `
 

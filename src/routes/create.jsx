@@ -4,8 +4,10 @@ import ErrorPage from "../routes/error"
 
 import RootLayout, {loader as programLoader} from '../components/RootLayout'
 import HomePage from '../pages/HomePage'
-import AboutPage from '../pages/AboutPage'
 import ContactPage from '../pages/ContactPage'
+
+import AboutPage, {loader as aboutLoader} from '../pages/AboutPage'
+import {actions as adminAboutAction} from '../pages/about/AdminAbout'
 
 import SponsorsPage, {loader as sponsorsLoader} from '../pages/SponsorsPage'
 import {actions as adminSponsorsAction} from '../pages/sponsors/AdminSponsors'
@@ -42,6 +44,7 @@ const AdminShop = lazy(() => import('../pages/shop/AdminShop'))
 const AdminAddShop = lazy(() => import('../pages/shop/AdminAddItem'))
 const AdminRemoveShop = lazy(() => import('../pages/shop/AdminRemoveItem'))
 
+const AdminAbout = lazy(() => import('../pages/about/AdminAbout'))
 
 const AdminSponsors = lazy(() => import('../pages/sponsors/AdminSponsors'))
 const AdminAddSponsors = lazy(() => import('../pages/sponsors/AdminAdd'))
@@ -117,7 +120,16 @@ export const router = createBrowserRouter([// change home to routes
 					},
 					{ 
 						path: "about",
-						element: <AboutPage />					
+						element: <AboutPage />,
+						loader:aboutLoader,
+						children:[
+							{
+								path: "admin",
+								element: <Suspense fallback={<>loading...</>}>
+											<AdminAbout />
+											</Suspense>,
+								action:adminAboutAction
+							}]			
 					},
 					{ 
 						path: "sponsors",

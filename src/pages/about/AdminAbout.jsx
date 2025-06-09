@@ -1,8 +1,8 @@
 import {useEffect} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
 import styled from 'styled-components'
-//import media from '../media'
-import { basicUpdateDB } from "../../utils/actions";
+import media from '../../utils/media'
+import { updateByEqualityDB } from "../../utils/actions";
 import BackButton from '../../components/buttons/BackButton'
 
 const Main = styled.div`
@@ -19,6 +19,14 @@ const Main = styled.div`
 
 	h2{
 		margin:60px 30px 0;
+
+		${media.laptop`
+			margin:120px 15px 0;
+		`}
+
+		${media.phone`
+			margin:100px 5px 0;
+		`}
 	}
 
 	form{
@@ -30,12 +38,22 @@ const Main = styled.div`
 		margin:30px 0;
 		padding:30px;
 
+		${media.laptop`
+			margin:20px 0;
+			padding:15px;
+		`}
 
-		input, select[type="text"]
+		${media.phone`
+			margin:2px 0;
+			padding:3px;
+		`}
+
+
+		input, textarea, select[type="text"]
 		{
 			font-size:1.3rem;
 		}
-		input, select, label{
+		input, textarea, select, label{
 			padding:15px;
 			margin:15px;
 			width:96%;
@@ -45,7 +63,7 @@ const Main = styled.div`
 			background:rgba(0,0,0,0.2);
 			border-radius:30px;
 		}
-		input:focus{
+		textarea:focus{
 			background:rgb(255, 254, 219);
 		}
 
@@ -60,40 +78,25 @@ const Main = styled.div`
 export async function actions({ request }) {
 
 	let formData = await request.formData()
-
-	let id = formData.get("_id")
-	let data = {
-		description:formData.get("description"), 
-		url:formData.get("url")
-	}
-
-	let updated = await basicUpdateDB('docs', id, data)
+	let data = {description:formData.get("about")}
+	let updated = await updateByEqualityDB('general',{key:'name', val:'about'}, data)
 	
 	return {updated, data}
 }
 
-export default function AdminDocs() {
-
-	let {
-		indx,
-		docs,
-		admin,
-	} = useOutletContext()
-
-	let {
-		description,
-		url,
-		_id
-	} = docs[indx]
+export default function AdminAbout() {
 
 	let actionData = useActionData()
 	let navigate = useNavigate()
+
+    let {admin, about } = useOutletContext();
+
 
 	useEffect(() => {
 
 		if(actionData?.updated){
 
-			navigate(`/docs`)
+			navigate(`/about`)
 		}else{
 			console.log('nothing was updated')
 		}
@@ -104,27 +107,20 @@ export default function AdminDocs() {
 		{
 			admin.status && 
 			<Main>
-				<h2>EDIT: {description}</h2>
-				<Form method="post" action={`/docs/admin`}>
-					<label> NAME:
-						<input
-						name="description"
+				<h2>EDIT: {about.name}</h2>
+				<Form method="post" action={`/about/admin`}>
+					<label> ABOUT TEXT:
+						<textarea
+						name="about"
 						type="text"
-						defaultValue={description}
+						defaultValue={about.description}
 						autoFocus
+						rows='13'
 						/>
 					</label>
-					<label> URL:
-						<input
-						name="url"
-						type="text"
-						defaultValue={url}
-						/>
-					</label>
-					<input name='_id' type='hidden' defaultValue={_id} />
 					<input type="submit" />
 				</Form>
-				<BackButton to={"/docs"} />
+				<BackButton to={"/about"} />
 			</Main>
 		}
 	</>

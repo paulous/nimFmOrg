@@ -68,8 +68,8 @@ export default function Show() {
                         {
                             <ChangeChars
                                 text={title.toUpperCase()}
-                                min={0.1}
-                                max={1}
+                                min={0.4}
+                                max={0.9}
 								bg
                             />
                         }{" "}
@@ -102,10 +102,10 @@ export default function Show() {
 				}
                 {parOne && <p className="par">{parOne}</p>}
                 {
-					audOne || audTwo &&
+					(audOne || audTwo) &&
 					<div className="audio-wrap">
-                    	<div>{audOne}</div>
-                    	<div>{audTwo}</div>
+                        {audOne && <audio controls src={audOne}></audio>}
+                        {audTwo && <audio controls src={audTwo}></audio>}
                 	</div>
 				}
 				{parTwo && <p className="par">{parTwo}</p>}
@@ -116,8 +116,9 @@ export default function Show() {
 				{
 					linkDesc &&
 					<div className="links-wrap">
-						<div>{linkDesc}</div>
-						<div>{linkUrl}</div>
+						<a href={linkUrl} target={"_blank"}>
+                            {linkDesc}
+						</a>
 					</div>
 				}
                 <div className="margBottom" />

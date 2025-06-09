@@ -22,7 +22,7 @@ body {background:rgba(34,24,28,1);}
   position: absolute;
   width: 32px;
   height: 32px;
-  background: #C7A4C4;
+  background: rgb(255, 59, 239);
   animation: lds-heart 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 .lds-heart div:after,
@@ -32,7 +32,7 @@ body {background:rgba(34,24,28,1);}
   display: block;
   width: 32px;
   height: 32px;
-  background: #C7A4C4;
+  background: rgb(255, 59, 239);
 }
 .lds-heart div:before {
   left: -24px;

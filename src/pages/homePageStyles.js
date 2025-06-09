@@ -31,7 +31,7 @@ export const Main = styled.div`
 						font-size:1.1rem;
 					`}
 					${media.phone`
-						font-size:0.8rem;
+						font-size:0.9rem;
 						padding:5px;
 						margin:0;
 					`}
@@ -40,6 +40,10 @@ export const Main = styled.div`
 					border:3px solid #3c0f3c;
 					box-shadow: -10px 1px 0 rgb(82, 1, 120);
 					color:rgba(183, 153, 183, 0.7);
+
+					${media.phone`
+						color:white;
+					`}
 
 					&:hover{
 						border:3px solid rgb(176, 64, 176);

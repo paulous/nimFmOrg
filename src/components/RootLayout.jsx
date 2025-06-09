@@ -6,6 +6,7 @@ import Player from "./player/Player";
 import { getProgramData } from "../utils/loaders";
 import { ShowTimeContext } from "../utils/ShowTimeState"
 import ProgramSelectedTime from '../pages/home/ProgramSelectedTime';
+import { worldTime } from "../utils/worldTime";
 
 export async function loader() {
     return { programcoll: await getProgramData() };
@@ -27,12 +28,23 @@ export default function RootLayout() {
     const { programcoll } = useLoaderData()
 
     const {
-        setProgramColl
+        programColl,
+        setProgramColl,
+        setUpdateTimeDate
     } = useContext(ShowTimeContext)
 
     useEffect(() => {
         programcoll && setProgramColl(programcoll)
     }, [programcoll])
+
+    useEffect(() => {
+        let onLine = () => { 
+            programColl.length > 0 && setUpdateTimeDate(worldTime())
+        }
+        window.addEventListener('online', onLine);
+        return () => window.removeEventListener('online', onLine)
+        //window.addEventListener('offline',  () => {one = one ? false : true;  console.log('offline')})
+    }, [])
 
     return <>
         <ProgramSelectedTime />

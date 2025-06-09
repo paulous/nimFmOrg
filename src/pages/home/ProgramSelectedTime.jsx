@@ -8,6 +8,7 @@ export default function ProgramSelectedTime() {
 	let timeout = useRef(window.setTimeout);
 
 	const {
+		updateTimeDate,
 		setUpdateTimeDate,
 		setCurrentShow,
 		programColl
@@ -64,13 +65,12 @@ export default function ProgramSelectedTime() {
 		window.clearTimeout(timeout.current)
 		timeout.current = window.setTimeout(() => {
         	setUpdateTimeDate(worldTime())
-			selectedTime(worldTime())
 		}, delay)
 	}
 
 	useEffect(() => {
         programColl.length > 0 && selectedTime(worldTime())
-    }, [programColl])
+    }, [programColl, updateTimeDate])
 	
 	return <></>
 }

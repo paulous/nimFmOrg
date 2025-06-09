@@ -66,7 +66,6 @@ const Main = styled.div`
     background-position-y: bottom;
     background-blend-mode: multiply;
     overflow-y: auto;
-    font-family: "Londrina Solid", cursive;
 
     .wrap {
         margin: 0 250px;
@@ -78,58 +77,50 @@ const Main = styled.div`
             font-size: 15rem;
             letter-spacing: 0.4;
             line-height: 0.71;
-            margin-bottom: 50px;
+            //margin-bottom: 30px;
+            font-family: "Londrina Solid", cursive;
 
             ${media.laptop`
-				font-size: 10rem;
+				font-size: 12rem;
 				letter-spacing: 0.5;
 			`}
 
             ${media.phone`
-				font-size: 5rem;
+				font-size: 6rem;
 				line-height: 0.72;
 			`}
         }
 
-        .contact-text {
-            font-size: 5rem;
-            letter-spacing: 0.5;
-            line-height: 0.72;
-            white-space: pre-wrap;
-            background: linear-gradient(
-                90deg,
-                rgba(40, 24, 56, 0.5) 15%,
-                rgba(0, 71, 137, 0.1) 95%
-            );
+        .body-txt{
+            position:relative;
+            border-radius:21px;
+            background: linear-gradient(0deg, rgba(42, 3, 42, 0.7) 25%, rgba(34, 2, 34, 0.9) 75%);
+            padding:30px;
+            font-size:1.5rem;
+            line-height:2;
+			color:rgba(243, 214, 243, 0.8);
+
+            p{margin-bottom:25px;}
+            a{color:rgb(187, 255, 0);}
+
+            ::first-line{
+                font-size:2.3rem;
+            }
 
             ${media.laptop`
-				font-size: 6rem;
-			`}
+                width:auto;
+            `}
 
             ${media.phone`
-				font-size: 3rem;
-			`}
-        }
-        .bottom-btns{
-            display:flex;
-            justify-content:space-around;
-            align-items:center;
-            margin:90px 0 150px;
-			font-size: 3rem;
+                font-size:1.1rem;
+                padding:15px;
 
-            ${media.phone`margin-bottom:100px; font-size: 1.5rem;`}
-
-            .facebook{
-                display:flex;
-                align-items:center;
-                cursor: pointer;
-                    }
-            .audio-link{
-                display:flex;
-                align-items:center;
-                cursor: pointer;
-            }
+                ::first-line{
+                    font-size:1.5rem;
+                }
+            `}
         }
+
 
         ${media.laptop`
 			margin:75px 50px 0;
@@ -153,22 +144,20 @@ export default function ContactPage() {
                         bg
                     />
                 </span>
-                <span className="contact-text">
-                    {
-                        <ChangeChars
-                            text={`NimFM is always interested to hear from individuals who would like to become radio presenters.
-					
-If you have an idea for your own show, call us on (02) 6689 0279, send an email to nimbinradiomedia@gmail.com, or just drop in.
-
-Full training is available.`.toUpperCase()}
-                            min={0.7}
-                            max={1}
-                            bg
-                        />
-                    }
-                </span>
+                <div className="body-txt">
+                    <p>NimFM is always interested to hear from individuals who would like to become radio presenters.
+                    If you have an idea for your own show.</p>
+                    <address>
+                    <p>Call us on: <a href="tel:+61-2-66890277"> +61-2-66890277</a></p>
+                    <p>Send an email to: <a href="mailto:nimbinradiomedia@gmail.com">nimbinradiomedia @ gmail.com</a></p>
+                    </address>
+                    <p>Or just drop in. Full training is available.</p>
+                </div>
                     <Footer />
             </div>
         </Main>
     );
 }
+
+
+  

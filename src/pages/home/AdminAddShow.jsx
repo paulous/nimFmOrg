@@ -95,17 +95,16 @@ export async function actions({ params, request }) {
 		linkUrl:formData.get("linkUrl") 
 	} 
 
-	let added = await basicAddDB('shows', data)
+	let addedId = await basicAddDB('shows', data)
 	
-	return {added, data}
+	return {addedId, data}
 
 }
 
 export default function AdminAddShow() {
 	let {
 		showsData,
-		admin,
-		setAdmin
+		admin
 	} = useOutletContext()
 
 	let {		
@@ -129,7 +128,7 @@ export default function AdminAddShow() {
 
 	useEffect(() => {
 
-		if(actionData?.response.insertedId){
+		if(actionData?.addedId){
 
 			navigate(`/program/admin-program`)
 		}else{

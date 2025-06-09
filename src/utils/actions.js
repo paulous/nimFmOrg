@@ -6,8 +6,6 @@ import {
     addDoc,
     writeBatch,
     doc,
-    getDoc,
-	setDoc,
     updateDoc,
     deleteDoc,
 } from "firebase/firestore"; // Import Firestore methods
@@ -17,52 +15,69 @@ import { db } from "../firebase"; // Import your Firestore instance
 //const { user, loading } = useAuth();
 /////////author_uid: currentUserUid, // <-- This is the crucial part matching your rules
 
-export const basicAddDB = async (coll, addShow) => {
+export const basicAddDB = async (coll, data) => {
     try {
-        const docRef = await addDoc(collection(db, coll), addShow);
-        console.log("Document written with ID:", docRef.id);
+        const docRef = await addDoc(collection(db, coll), data);
+        //console.log("Document written with ID:", docRef.id);
 
         return docRef.id;
     } catch (e) {
-        console.error("Error adding document: ", e);
+        //console.error("Error adding document: ", e);
     }
 };
 
 export const basicRemoveDB = async (coll, documentId) => {
-
     const hostDocRef = doc(db, coll, documentId);
 
     try {
         // This operation will FAIL if the document does NOT exist or if security rules prevent deletion
         await deleteDoc(hostDocRef);
 
-        console.log(
-            `Document with ID ${documentId} in collection ${coll} successfully deleted.`
-        );
+        //console.log(`Document with ID ${documentId} in collection ${coll} successfully deleted.`);
 
         return documentId;
     } catch (error) {
-        console.error(`Error deleting document with ID ${documentId}:`, error);
+        //console.error(`Error deleting document with ID ${documentId}:`, error);
         throw error;
     }
 };
 
 export const basicUpdateDB = async (coll, documentId, dataToUpdate) => {
-
     const hostDocRef = doc(db, coll, documentId);
 
     try {
         // This operation will FAIL if the document does NOT exist (this is the upsert: false behavior)
         await updateDoc(hostDocRef, dataToUpdate);
-
-        console.log(
-            `Document with ID ${documentId} in collection ${coll} successfully updated.`
-        );
-
+        //console.log(`Document with ID ${documentId} in collection ${coll} successfully updated.`);
         return { documentId };
     } catch (error) {
-        console.error(`Error updating document with ID ${documentId}:`, error);
+        //console.error(`Error updating document with ID ${documentId}:`, error);
         throw error;
+    }
+};
+
+export const updateByEqualityDB = async (coll, keyValue, dataToUpdate) => {
+
+    const q = query(
+        collection(db, coll),
+        where(keyValue.key, "==", keyValue.val)
+    );
+
+    const querySnapshot = await getDocs(q); // <-- Crucial step: Await the results!
+
+    // Assuming there's only one document with that email
+    if (!querySnapshot.empty) {
+        const docSnapshot = querySnapshot.docs[0]; // Get the first document snapshot
+        const docRef = docSnapshot.ref; // Get the DocumentReference from the snapshot
+
+        try {
+            await updateDoc(docRef, dataToUpdate);
+
+            return true
+            
+        } catch (error) {
+            
+        }
     }
 };
 
@@ -84,12 +99,10 @@ export const getTitleId = async () => {
             docs.push(show);
         });
 
-        console.log(docs);
         if (docs.length) return docs;
         else return [];
-        console.log("no shop data...dude");
     } catch (e) {
-        console.error("Error getting shows document: ", e);
+        //console.error("Error getting shows document: ", e);
     }
 };
 
@@ -110,7 +123,7 @@ export const updateProgram = async (data, user) => {
     const batch = writeBatch(db);
     const queryPromises = [];
 
-    console.log("Starting batch update process for program hosts...");
+    //console.log("Starting batch update process for program hosts...");
 
     // Step 1: Prepare queries for each day and collect promises
     days.forEach((day, index) => {
@@ -147,9 +160,7 @@ export const updateProgram = async (data, user) => {
                 batch.update(docToUpdateRef, {
                     hosts: currentNewHostsData, // Replace the existing 'hosts' field
                 });
-                console.log(
-                    `Added update to batch for document with day: ${currentDay} (Document ID: ${docToUpdateRef.id})`
-                );
+                //console.log(`Added update to batch for document with day: ${currentDay} (Document ID: ${docToUpdateRef.id})`);
                 operationsAdded++;
             }
         });
@@ -157,18 +168,13 @@ export const updateProgram = async (data, user) => {
         // Step 4: Commit the batch as a single atomic operation
         if (operationsAdded > 0) {
             await batch.commit();
-            console.log(
-                `Batch update committed successfully. ${operationsAdded} documents updated.`
-            );
-
+            //console.log(`Batch update committed successfully. ${operationsAdded} documents updated.`);
             return { operationsAdded, days, shows };
         } else {
-            console.log(
-                "No documents found for the provided days, batch commit skipped."
-            );
+            // console.log( "No documents found for the provided days, batch commit skipped.");
         }
     } catch (error) {
-        console.error("Error performing batch update:", error);
+        //console.error("Error performing batch update:", error);
         // Rethrow or handle the error
         throw error;
     }

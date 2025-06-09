@@ -21,7 +21,6 @@ export default function Home() {
         <>
             {MemoRocks}
             <Center>
-                <CurrentShow {...{ audioStream }} />
                 <RainbowCont>
                     <RainbowSvg pause={playerPause.pauseplay} />
                     <div className='btn-position'>
@@ -32,6 +31,7 @@ export default function Home() {
                             }}
                         />
                     </div>
+                    <CurrentShow {...{ audioStream }} />
                 </RainbowCont>
             </Center>
             <RadioCont>
