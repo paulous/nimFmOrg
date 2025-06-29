@@ -64,8 +64,8 @@ const Main = styled.div`
         ),
         url(/assets/docs/bookShelf.jpg);
     background-size: 30%;
-    background-size: cover;
-    background-repeat: no-repeat;
+    //background-size: cover;
+    //background-repeat:
     padding-top: 30px;
     overflow-y: auto;
 
@@ -171,6 +171,7 @@ export async function loader() {
 }
 
 export default function DocsPage() {
+
     const { admin, setAdmin } = useContext(AdminContext);
 
     const [indx, setIndx] = useState(0);
@@ -209,7 +210,7 @@ export default function DocsPage() {
                     ))}
                 </ul>
             </Main>
-            <Outlet context={{ admin, setAdmin, docs, indx, setIndx }} />
+            <Outlet context={{ admin, docs, indx }} />
         </>
     );
 }

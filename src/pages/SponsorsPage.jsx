@@ -199,7 +199,7 @@ export default function SponsorsPage() {
                 <Footer />
             </Main>
             <BackButton to={"/"} />
-            <Outlet context={{ admin, setAdmin, sponsors, indx, setIndx }} />
+            <Outlet context={{ admin, sponsors, indx }} />
         </>
     );
 }

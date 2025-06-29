@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
 import { basicAddDB } from "../../utils/actions";
 //import media from '../media'
@@ -30,7 +30,17 @@ const Main = styled.div`
 		margin:30px 0;
 		padding:30px;
 
+		input[type="submit"]
+		{
+			background:rgb(55, 180, 17);
+			border-radius:30px;
+			font-size:1.5rem;
+			cursor: pointer;
 
+			:hover{
+				background:rgb(230, 9, 156);
+			}
+		}
 		input, select[type="text"]
 		{
 			font-size:1.3rem;
@@ -65,7 +75,7 @@ export async function actions({ request }) {
 		title:formData.get("title"), 
 		site:formData.get("site"), 
 		thumbnail:formData.get("thumbnail"),
-		order:formData.get("order")
+		order: Number.parseFloat(formData.get("order"))
 	}
 
 	let addedId = await basicAddDB('sponsors', data)
@@ -75,24 +85,45 @@ export async function actions({ request }) {
 
 export default function AdminAdd() {
 
+	
 	let {
-		indx,
-		setIndx,
 		sponsors,
 		admin,
-		setAdmin
+		indx
 	} = useOutletContext()
+	
+	let [order, setOrder] = useState(0)
+	let [index, setIndex] = useState(indx)
+
 
 	let actionData = useActionData()
 	let navigate = useNavigate()
 
+	let orderGap = (e) => {
+
+		let selectedIndx = Number(e.target.selectedIndex)
+		
+		if(sponsors.length-1 === e.target.value){
+			setOrder(Math.round(sponsors[e.target.value].order) + 100)
+			
+		}else if(e.target.value === 0){
+			setOrder(sponsors[0].order ? sponsors[0].order / 2 : 100)
+		}
+		else{
+			
+			let beforIndx = selectedIndx-1
+			let afterIndx = selectedIndx+1
+
+			setOrder((sponsors[beforIndx].order + sponsors[afterIndx].order) / 2)
+		}
+
+		setIndex(selectedIndx)
+	}
+
 	useEffect(() => {
 
 		if(actionData?.addedId){
-
 			navigate(`/sponsors`)
-		}else{
-			console.log('nothing was updated')
 		}
 
 	}, [actionData])
@@ -123,22 +154,22 @@ export default function AdminAdd() {
 					</label>
 					<label> PLACEMENT:
 					<select
-					name={'order'}
-					value={indx}
-					onChange={(e) => setIndx(e.target.value)}
+					value={index}
+					onChange={orderGap}
 					>
 					{
 						sponsors.map((s, i) => (
 							<option
 								key={`sp${i}`}
-								value={s.order}
+								value={i}
 							>
-								{s.order}
+								{`${i} - ${s.title}`}
 							</option>
 						))
 					}
 					</select>
 					</label>
+					<input name='order' type='hidden' defaultValue={order} />
 					<input type="submit" />
 				</Form>
 				<BackButton to={"/sponsors"} />

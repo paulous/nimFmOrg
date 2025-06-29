@@ -103,8 +103,6 @@ export default function AdminRemove() {
 		if(actionData?.deleteShowId){
 
 			navigate(`/sponsors`)
-		}else{
-			console.log('nothing was updated')
 		}
 
 	}, [actionData])

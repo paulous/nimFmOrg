@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
 import { basicAddDB } from "../../utils/actions";
 import BackButton from '../../components/buttons/BackButton'
@@ -30,7 +30,17 @@ const Main = styled.div`
 		margin:30px 0;
 		padding:30px;
 
+		input[type="submit"]
+		{
+			background:rgb(55, 180, 17);
+			border-radius:30px;
+			font-size:1.5rem;
+			cursor: pointer;
 
+			:hover{
+				background:rgb(230, 9, 156);
+			}
+		}
 		input, select[type="text"]
 		{
 			font-size:1.3rem;
@@ -63,7 +73,8 @@ export async function actions({ request }) {
 
 	let data = {
 		description:formData.get("description"), 
-		url:formData.get("url")
+		url:formData.get("url"),
+		order: Number.parseFloat(formData.get("order"))
 	}
 
 	let addedId = await basicAddDB('docs', data)
@@ -74,20 +85,43 @@ export async function actions({ request }) {
 export default function AdminAdd() {
 
 	let {
+		docs,
 		admin,
-		setAdmin
+		indx
 	} = useOutletContext()
+	
+	let [order, setOrder] = useState(0)
+	let [index, setIndex] = useState(indx)
 
 	let actionData = useActionData()
 	let navigate = useNavigate()
+
+	let orderGap = (e) => {
+
+		let selectedIndx = Number(e.target.selectedIndex)
+		
+		if(docs.length-1 === e.target.value){
+			setOrder(Math.round(docs[e.target.value].order) + 100)
+			
+		}else if(e.target.value === 0){
+			setOrder(docs[0].order ? docs[0].order / 2 : 100)
+		}
+		else{
+			
+			let beforIndx = selectedIndx-1
+			let afterIndx = selectedIndx+1
+
+			setOrder((docs[beforIndx].order + docs[afterIndx].order) / 2)
+		}
+
+		setIndex(selectedIndx)
+	}
 
 	useEffect(() => {
 
 		if(actionData?.addedId){
 
 			navigate(`/docs`)
-		}else{
-			console.log('nothing was updated')
 		}
 
 	}, [actionData])
@@ -110,6 +144,24 @@ export default function AdminAdd() {
 						type="text"
 						/>
 					</label>
+					<label> PLACEMENT:
+					<select
+					value={index}
+					onChange={orderGap}
+					>
+					{
+						docs.map((s, i) => (
+							<option
+								key={`sp${i}`}
+								value={i}
+							>
+								{`${i} - ${s.description}`}
+							</option>
+						))
+					}
+					</select>
+					</label>
+					<input name='order' type='hidden' defaultValue={order} />
 					<input type="submit" />
 				</Form>
 				<BackButton to={"/docs"} />

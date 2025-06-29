@@ -1,8 +1,8 @@
-import React from 'react'
 import styled from 'styled-components'
 
 const Main = styled.div`
 	width:100%;
+	font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 
 	h1{
 	}
@@ -15,6 +15,9 @@ const Main = styled.div`
 		flex-wrap:wrap;
 		border-radius:15px;
 		margin-top:5px;
+		padding:15px;
+		justify-content:space-between;
+		align-items:center;
 	}
 
 	span{
@@ -35,8 +38,9 @@ export default function AdminNav({navigate, add, remove}) {
   return <Main  className='add-remove'>
 	<h1>ADMIN</h1>
 		<nav>
-			<span onClick={() => navigate(add)}>Add new Item</span>	
-			<span onClick={() => navigate(remove)}>Remove Item</span>	
+			<span onClick={() => navigate(add)}>CREATE</span>
+			<span onClick={() => navigate(remove)}>DESTROY</span>	
 		</nav>
+		<p>Click items below to update.</p>
 	</Main>
 }

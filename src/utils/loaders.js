@@ -1,5 +1,5 @@
 import { db } from "../firebase"; // Import your Firestore instance
-import { collection, query, getDocs, getDoc, doc, where } from "firebase/firestore"; // Import Firestore methods
+import { collection, query, getDocs, getDoc, doc, where, orderBy } from "firebase/firestore"; // Import Firestore methods
 
 export const getShowTitleId = async () => {
 
@@ -37,7 +37,7 @@ export const getProgramData = async () => {
 
 		if (docs.length) return docs.sort((a, b) => a.indx - b.indx);
     	//else console.log("no program data...dude");
-        console.log(docs);
+        //console.log(docs);
 
     } catch (e) {console.error("Error getting program document: ", e);}
 };
@@ -79,7 +79,7 @@ export const getSponsors = async () => {
 
 	try {
         const collectionRef = collection(db, 'sponsors');
-        const snapshot = await getDocs(query(collectionRef)); // Use getDocs and await the result
+        const snapshot = await getDocs(query(collectionRef, orderBy("order", "asc"))); // Use getDocs and await the result
         
         const docs = [];
         snapshot.forEach((doc) => {
@@ -92,7 +92,7 @@ export const getSponsors = async () => {
             docs.push(shop);
         });
        
-        return docs.sort((a, b) => a.order - b.order);
+        return docs //.sort((a, b) => a.order - b.order);
 
     } catch (e) {console.error("Error getting program document: ", e);}
 };
@@ -101,7 +101,7 @@ export const getDocuments = async () => {
 
 	try {
         const collectionRef = collection(db, 'docs');
-        const snapshot = await getDocs(query(collectionRef)); // Use getDocs and await the result
+        const snapshot = await getDocs(query(collectionRef, orderBy("order", "asc"))); // Use getDocs and await the result
 
         const docs = [];
         snapshot.forEach((doc) => {

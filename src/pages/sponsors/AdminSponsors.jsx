@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
 import { basicUpdateDB } from "../../utils/actions";
 import BackButton from '../../components/buttons/BackButton'
@@ -30,7 +30,17 @@ const Main = styled.div`
 		margin:30px 0;
 		padding:30px;
 
-
+		input[type="submit"]
+		{
+			background:rgb(55, 180, 17);
+			border-radius:30px;
+			font-size:1.5rem;
+			cursor: pointer;
+			
+			:hover{
+				background:rgb(230, 9, 156);
+			}
+		}
 		input, select[type="text"]
 		{
 			font-size:1.3rem;
@@ -66,7 +76,7 @@ export async function actions({ request }) {
 		title:formData.get("title"), 
 		site:formData.get("site"), 
 		thumbnail:formData.get("thumbnail"),
-		order:Number(formData.get("new-order"))
+		order:Number.parseFloat(formData.get("order"))
 	}
 
 	let updated = await basicUpdateDB('sponsors', id, data)
@@ -78,9 +88,8 @@ export default function AdminSponsors() {
 
 	let {
 		indx,
-		setIndx,
 		sponsors,
-		admin,
+		admin
 	} = useOutletContext()
 
 	let {
@@ -91,16 +100,36 @@ export default function AdminSponsors() {
 		_id
 	} = sponsors[indx]
 
+	let [orders, setOrders] = useState(order)
+	let [index, setIndex] = useState(indx)
+
 	let actionData = useActionData()
 	let navigate = useNavigate()
+
+	let orderGap = (e) => {
+
+		let selectedIndx = Number(e.target.selectedIndex)
+		let beforIndx = selectedIndx-1
+		let afterIndx = selectedIndx+1
+		
+		if(sponsors.length-1 === selectedIndx){
+			setOrders(sponsors[selectedIndx].order + 100)
+			
+		}else if(selectedIndx === 0){
+			setOrders(sponsors[0].order / 2)
+		}
+		else{
+			setOrders((sponsors[beforIndx].order + sponsors[afterIndx].order) / 2)
+		}
+
+		setIndex(selectedIndx)
+	}
 
 	useEffect(() => {
 
 		if(actionData?.updated){
 
 			navigate(`/sponsors`)
-		}else{
-			console.log('nothing was updated')
 		}
 
 	}, [actionData])
@@ -135,22 +164,22 @@ export default function AdminSponsors() {
 					</label>
 					<label> PLACEMENT:
 					<select
-					name={'new-order'}
-					value={indx}
-					onChange={(e) => setIndx(e.target.value)}
+					value={index}
+					onChange={orderGap}
 					>
 					{
 						sponsors.map((s, i) => (
 							<option
 								key={`sp${i}`}
-								value={s.order}
+								value={i}
 							>
-								{`${s.order} - ${s.title}`}
+								{`${i} - ${s.title}`}
 							</option>
 						))
 					}
 					</select>
 					</label>
+					<input name='order' type='hidden' defaultValue={orders} />
 					<input name='_id' type='hidden' defaultValue={_id} />
 					<input type="submit" />
 				</Form>

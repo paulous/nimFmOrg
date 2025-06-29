@@ -2,6 +2,7 @@ import {useContext, useEffect} from "react";
 import { Outlet, useLoaderData } from "react-router-dom";
 import MainNavigation from "./MainNav";
 import styled from "styled-components";
+import media from "../utils/media";
 import Player from "./player/Player";
 import { getProgramData } from "../utils/loaders";
 import { ShowTimeContext } from "../utils/ShowTimeState"
@@ -20,7 +21,12 @@ const Nav = styled.div`
     position: fixed;
     top: 0;
     padding: 8px 0 12px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.1);
+
+    ${media.phone`
+        background: rgba(0, 0, 0, 0.3);
+
+    `}
 `
 
 export default function RootLayout() {
@@ -42,7 +48,7 @@ export default function RootLayout() {
             programColl.length > 0 && setUpdateTimeDate(worldTime())
         }
         window.addEventListener('online', onLine);
-        return () => window.removeEventListener('online', onLine)
+        //return () => window.removeEventListener('online', onLine)
         //window.addEventListener('offline',  () => {one = one ? false : true;  console.log('offline')})
     }, [])
 

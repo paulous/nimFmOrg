@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import { useOutletContext, Form, useActionData, useNavigate} from 'react-router-dom'
 import styled from 'styled-components'
 //import media from '../media'
@@ -30,7 +30,17 @@ const Main = styled.div`
 		margin:30px 0;
 		padding:30px;
 
+		input[type="submit"]
+		{
+			background:rgb(55, 180, 17);
+			border-radius:30px;
+			font-size:1.5rem;
+			cursor: pointer;
 
+			:hover{
+				background:rgb(230, 9, 156);
+			}
+		}
 		input, select[type="text"]
 		{
 			font-size:1.3rem;
@@ -64,7 +74,8 @@ export async function actions({ request }) {
 	let id = formData.get("_id")
 	let data = {
 		description:formData.get("description"), 
-		url:formData.get("url")
+		url:formData.get("url"),
+		order:Number.parseFloat(formData.get("order"))
 	}
 
 	let updated = await basicUpdateDB('docs', id, data)
@@ -83,19 +94,40 @@ export default function AdminDocs() {
 	let {
 		description,
 		url,
+		order,
 		_id
 	} = docs[indx]
 
+	let [orders, setOrders] = useState(order)
+	let [index, setIndex] = useState(indx)
+
 	let actionData = useActionData()
 	let navigate = useNavigate()
+
+	let orderGap = (e) => {
+
+		let selectedIndx = Number(e.target.selectedIndex)
+		let beforIndx = selectedIndx-1
+		let afterIndx = selectedIndx+1
+		
+		if(docs.length-1 === selectedIndx){
+			setOrders(docs[selectedIndx].order + 100)
+			
+		}else if(selectedIndx === 0){
+			setOrders(docs[0].order / 2)
+		}
+		else{
+			setOrders((docs[beforIndx].order + docs[afterIndx].order) / 2)
+		}
+
+		setIndex(selectedIndx)
+	}
 
 	useEffect(() => {
 
 		if(actionData?.updated){
 
 			navigate(`/docs`)
-		}else{
-			console.log('nothing was updated')
 		}
 
 	}, [actionData])
@@ -121,6 +153,25 @@ export default function AdminDocs() {
 						defaultValue={url}
 						/>
 					</label>
+					<input name='_id' type='hidden' defaultValue={_id} />
+										<label> PLACEMENT:
+					<select
+					value={index}
+					onChange={orderGap}
+					>
+					{
+						docs.map((s, i) => (
+							<option
+								key={`sp${i}`}
+								value={i}
+							>
+								{`${i} - ${s.description}`}
+							</option>
+						))
+					}
+					</select>
+					</label>
+					<input name='order' type='hidden' defaultValue={orders} />
 					<input name='_id' type='hidden' defaultValue={_id} />
 					<input type="submit" />
 				</Form>

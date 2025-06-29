@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
 		<AuthContext.Provider value={value}>
 			{/* Render children only when auth state is determined (optional, but good practice) */}
 			{!loading && children}
-			{loading && <div style={{vw:"100%", vh:"100%"}}><Loader /></div>}
+			{loading && <div style={{position:'absolute', top:'0', left:'0', right:'0', bottom:'0'}}><Loader /></div>}
 		</AuthContext.Provider>
 	);
 }
